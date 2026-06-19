@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ko">
+<body>
+<nav th:fragment="nav" class="navbar navbar-expand-lg egov-nav egov-navbar border-bottom">
+    <div class="container">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav gap-1">
+                <li class="nav-item"><a class="nav-link" th:href="@{/}">홈</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">소개</a>
+                    <ul class="dropdown-menu">
+                        <li><h6 class="dropdown-header">사이트 소개</h6></li>
+                        <li><a class="dropdown-item" th:href="@{/EgovPageLink.do(linkIndex=3)}">사이트소개</a></li>
+                        <li><a class="dropdown-item" th:href="@{/EgovPageLink.do(linkIndex=4)}">연혁</a></li>
+                        <li><a class="dropdown-item" th:href="@{/EgovPageLink.do(linkIndex=5)}">조직소개</a></li>
+                        <li><a class="dropdown-item" th:href="@{/EgovPageLink.do(linkIndex=6)}">찾아오시는길</a></li>
+                        <li><a class="dropdown-item" th:href="@{/EgovPageLink.do(linkIndex=7)}">템플릿 소개</a></li>
+                        <li><hr class="dropdown-divider"/></li>
+                        <li><h6 class="dropdown-header">민원광장</h6></li>
+                        <li><a class="dropdown-item" th:href="@{/EgovPageLink.do(linkIndex=0)}">민원발급</a></li>
+                        <li><a class="dropdown-item" th:href="@{/EgovPageLink.do(linkIndex=1)}">민원신청</a></li>
+                        <li><a class="dropdown-item" th:href="@{/EgovPageLink.do(linkIndex=2)}">민원결과확인</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/cop/bbs/selectBoardList.do(bbsId='BBSMSTR_AAAAAAAAAAAA')}">공지사항</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/cop/bbs/selectBoardList.do(bbsId='BBSMSTR_BBBBBBBBBBBB')}">갤러리</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/uss/olh/faq/FaqListInqire.do}">FAQ</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/uss/olh/qna/QnaListInqire.do}">Q&amp;A</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/uss/olp/qnn/EgovQustnrRespondInfoManageList.do}">설문참여</a>
+                </li>
+                <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">관리자</a>
+                    <ul class="dropdown-menu">
+                        <li><h6 class="dropdown-header">회원·권한</h6></li>
+                        <li><a class="dropdown-item" th:href="@{/uss/umt/mber/EgovMberManage.do}">회원관리</a></li>
+                        <li><a class="dropdown-item" th:href="@{/sec/ram/EgovAuthorListView.do}">권한관리</a></li>
+                        <li><a class="dropdown-item" th:href="@{/sec/rmt/EgovRoleListView.do}">롤관리</a></li>
+                        <li><a class="dropdown-item" th:href="@{/sec/gmt/EgovGroupListView.do}">그룹관리</a></li>
+                        <li><hr class="dropdown-divider"/></li>
+                        <li><h6 class="dropdown-header">콘텐츠</h6></li>
+                        <li><a class="dropdown-item" th:href="@{/cop/bbs/SelectBBSMasterInfs.do}">게시판마스터</a></li>
+                        <li><a class="dropdown-item" th:href="@{/uss/olh/qnm/QnaAnswerListInqire.do}">Q&amp;A 답변관리</a></li>
+                        <li><a class="dropdown-item" th:href="@{/uss/ion/bnr/selectBannerList.do}">배너관리</a></li>
+                        <li><a class="dropdown-item" th:href="@{/uss/sam/stp/StplatListInqire.do}">약관관리</a></li>
+                        <li><hr class="dropdown-divider"/></li>
+                        <li><h6 class="dropdown-header">설문·시스템</h6></li>
+                        <li><a class="dropdown-item" th:href="@{/uss/olp/qmc/EgovQustnrManageList.do}">설문관리</a></li>
+                        <li><a class="dropdown-item" th:href="@{/sym/cal/EgovRestdeList.do}">휴일관리</a></li>
+                        <li><a class="dropdown-item" th:href="@{/sym/ccm/zip/EgovCcmZipList.do}">우편번호관리</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</body>
+</html>
