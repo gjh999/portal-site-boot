@@ -33,6 +33,13 @@ public interface EgovBannerService {
 	public List<BannerVO> selectBannerList(BannerVO bannerVO) throws Exception;
 
 	/**
+	 * 배너 유형(MAIN/POPUP/FOOTER)별로 반영(REFLCT_AT='Y') 배너 목록을 조회한다.
+	 * @param bannerVO - 배너 Vo (bannerTy 필수)
+	 * @return List - 유형별 배너 목록
+	 */
+	public List<BannerVO> selectBannerListByType(BannerVO bannerVO) throws Exception;
+
+	/**
 	 * 배너목록 총 갯수를 조회한다.
 	 * @param bannerVO - 배너 Vo
 	 * @return int - 배너 카운트 수

@@ -20,6 +20,7 @@
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <link rel="stylesheet" th:href="@{/css/krds-compat.css}"/>
     <link rel="stylesheet" th:href="@{/css/krds.css}"/>
+    <link rel="stylesheet" th:href="@{/css/banner.css}"/>
     <link rel="icon" type="image/svg+xml" th:href="@{/images/logo.svg}"/>
 
     <!-- 페이지별 추가 CSS -->
@@ -43,6 +44,9 @@
     </th:block>
 </main>
 
+<!-- 팝업 배너 (페이지 진입 시 표출, '오늘 하루 보지 않기' 쿠키 24h) -->
+<th:block th:replace="~{fragments/banner :: popup(${popupBannerList})}"></th:block>
+
 <!-- 푸터 -->
 <footer class="egov-footer" th:replace="~{fragments/footer :: footer}"></footer>
 
@@ -52,6 +56,8 @@
 <script th:src="@{/js/krds.js}"></script>
 <!-- 공통 JS -->
 <script th:src="@{/js/common.js}"></script>
+<!-- 배너 슬라이드/팝업 JS -->
+<script th:src="@{/js/banner.js}"></script>
 
 <!-- 페이지별 추가 JS -->
 <th:block layout:fragment="body-js"></th:block>

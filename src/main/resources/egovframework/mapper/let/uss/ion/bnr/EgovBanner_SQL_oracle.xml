@@ -14,6 +14,7 @@
         <result property="bannerDc" column="BANNER_DC"/>
         <result property="sortOrdr" column="SORT_ORDR"/>
         <result property="reflctAt" column="REFLCT_AT"/>
+        <result property="bannerTy" column="BANNER_TY"/>
         <result property="userId" column="FRST_REGISTER_ID"/>
         <result property="regDate" column="FRST_REGIST_PNTTM"/>
     </resultMap>
@@ -113,6 +114,7 @@
                     BANNER_DC,    
                     SORT_ORDR,        
                     REFLCT_AT,            
+                    BANNER_TY,
                     FRST_REGISTER_ID,
                     FRST_REGIST_PNTTM)
             VALUES (#{bannerId},
@@ -123,6 +125,7 @@
                     #{bannerDc},
                     #{sortOrdr},
                     #{reflctAt},
+                    #{bannerTy},
                     #{userId},
                     SYSDATE)   
         
@@ -139,6 +142,7 @@
                    BANNER_DC = #{bannerDc},
                    SORT_ORDR = #{sortOrdr},
                    REFLCT_AT = #{reflctAt},
+                   BANNER_TY = #{bannerTy},
                    LAST_UPDUSR_ID = #{userId},
                    LAST_UPDT_PNTTM = SYSDATE   
              WHERE BANNER_ID = #{bannerId}    
@@ -171,5 +175,22 @@
                AND A.BANNER_ID = #{bannerId}
                AND A.BANNER_IMAGE_FILE = B.ATCH_FILE_ID  
         
+    </select>
+
+    <select id="selectBannerListByType" parameterType="egovframework.let.uss.ion.bnr.service.BannerVO" resultMap="banner">
+            SELECT BANNER_ID,
+                   BANNER_NM,
+                   LINK_URL,
+                   BANNER_IMAGE,
+                   BANNER_IMAGE_FILE,
+                   BANNER_DC,
+                   SORT_ORDR,
+                   REFLCT_AT,
+                   BANNER_TY,
+                   FRST_REGISTER_ID
+              FROM TB_BANNER
+             WHERE REFLCT_AT = 'Y'
+               AND BANNER_TY = #{bannerTy}
+             ORDER BY SORT_ORDR
     </select>
 </mapper>

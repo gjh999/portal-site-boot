@@ -68,6 +68,10 @@ public class Banner extends ComDefaultVO {
 	 */
 	private String reflctAt;
 	/**
+	 * 배너 유형 (MAIN: 메인, POPUP: 팝업, FOOTER: 푸터)
+	 */
+	private String bannerTy;
+	/**
 	 * 사용자 ID
 	 */
 	private String userId;
@@ -175,6 +179,18 @@ public class Banner extends ComDefaultVO {
 	 */
 	public void setReflctAt(String reflctAt) {
 		this.reflctAt = reflctAt;
+	}
+	/**
+	 * @return the bannerTy
+	 */
+	public String getBannerTy() {
+		return bannerTy;
+	}
+	/**
+	 * @param bannerTy the bannerTy to set
+	 */
+	public void setBannerTy(String bannerTy) {
+		this.bannerTy = bannerTy;
 	}
 	/**
 	 * @return the userId

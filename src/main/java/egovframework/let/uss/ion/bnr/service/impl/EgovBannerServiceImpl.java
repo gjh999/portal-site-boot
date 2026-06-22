@@ -47,6 +47,15 @@ public class EgovBannerServiceImpl extends EgovAbstractServiceImpl implements Eg
 	}
 
 	/**
+	 * 배너 유형(MAIN/POPUP/FOOTER)별 반영 배너 목록을 조회한다.
+	 * @param bannerVO - 배너 VO (bannerTy 필수)
+	 * @return List - 유형별 배너 목록
+	 */
+	public List<BannerVO> selectBannerListByType(BannerVO bannerVO) throws Exception {
+		return bannerDAO.selectBannerListByType(bannerVO);
+	}
+
+	/**
 	 * 배너목록 총 갯수를 조회한다.
 	 * @param bannerVO - 배너 VO
 	 * @return int - 배너 카운트 수

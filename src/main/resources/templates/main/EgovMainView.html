@@ -131,6 +131,11 @@
         </div>
     </section>
 
+    <!-- ===== 메인 배너 슬라이드(캐러셀) ===== -->
+    <section class="mt-4" th:if="${mainBannerList != null and !#lists.isEmpty(mainBannerList)}">
+        <div th:replace="~{fragments/banner :: carousel(${mainBannerList}, ${bannerInterval}, 'bnr-main')}"></div>
+    </section>
+
     <!-- ===== 통계 ===== -->
     <section class="row g-3 mt-4">
         <div class="col-6 col-lg-3"><div class="lp-stat"><div class="num">130+</div><div class="lbl">서비스 화면</div></div></div>
@@ -257,9 +262,9 @@
             <div>
                 <div class="lp-row" th:each="item : ${qriList}">
                     <a th:href="@{/uss/olp/qnn/EgovQustnrRespondInfoManageList.do}"
-                       th:text="${item.qestnrSj}">설문 제목</a>
+                       th:text="${item.qestnrsj}">설문 제목</a>
                     <span class="date">
-                        <span th:text="${item.qestnrBeginDe}">시작일</span> ~ <span th:text="${item.qestnrEndDe}">종료일</span>
+                        <span th:text="${item.qestnrbeginde}">시작일</span> ~ <span th:text="${item.qestnrendde}">종료일</span>
                     </span>
                 </div>
                 <div class="lp-row" th:if="${qriList == null or #lists.isEmpty(qriList)}">

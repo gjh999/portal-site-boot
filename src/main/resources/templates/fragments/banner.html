@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<body>
+
+<!--
+  배너 슬라이드(캐러셀) 공통 프래그먼트.
+  파라미터: bannerList(목록), interval(ms), extraClass(bnr-main|bnr-foot)
+  이미지는 /images/banner/{bannerImage} 경로에서 서빙.
+-->
+<th:block th:fragment="carousel(bannerList, interval, extraClass)">
+    <div th:if="${bannerList != null and !#lists.isEmpty(bannerList)}"
+         class="bnr-carousel" th:classappend="${extraClass}" th:attr="data-interval=${interval}">
+        <div class="bnr-track">
+            <div class="bnr-slide" th:each="b : ${bannerList}">
+                <a th:href="${b.linkUrl}" target="_blank" rel="noopener">
+                    <img th:src="@{'/images/banner/' + ${b.bannerImage}}" th:alt="${b.bannerNm}"
+                         onerror="this.src='/images/intro/main_visual.png';"/>
+                    <span class="bnr-cap" th:if="${b.bannerNm != null}">
+                        <span th:text="${b.bannerNm}">배너명</span>
+                        <small th:if="${b.bannerDc != null and b.bannerDc != ''}" th:text="${b.bannerDc}">설명</small>
+                    </span>
+                </a>
+            </div>
+        </div>
+        <button type="button" class="bnr-nav bnr-prev" aria-label="이전 배너">&#10094;</button>
+        <button type="button" class="bnr-nav bnr-next" aria-label="다음 배너">&#10095;</button>
+        <div class="bnr-dots">
+            <button type="button" class="bnr-dot" th:each="b,st : ${bannerList}"
+                    th:classappend="${st.index == 0} ? 'active'" th:attr="aria-label='배너 ' + ${st.count}"></button>
+        </div>
+    </div>
+</th:block>
+
+<!--
+  팝업 배너 프래그먼트. 첫 번째 POPUP 배너만 표출. "오늘 하루 보지 않기"(쿠키 24h).
+  파라미터: bannerList(POPUP 목록)
+-->
+<th:block th:fragment="popup(bannerList)">
+    <div th:if="${bannerList != null and !#lists.isEmpty(bannerList)}"
+         th:with="b=${bannerList[0]}"
+         class="bnr-popup-overlay" style="display:none;"
+         th:attr="data-cookie-key='bnrPopupHide_' + ${b.bannerId}">
+        <div class="bnr-popup" role="dialog" aria-modal="true" aria-label="팝업 배너">
+            <div class="bnr-popup-body">
+                <a th:href="${b.linkUrl}" target="_blank" rel="noopener">
+                    <img th:src="@{'/images/banner/' + ${b.bannerImage}}" th:alt="${b.bannerNm}"
+                         onerror="this.src='/images/intro/main_visual.png';"/>
+                </a>
+                <div class="bnr-popup-title" th:if="${b.bannerNm != null}" th:text="${b.bannerNm}">팝업 제목</div>
+                <div class="bnr-popup-desc" th:if="${b.bannerDc != null and b.bannerDc != ''}" th:text="${b.bannerDc}">팝업 설명</div>
+            </div>
+            <div class="bnr-popup-foot">
+                <label>
+                    <input type="checkbox" class="bnr-popup-today"/> 오늘 하루 보지 않기
+                </label>
+                <button type="button" class="bnr-popup-close">닫기 &times;</button>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</body>
+</html>

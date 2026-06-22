@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import egovframework.com.cmm.ComDefaultVO;
 import egovframework.let.cop.bbs.service.BoardVO;
 import egovframework.let.cop.bbs.service.EgovBBSManageService;
+import egovframework.let.uss.ion.bnr.service.BannerVO;
+import egovframework.let.uss.ion.bnr.service.EgovBannerService;
 import egovframework.let.uss.olh.faq.service.EgovFaqManageService;
 import egovframework.let.uss.olh.faq.service.FaqManageDefaultVO;
 import egovframework.let.uss.olp.qri.service.EgovQustnrRespondInfoService;
@@ -40,6 +42,9 @@ public class EgovMainController {
 	@Resource(name = "egovQustnrRespondInfoService")
 	private EgovQustnrRespondInfoService egovQustnrRespondInfoService;
 
+	@Resource(name = "egovBannerService")
+	private EgovBannerService egovBannerService;
+
 	/**
 	 * 포털 메인 페이지.
 	 */
@@ -49,6 +54,7 @@ public class EgovMainController {
 		model.addAttribute("bbsList", selectBoard("BBSMSTR_BBBBBBBBBBBB"));    // 자유게시판
 		model.addAttribute("faqList", selectFaq());                            // FAQ
 		model.addAttribute("qriList", selectQri());                            // 설문참여
+		model.addAttribute("mainBannerList", selectBanner("MAIN"));            // 메인 슬라이드 배너
 		return "main/EgovMainView";
 	}
 
@@ -95,6 +101,21 @@ public class EgovMainController {
 			return result == null ? List.of() : result;
 		} catch (Exception e) {
 			log.warn("메인 설문참여 조회 실패: {}", e.getMessage());
+			return List.of();
+		}
+	}
+
+	/**
+	 * 메인 슬라이드 배너(BANNER_TY='MAIN', REFLCT_AT='Y') 목록 조회. 실패해도 메인은 렌더링되도록 방어.
+	 */
+	private List<?> selectBanner(String bannerTy) {
+		try {
+			BannerVO bannerVO = new BannerVO();
+			bannerVO.setBannerTy(bannerTy);
+			List<?> result = egovBannerService.selectBannerListByType(bannerVO);
+			return result == null ? List.of() : result;
+		} catch (Exception e) {
+			log.warn("메인 배너 조회 실패(type={}): {}", bannerTy, e.getMessage());
 			return List.of();
 		}
 	}

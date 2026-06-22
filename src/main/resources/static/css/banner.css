@@ -1,0 +1,44 @@
+/* ===== 배너 슬라이드(캐러셀) — 순수 CSS/JS, 외부 라이브러리 없음 ===== */
+.bnr-carousel { position: relative; overflow: hidden; border-radius: 18px;
+    border: 1px solid var(--krds-gray-10, #E7E8EA); background: #f4f5f6; }
+.bnr-track { display: flex; transition: transform .6s ease; }
+.bnr-slide { min-width: 100%; flex: 0 0 100%; }
+.bnr-slide a { display: block; text-decoration: none; }
+.bnr-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.bnr-cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 14px 20px;
+    background: linear-gradient(0deg, rgba(0,0,0,.62), transparent);
+    color: #fff; font-weight: 700; font-size: 16px; }
+/* 메인 배너 높이 */
+.bnr-main .bnr-slide { height: clamp(180px, 26vw, 320px); }
+/* 푸터 배너 높이 */
+.bnr-foot .bnr-slide { height: clamp(90px, 14vw, 150px); }
+.bnr-cap small { display: block; font-weight: 500; font-size: 12.5px; opacity: .9; }
+
+/* 표시기(dots) */
+.bnr-dots { position: absolute; left: 0; right: 0; bottom: 10px; display: flex;
+    justify-content: center; gap: 8px; z-index: 3; }
+.bnr-foot .bnr-dots { bottom: 6px; }
+.bnr-dot { width: 10px; height: 10px; border-radius: 999px; border: none; cursor: pointer;
+    background: rgba(255,255,255,.55); padding: 0; }
+.bnr-dot.active { background: #fff; }
+
+/* 좌우 화살표 */
+.bnr-nav { position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+    width: 38px; height: 38px; border-radius: 999px; border: none; cursor: pointer;
+    background: rgba(0,0,0,.35); color: #fff; font-size: 18px; line-height: 1; }
+.bnr-nav:hover { background: rgba(0,0,0,.55); }
+.bnr-prev { left: 10px; } .bnr-next { right: 10px; }
+
+/* ===== 팝업 배너 ===== */
+.bnr-popup-overlay { position: fixed; inset: 0; z-index: 1080;
+    background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; }
+.bnr-popup { width: min(420px, 92vw); background: #fff; border-radius: 16px; overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+.bnr-popup-body a { display: block; }
+.bnr-popup-body img { width: 100%; display: block; }
+.bnr-popup-title { padding: 14px 18px 4px; font-weight: 700; font-size: 16px; color: #1E2124; }
+.bnr-popup-desc { padding: 0 18px 12px; font-size: 13.5px; color: #58616A; }
+.bnr-popup-foot { display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px; border-top: 1px solid var(--krds-gray-10, #E7E8EA); background: #f4f5f6; }
+.bnr-popup-foot label { font-size: 13.5px; color: #33363D; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.bnr-popup-close { border: none; background: transparent; font-size: 14px; color: #58616A; cursor: pointer; font-weight: 600; }

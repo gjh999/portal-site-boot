@@ -32,12 +32,16 @@
         <div class="krds-table-wrap">
         <table class="tbl">
             <thead><tr>
-                <th scope="col" style="width:60px;">순서</th><th scope="col">배너명</th><th scope="col">링크</th><th scope="col">설명</th>
+                <th scope="col" style="width:60px;">순서</th><th scope="col" style="width:90px;">유형</th><th scope="col">배너명</th><th scope="col">링크</th><th scope="col">설명</th>
                 <th scope="col" style="width:90px;">반영여부</th><th scope="col" style="width:110px;">등록일</th>
             </tr></thead>
             <tbody>
             <tr th:each="item : ${bannerList}">
                 <td class="text-center" th:text="${item.sortOrdr}">1</td>
+                <td class="text-center">
+                    <span class="krds-badge bg-info"
+                          th:text="${item.bannerTy == 'POPUP'} ? '팝업' : (${item.bannerTy == 'FOOTER'} ? '푸터' : '메인')">메인</span>
+                </td>
                 <td><a th:href="@{/uss/ion/bnr/getBanner.do(bannerId=${item.bannerId})}" th:text="${item.bannerNm}">배너명</a></td>
                 <td><a th:href="${item.linkUrl}" th:text="${item.linkUrl}" target="_blank">링크</a></td>
                 <td th:text="${item.bannerDc}">설명</td>
@@ -48,7 +52,7 @@
                 </td>
                 <td class="text-center" th:text="${item.regDate}">등록일</td>
             </tr>
-            <tr th:if="${bannerList == null or #lists.isEmpty(bannerList)}"><td colspan="6" class="text-center text-muted py-4">등록된 배너가 없습니다.</td></tr>
+            <tr th:if="${bannerList == null or #lists.isEmpty(bannerList)}"><td colspan="7" class="text-center text-muted py-4">등록된 배너가 없습니다.</td></tr>
             </tbody>
         </table>
         </div>

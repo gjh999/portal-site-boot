@@ -41,6 +41,16 @@ public class BannerDAO extends EgovAbstractMapper {
 		return selectList("bannerDAO.selectBannerList", bannerVO);
 	}
 
+	/**
+	 * 배너 유형별 반영 배너 목록을 조회한다.
+	 * @param bannerVO - 배너 Vo (bannerTy 필수)
+	 * @return List - 유형별 배너 목록
+	 * @exception Exception
+	 */
+	public List<BannerVO> selectBannerListByType(BannerVO bannerVO) throws Exception {
+		return selectList("bannerDAO.selectBannerListByType", bannerVO);
+	}
+
     /**
 	 * 배너목록 총 갯수를 조회한다.
 	 * @param bannerVO BannerVO

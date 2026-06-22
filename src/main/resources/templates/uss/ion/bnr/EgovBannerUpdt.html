@@ -19,6 +19,14 @@
                 <input class="krds-input" type="text" th:value="*{bannerId}" readonly/>
             </div>
             <div class="mb-3">
+                <label class="form-label">배너 유형 <span class="text-danger">*</span></label>
+                <select class="krds-form-select" th:field="*{bannerTy}">
+                    <option value="MAIN">메인 배너</option>
+                    <option value="POPUP">팝업 배너</option>
+                    <option value="FOOTER">푸터 배너</option>
+                </select>
+            </div>
+            <div class="mb-3">
                 <label class="form-label">배너명 <span class="text-danger">*</span></label>
                 <input class="krds-input" type="text" th:field="*{bannerNm}" maxlength="30" required/>
                 <div class="text-danger small" th:if="${#fields.hasErrors('bannerNm')}" th:errors="*{bannerNm}"></div>
