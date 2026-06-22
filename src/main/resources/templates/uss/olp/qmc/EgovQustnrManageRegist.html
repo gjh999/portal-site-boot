@@ -12,8 +12,9 @@
             <li class="breadcrumb-item active">등록</li>
         </ol></nav>
         <h1 class="h4 mb-3"><i class="bi bi-clipboard-plus"></i> 설문지 등록</h1>
-        <form th:action="@{/uss/olp/qmc/EgovQustnrManageRegist.do}" th:object="${qustnrManageVO}" method="post">
+        <form id="qustnrForm" th:action="@{/uss/olp/qmc/EgovQustnrManageRegist.do}" th:object="${qustnrManageVO}" method="post">
             <input type="hidden" name="cmd" value="save"/>
+            <input type="hidden" id="questionsJson" name="questionsJson" value="[]"/>
             <div class="row g-3">
                 <div class="col-12"><label class="form-label">설문제목 <span class="text-danger">*</span></label>
                     <input class="krds-input" type="text" th:field="*{qestnrSj}" maxlength="250" required/>
@@ -26,8 +27,8 @@
                     <div class="text-danger small" th:if="${#fields.hasErrors('qestnrWritngGuidanceCn')}" th:errors="*{qestnrWritngGuidanceCn}"></div></div>
                 <div class="col-md-6"><label class="form-label">설문대상 <span class="text-danger">*</span></label>
                     <select class="krds-form-select" th:field="*{qestnrTrget}" required>
-                        <option value="">선택</option>
-                        <option th:each="c : ${comCode034}" th:value="${c.code}" th:text="${c.codeNm}"></option>
+                        <option th:each="c : ${comCode034}" th:value="${c.code}" th:text="${c.codeNm}"
+                                th:selected="${c.code == '00'}"></option>
                     </select>
                     <div class="text-danger small" th:if="${#fields.hasErrors('qestnrTrget')}" th:errors="*{qestnrTrget}"></div></div>
                 <div class="col-md-3"><label class="form-label">설문 시작일 <span class="text-danger">*</span></label>
@@ -36,15 +37,28 @@
                 <div class="col-md-3"><label class="form-label">설문 종료일 <span class="text-danger">*</span></label>
                     <input class="krds-input" type="date" th:field="*{qestnrEndDe}" required/>
                     <div class="text-danger small" th:if="${#fields.hasErrors('qestnrEndDe')}" th:errors="*{qestnrEndDe}"></div></div>
-                <div class="col-12"><label class="form-label">템플릿 유형</label>
+                <div class="col-12"><label class="form-label">템플릿 유형 <span class="text-danger">*</span></label>
                     <div>
                         <div class="form-check form-check-inline" th:each="t,st : ${listQustnrTmplat}">
-                            <input class="form-check-input" type="radio" name="qestnrTmplatId"
-                                   th:value="${t.qestnrtmplatid}" th:checked="${st.first}"/>
+                            <input class="form-check-input qtmplat-radio" type="radio" name="qestnrTmplatId"
+                                   th:value="${t.qestnrtmplatid}" th:checked="${st.first}"
+                                   th:attr="data-ty=${t.qestnrtmplatty}"/>
                             <label class="form-check-label" th:text="${t.qestnrtmplatty}">유형</label>
                         </div>
                         <span class="text-muted small" th:if="${#lists.isEmpty(listQustnrTmplat)}">등록된 템플릿이 없습니다.</span>
                     </div>
+                    <p class="text-muted small mt-1 mb-0">객관식 템플릿은 질문과 보기를, 서술형 템플릿은 질문만 등록합니다.</p>
+                </div>
+
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <label class="form-label mb-0">설문 문항</label>
+                        <button class="krds-btn secondary small" type="button" id="btnAddQuestion">
+                            <i class="bi bi-plus-lg"></i> 문항 추가</button>
+                    </div>
+                    <!-- 등록된 문항 아코디언 -->
+                    <div id="questionAccordion" class="krds-accordion"></div>
+                    <p class="text-muted small mb-0" id="noQuestionMsg">아직 등록된 문항이 없습니다. ‘문항 추가’ 버튼으로 문항을 등록하세요.</p>
                 </div>
             </div>
             <div class="d-flex justify-content-between mt-4">
@@ -53,6 +67,195 @@
             </div>
         </form>
     </div>
+
+    <!-- 문항 등록 모달 (순수 JS, 외부 라이브러리 없음) -->
+    <div id="questionModal" class="qmodal-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="questionModalTitle">
+        <div class="qmodal-box">
+            <div class="qmodal-head">
+                <h2 class="h5 mb-0" id="questionModalTitle"><i class="bi bi-pencil-square"></i> 문항 등록</h2>
+                <button type="button" class="qmodal-close" id="btnCloseModal" aria-label="닫기">&times;</button>
+            </div>
+            <div class="qmodal-body">
+                <div class="mb-3">
+                    <label class="form-label">질문 유형</label>
+                    <div>
+                        <span class="krds-badge" id="modalTypeBadge">객관식</span>
+                        <span class="text-muted small ms-2" id="modalTypeHint">보기를 1개 이상 입력하세요.</span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="modalQuestionCn">질문 내용 <span class="text-danger">*</span></label>
+                    <textarea id="modalQuestionCn" class="krds-input" rows="2" maxlength="2500" placeholder="질문을 입력하세요"></textarea>
+                </div>
+                <div id="modalObjectiveArea">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="modalMulti"/>
+                        <label class="form-check-label" for="modalMulti">복수 선택(체크박스) 허용</label>
+                    </div>
+                    <label class="form-label">보기 목록</label>
+                    <div id="modalItemList"></div>
+                    <button type="button" class="krds-btn tertiary small mt-2" id="btnAddItem">
+                        <i class="bi bi-plus-lg"></i> 보기 추가</button>
+                </div>
+            </div>
+            <div class="qmodal-foot">
+                <button type="button" class="krds-btn tertiary" id="btnCancelModal">취소</button>
+                <button type="button" class="krds-btn primary" id="btnSaveQuestion"><i class="bi bi-check-lg"></i> 문항 등록</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .qmodal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1050;display:flex;align-items:flex-start;justify-content:center;padding:48px 16px;overflow:auto;}
+        .qmodal-box{background:#fff;border-radius:8px;width:100%;max-width:640px;box-shadow:0 10px 30px rgba(0,0,0,.25);}
+        .qmodal-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #e5e7eb;}
+        .qmodal-close{background:none;border:none;font-size:28px;line-height:1;cursor:pointer;color:#555;}
+        .qmodal-body{padding:20px;}
+        .qmodal-foot{display:flex;justify-content:flex-end;gap:8px;padding:16px 20px;border-top:1px solid #e5e7eb;}
+        .qmodal-item-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+        .krds-accordion .acc-item{border:1px solid #d1d5db;border-radius:6px;margin-bottom:8px;overflow:hidden;}
+        .krds-accordion .acc-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 14px;background:#f8f9fa;cursor:pointer;}
+        .krds-accordion .acc-head .acc-title{font-weight:600;}
+        .krds-accordion .acc-body{padding:12px 14px;display:none;border-top:1px solid #e5e7eb;}
+        .krds-accordion .acc-item.open .acc-body{display:block;}
+    </style>
+
+    <script th:inline="javascript">
+    (function () {
+        var questions = [];               // {type:'1'|'2', content, multi, items:[{content, etc}]}
+        var accordion = document.getElementById('questionAccordion');
+        var noMsg = document.getElementById('noQuestionMsg');
+        var modal = document.getElementById('questionModal');
+        var itemList = document.getElementById('modalItemList');
+
+        function currentTemplateType() {
+            var r = document.querySelector('.qtmplat-radio:checked');
+            return r ? (r.getAttribute('data-ty') || '') : '';
+        }
+        // 템플릿명에 '주관식' 또는 '서술'이 있으면 서술형(2), 아니면 객관식(1)
+        function currentQType() {
+            var ty = currentTemplateType();
+            return (ty.indexOf('주관식') >= 0 || ty.indexOf('서술') >= 0) ? '2' : '1';
+        }
+
+        function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+        function renderAccordion() {
+            accordion.innerHTML = '';
+            noMsg.style.display = questions.length ? 'none' : 'block';
+            questions.forEach(function (q, idx) {
+                var typeLabel = q.type === '2' ? '서술형' : (q.multi ? '객관식(복수)' : '객관식(단일)');
+                var item = document.createElement('div');
+                item.className = 'acc-item';
+                var itemsHtml = '';
+                if (q.type === '1') {
+                    itemsHtml = '<ul class="mb-0">' + q.items.map(function (it) {
+                        return '<li>' + esc(it.content) + (it.etc ? ' <span class="krds-badge">기타</span>' : '') + '</li>';
+                    }).join('') + '</ul>';
+                } else {
+                    itemsHtml = '<p class="text-muted mb-0">주관식 서술 응답</p>';
+                }
+                item.innerHTML =
+                    '<div class="acc-head">' +
+                        '<span class="acc-title">' + (idx + 1) + '. ' + esc(q.content) + '</span>' +
+                        '<span class="d-flex align-items-center gap-2">' +
+                            '<span class="krds-badge">' + typeLabel + '</span>' +
+                            '<button type="button" class="krds-btn danger small btn-del-q" data-idx="' + idx + '">삭제</button>' +
+                        '</span>' +
+                    '</div>' +
+                    '<div class="acc-body">' + itemsHtml + '</div>';
+                accordion.appendChild(item);
+            });
+            syncJson();
+        }
+
+        function syncJson() {
+            document.getElementById('questionsJson').value = JSON.stringify(questions);
+        }
+
+        // 아코디언 펼침/접힘 + 삭제 (이벤트 위임)
+        accordion.addEventListener('click', function (e) {
+            var delBtn = e.target.closest('.btn-del-q');
+            if (delBtn) {
+                e.stopPropagation();
+                questions.splice(parseInt(delBtn.getAttribute('data-idx'), 10), 1);
+                renderAccordion();
+                return;
+            }
+            var head = e.target.closest('.acc-head');
+            if (head) { head.parentNode.classList.toggle('open'); }
+        });
+
+        function addItemRow(content, etc) {
+            var row = document.createElement('div');
+            row.className = 'qmodal-item-row';
+            row.innerHTML =
+                '<input type="text" class="krds-input item-cn" maxlength="1000" placeholder="보기 내용" />' +
+                '<label class="form-check-label" style="white-space:nowrap;">' +
+                    '<input type="checkbox" class="form-check-input item-etc" /> 기타</label>' +
+                '<button type="button" class="krds-btn tertiary small item-del">삭제</button>';
+            row.querySelector('.item-cn').value = content || '';
+            row.querySelector('.item-etc').checked = !!etc;
+            row.querySelector('.item-del').addEventListener('click', function () { row.remove(); });
+            itemList.appendChild(row);
+        }
+
+        function openModal() {
+            var qType = currentQType();
+            document.getElementById('modalQuestionCn').value = '';
+            document.getElementById('modalMulti').checked = false;
+            itemList.innerHTML = '';
+            var objArea = document.getElementById('modalObjectiveArea');
+            if (qType === '2') {
+                objArea.style.display = 'none';
+                document.getElementById('modalTypeBadge').textContent = '서술형(주관식)';
+                document.getElementById('modalTypeHint').textContent = '응답자가 자유롭게 서술합니다.';
+            } else {
+                objArea.style.display = 'block';
+                document.getElementById('modalTypeBadge').textContent = '객관식';
+                document.getElementById('modalTypeHint').textContent = '보기를 1개 이상 입력하세요.';
+                addItemRow('', false);
+                addItemRow('', false);
+            }
+            modal.style.display = 'flex';
+            document.getElementById('modalQuestionCn').focus();
+        }
+        function closeModal() { modal.style.display = 'none'; }
+
+        document.getElementById('btnAddQuestion').addEventListener('click', function () {
+            if (!document.querySelector('.qtmplat-radio:checked')) {
+                alert('먼저 템플릿 유형을 선택하세요.');
+                return;
+            }
+            openModal();
+        });
+        document.getElementById('btnCloseModal').addEventListener('click', closeModal);
+        document.getElementById('btnCancelModal').addEventListener('click', closeModal);
+        modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+        document.getElementById('btnAddItem').addEventListener('click', function () { addItemRow('', false); });
+
+        document.getElementById('btnSaveQuestion').addEventListener('click', function () {
+            var qType = currentQType();
+            var content = document.getElementById('modalQuestionCn').value.trim();
+            if (!content) { alert('질문 내용을 입력하세요.'); return; }
+            var q = { type: qType, content: content, multi: false, items: [] };
+            if (qType === '1') {
+                q.multi = document.getElementById('modalMulti').checked;
+                var rows = itemList.querySelectorAll('.qmodal-item-row');
+                rows.forEach(function (r) {
+                    var cn = r.querySelector('.item-cn').value.trim();
+                    if (cn) { q.items.push({ content: cn, etc: r.querySelector('.item-etc').checked }); }
+                });
+                if (q.items.length === 0) { alert('객관식 문항은 보기를 1개 이상 입력하세요.'); return; }
+            }
+            questions.push(q);
+            renderAccordion();
+            closeModal();
+        });
+
+        renderAccordion();
+    })();
+    </script>
 </main>
 </body>
 </html>

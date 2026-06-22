@@ -11,25 +11,71 @@
             <li class="breadcrumb-item active">설문조사 참여</li>
         </ol></nav>
         <h1 class="h4 mb-3"><i class="bi bi-ui-checks"></i> 설문조사 참여</h1>
+
+        <!-- 검색/필터 폼 -->
+        <form class="krds-panel mb-3" method="get" th:action="@{/uss/olp/qnn/EgovQustnrRespondInfoManageList.do}">
+            <div class="krds-panel-body">
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label mb-1">설문제목 검색</label>
+                        <input type="hidden" name="searchCondition" value="QESTNR_SJ"/>
+                        <input class="krds-input" type="text" name="searchKeyword"
+                               th:value="${searchKeyword}" placeholder="제목으로 검색"/>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label mb-1">회원유형 필터</label>
+                        <select class="krds-form-select" name="surveyTrgetFilter">
+                            <option value="" th:selected="${surveyTrgetFilter != 'MINE'}">전체 설문</option>
+                            <option value="MINE" th:selected="${surveyTrgetFilter == 'MINE'}">내 유형 대상만</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label mb-1">참여여부 필터</label>
+                        <select class="krds-form-select" name="surveyPartcptn">
+                            <option value="" th:selected="${surveyPartcptn == null or surveyPartcptn == ''}">전체</option>
+                            <option value="N" th:selected="${surveyPartcptn == 'N'}">미참여</option>
+                            <option value="Y" th:selected="${surveyPartcptn == 'Y'}">참여완료</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="krds-btn primary w-100" type="submit"><i class="bi bi-search"></i> 검색</button>
+                    </div>
+                </div>
+                <p class="text-muted small mb-0 mt-2" th:if="${loginOccp != null and loginOccp != ''}">
+                    내 직업유형:
+                    <span th:each="c : ${comCode034}" th:if="${c.code == loginOccp}" th:text="${c.codeNm}"></span>
+                    <span> — ‘내 유형 대상만’ 선택 시 전체 대상 설문과 내 유형 대상 설문만 표시됩니다.</span>
+                </p>
+            </div>
+        </form>
+
         <div class="krds-table-wrap"><table class="tbl">
             <thead><tr>
                 <th scope="col" style="width:60px;">번호</th>
                 <th scope="col">설문제목</th>
                 <th scope="col">설문목적</th>
-                <th scope="col" style="width:220px;white-space:nowrap;">설문기간</th>
-                <th scope="col" style="width:120px;">등록자</th>
-                <th scope="col" style="width:120px;">등록일</th>
+                <th scope="col" style="width:100px;">설문대상</th>
+                <th scope="col" style="width:200px;white-space:nowrap;">설문기간</th>
+                <th scope="col" style="width:100px;">참여상태</th>
+                <th scope="col" style="width:110px;">등록자</th>
             </tr></thead>
             <tbody>
             <tr th:each="item, st : ${resultList}">
                 <td class="text-center" th:text="${st.count}">1</td>
                 <td><a th:href="@{/uss/olp/qnn/EgovQustnrRespondInfoManageRegist.do(qestnrId=${item['qestnrid']},qestnrTmplatId=${item['qestnrtmplatid']})}" th:text="${item['qestnrsj']}">설문제목</a></td>
                 <td th:text="${item['qestnrpurps']}">목적</td>
+                <td class="text-center">
+                    <span th:if="${item['qestnrtrget'] == null or item['qestnrtrget'] == '' or item['qestnrtrget'] == '00'}">전체</span>
+                    <span th:each="c : ${comCode034}" th:if="${c.code == item['qestnrtrget']}" th:text="${c.codeNm}"></span>
+                </td>
                 <td class="text-center" style="white-space:nowrap;"><span th:text="${item['qestnrbeginde']}">시작</span> ~ <span th:text="${item['qestnrendde']}">종료</span></td>
+                <td class="text-center">
+                    <span class="krds-badge" style="background:#1f7a3d;color:#fff;" th:if="${item['partcptnat'] == 'Y'}">참여완료</span>
+                    <span class="krds-badge" th:if="${item['partcptnat'] != 'Y'}">미참여</span>
+                </td>
                 <td class="text-center" th:text="${item['frstregisternm']}">등록자</td>
-                <td class="text-center" th:text="${item['frstregistpnttm']}">등록일</td>
             </tr>
-            <tr th:if="${#lists.isEmpty(resultList)}"><td colspan="6" class="text-center text-muted py-4">진행 중인 설문조사가 없습니다.</td></tr>
+            <tr th:if="${#lists.isEmpty(resultList)}"><td colspan="7" class="text-center text-muted py-4">진행 중인 설문조사가 없습니다.</td></tr>
             </tbody>
         </table></div>
 

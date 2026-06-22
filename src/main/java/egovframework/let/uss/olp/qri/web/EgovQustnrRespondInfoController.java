@@ -199,12 +199,40 @@ public class EgovQustnrRespondInfoController {
 		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 
+		// 제목 검색조건 기본값 보정 (검색어가 있는데 조건이 없으면 제목으로 검색)
+		if (searchVO.getSearchKeyword() != null && !searchVO.getSearchKeyword().isEmpty()
+				&& (searchVO.getSearchCondition() == null || searchVO.getSearchCondition().isEmpty())) {
+			searchVO.setSearchCondition("QESTNR_SJ");
+		}
+
+		// 로그인 사용자 정보(직업유형/고유아이디) — 회원유형 필터 및 참여여부 판정용
+		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+		if (Boolean.TRUE.equals(isAuthenticated)) {
+			LoginVO loginVO = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+			if (loginVO != null) {
+				searchVO.setLoginEsntlId(loginVO.getUniqId() == null ? "" : loginVO.getUniqId());
+				java.util.Map<String, Object> occpMap = new java.util.HashMap<>();
+				occpMap.put("uniqId", loginVO.getUniqId());
+				String occp = egovQustnrRespondInfoService.selectLoginUserOccp(occpMap);
+				searchVO.setLoginOccp(occp == null ? "" : occp);
+				model.addAttribute("loginOccp", searchVO.getLoginOccp());
+			}
+		}
+
 		model.addAttribute("resultList", egovQustnrRespondInfoService.selectQustnrRespondInfoManageList(searchVO));
 
 		model.addAttribute("searchKeyword",
 				commandMap.get("searchKeyword") == null ? "" : (String) commandMap.get("searchKeyword"));
 		model.addAttribute("searchCondition",
 				commandMap.get("searchCondition") == null ? "" : (String) commandMap.get("searchCondition"));
+		// 필터 상태 유지
+		model.addAttribute("surveyTrgetFilter", searchVO.getSurveyTrgetFilter());
+		model.addAttribute("surveyPartcptn", searchVO.getSurveyPartcptn());
+
+		// 직업유형 공통코드(설문대상 표시용)
+		ComDefaultCodeVO voComCode = new ComDefaultCodeVO();
+		voComCode.setCodeId("COM034");
+		model.addAttribute("comCode034", cmmUseService.selectCmmCodeDetail(voComCode));
 
 		int totCnt = (Integer) egovQustnrRespondInfoService.selectQustnrRespondInfoManageListCnt(searchVO);
 		paginationInfo.setTotalRecordCount(totCnt);

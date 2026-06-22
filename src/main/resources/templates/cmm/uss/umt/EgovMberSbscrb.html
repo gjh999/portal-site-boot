@@ -56,6 +56,13 @@
                             <option value="F">여자</option>
                         </th:block>
                     </select></div>
+                <div class="col-md-6"><label class="form-label">직업유형 <span class="text-danger">*</span></label>
+                    <select class="krds-form-select" th:field="*{occpTy}" required>
+                        <option value="">선택하세요</option>
+                        <option th:each="c : ${occpTy_result}" th:if="${c.code != '00'}"
+                                th:value="${c.code}" th:text="${c.codeNm}">직업</option>
+                    </select>
+                    <div class="text-danger small" th:if="${#fields.hasErrors('occpTy')}" th:errors="*{occpTy}"></div></div>
                 <div class="col-md-6"><label class="form-label">핸드폰번호</label>
                     <input class="krds-input" type="text" th:field="*{moblphonNo}" maxlength="15"/></div>
                 <div class="col-md-4"><label class="form-label">지역번호</label>

@@ -72,6 +72,11 @@ public class MberManageVO extends UserDefaultVO{
 	 */
 	private String sexdstnCode;
 	/**
+	 * 직업유형(COM034) - 필수
+	 */
+	@EgovNullCheck
+	private String occpTy;
+	/**
 	 * 회원 ID
 	 */
 	@EgovNullCheck
@@ -270,6 +275,20 @@ public class MberManageVO extends UserDefaultVO{
 	 */
 	public void setSexdstnCode(String sexdstnCode) {
 		this.sexdstnCode = sexdstnCode;
+	}
+	/**
+	 * occpTy attribute 값을 리턴한다.
+	 * @return String
+	 */
+	public String getOccpTy() {
+		return occpTy;
+	}
+	/**
+	 * occpTy attribute 값을 설정한다.
+	 * @param occpTy String
+	 */
+	public void setOccpTy(String occpTy) {
+		this.occpTy = occpTy;
 	}
 	/**
 	 * mberId attribute 값을  리턴한다.

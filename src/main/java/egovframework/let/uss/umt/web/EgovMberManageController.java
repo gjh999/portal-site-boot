@@ -145,6 +145,10 @@ public class EgovMberManageController {
 		vo.setTableNm("LETTNORGNZTINFO");
 		model.addAttribute("groupId_result", cmmUseService.selectGroupIdDetail(vo));
 
+		//직업유형코드(COM034) 조회 - 회원 직업유형 필수 입력
+		vo.setCodeId("COM034");
+		model.addAttribute("occpTy_result", cmmUseService.selectCmmCodeDetail(vo));
+
 		return "cmm/uss/umt/EgovMberInsert";
 	}
 
@@ -184,6 +188,9 @@ public class EgovMberManageController {
 			//그룹정보를 조회 - GROUP_ID정보
 			vo.setTableNm("LETTNORGNZTINFO");
 			model.addAttribute("groupId_result", cmmUseService.selectGroupIdDetail(vo));
+			//직업유형코드(COM034) 조회
+			vo.setCodeId("COM034");
+			model.addAttribute("occpTy_result", cmmUseService.selectCmmCodeDetail(vo));
 			return "cmm/uss/umt/EgovMberInsert";
 		} else {
 			mberManageService.insertMber(mberManageVO);
@@ -229,6 +236,10 @@ public class EgovMberManageController {
 		vo.setTableNm("LETTNORGNZTINFO");
 		model.addAttribute("groupId_result", cmmUseService.selectGroupIdDetail(vo));
 
+		//직업유형코드(COM034) 조회
+		vo.setCodeId("COM034");
+		model.addAttribute("occpTy_result", cmmUseService.selectCmmCodeDetail(vo));
+
 		MberManageVO mberManageVO = mberManageService.selectMber(mberId);
 		model.addAttribute("mberManageVO", mberManageVO);
 		model.addAttribute("userSearchVO", userSearchVO);
@@ -272,6 +283,9 @@ public class EgovMberManageController {
 			//그룹정보를 조회 - GROUP_ID정보
 			vo.setTableNm("LETTNORGNZTINFO");
 			model.addAttribute("groupId_result", cmmUseService.selectGroupIdDetail(vo));
+			//직업유형코드(COM034) 조회
+			vo.setCodeId("COM034");
+			model.addAttribute("occpTy_result", cmmUseService.selectCmmCodeDetail(vo));
 			return "cmm/uss/umt/EgovMberSelectUpdt";
 		} else {
 			mberManageService.updateMber(mberManageVO);
@@ -334,6 +348,10 @@ public class EgovMberManageController {
 		//성별구분코드를 코드정보로부터 조회
 		vo.setCodeId("COM014");
 		model.addAttribute("sexdstnCode_result", cmmUseService.selectCmmCodeDetail(vo));
+
+		//직업유형코드(COM034) 조회 - 회원 직업유형 필수 입력
+		vo.setCodeId("COM034");
+		model.addAttribute("occpTy_result", cmmUseService.selectCmmCodeDetail(vo));
 
 		if (!"".equals(commandMap.get("realname"))) {
 			model.addAttribute("mberNm", commandMap.get("realname")); //실명인증된 이름 - 주민번호 인증

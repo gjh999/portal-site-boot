@@ -98,6 +98,7 @@ FROM(
                     MBER_FXNUM       ,
                     MBER_EMAIL_ADRES ,
                     MIDDLE_TELNO     ,
+                    OCCP_TY          ,
                     SBSCRB_DE        )
               VALUES(
                     #{uniqId},
@@ -119,7 +120,8 @@ FROM(
                     #{mberFxnum},
                     #{mberEmailAdres},
                     #{middleTelno},
-                    sysdate()  )              
+                    #{occpTy},
+                    sysdate()  )
         
     </insert>
     
@@ -153,6 +155,7 @@ FROM(
                 MBER_FXNUM       mberFxnum,
                 MBER_EMAIL_ADRES mberEmailAdres,
                 MIDDLE_TELNO     middleTelno,
+                OCCP_TY          occpTy,
                 TO_CHAR(SBSCRB_DE,'YYYY-MM-DD') sbscrbDe
             FROM TB_GNRL_MBER
             WHERE ESNTL_ID=#{uniqId}
@@ -178,7 +181,8 @@ FROM(
                 GROUP_ID         = #{groupId},
                 MBER_FXNUM       = #{mberFxnum},
                 MBER_EMAIL_ADRES = #{mberEmailAdres},
-                MIDDLE_TELNO     = #{middleTelno}
+                MIDDLE_TELNO     = #{middleTelno},
+                OCCP_TY          = #{occpTy}
             WHERE ESNTL_ID=#{uniqId}
         
     </update>

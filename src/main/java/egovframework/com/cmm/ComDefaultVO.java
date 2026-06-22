@@ -56,6 +56,27 @@ public class ComDefaultVO implements Serializable {
 	/** 검색KeywordTo */
     private String searchKeywordTo = "";
 
+    /** (설문) 설문대상 유형 필터: ''=전체, 'MINE'=내 직업유형/전체대상만 */
+    private String surveyTrgetFilter = "";
+
+    /** (설문) 참여여부 필터: ''=전체, 'Y'=참여완료, 'N'=미참여 */
+    private String surveyPartcptn = "";
+
+    /** (설문) 로그인 사용자 고유아이디(ESNTL_ID) — 참여여부 판정용 */
+    private String loginEsntlId = "";
+
+    /** (설문) 로그인 사용자 직업유형(COM034) — 설문대상 필터용 */
+    private String loginOccp = "";
+
+    public String getSurveyTrgetFilter() { return surveyTrgetFilter; }
+    public void setSurveyTrgetFilter(String surveyTrgetFilter) { this.surveyTrgetFilter = surveyTrgetFilter; }
+    public String getSurveyPartcptn() { return surveyPartcptn; }
+    public void setSurveyPartcptn(String surveyPartcptn) { this.surveyPartcptn = surveyPartcptn; }
+    public String getLoginEsntlId() { return loginEsntlId; }
+    public void setLoginEsntlId(String loginEsntlId) { this.loginEsntlId = loginEsntlId; }
+    public String getLoginOccp() { return loginOccp; }
+    public void setLoginOccp(String loginOccp) { this.loginOccp = loginOccp; }
+
 	public int getFirstIndex() {
 		return firstIndex;
 	}

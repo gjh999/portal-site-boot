@@ -109,6 +109,29 @@ cd "/c/eGovFrame/workspace-egov/portal-site-boot"
 
 > 검증: 위 20개 화면 HTTP 200, FAQ 등록 생성 플로우(채번→insert→목록반영) 검증 완료. 로그인/로그아웃/권한가드 동작.
 
+## 설문(survey) 기능 개선 — end-to-end 구현·검증 완료 (2026-06-23)
+- **문항 모달 등록(아코디언)**: 설문 등록(`EgovQustnrManageRegist`)에서 템플릿유형(객관식/서술형) 선택 후
+  순수 JS 모달(외부 라이브러리 없음, KRDS 클래스)로 질문+보기 등록 → 아코디언 표시. hidden `questionsJson`(JSON 배열)으로
+  제출하면 `EgovQustnrManageController.saveQuestions()`가 Jackson 파싱 후 qqm/qim 서비스로 문항/보기 저장.
+  **문항ID는 IdGen prefix `QQESTN_`** 라 응답 컨트롤러 저장 루프(`sKey.substring(0,6)=="QQESTN"`)와 자동 정합.
+  서술형은 `MXMM_CHOISE_CO=null`(숫자컬럼 빈문자 금지) 주의.
+- **응답 렌더/응답**: 응답 페이지가 `Comtnqustnrqesitm`/`Comtnqustnriem`로 문항 렌더(객관식=라디오/체크박스, 서술형=textarea).
+  시드 설문 `QESTNR_000000000001`에 데모 문항 3개(객관식2+서술형1)·보기7개 시드 → "등록된 문항이 없습니다" 해소.
+- **설문대상 '전체'(코드 '00')**: COM034에 '00'=전체 추가, 등록폼 기본선택. '전체'면 모든 회원유형 응답대상.
+- **회원 직업유형 필수**: `TB_GNRL_MBER`·`TB_EMPLYR_INFO`에 `OCCP_TY VARCHAR(10)` ADD COLUMN(비파괴),
+  `VW_USER_MASTER`에 `USER_OCCP` 컬럼 추가. `MberManageVO.occpTy`(@EgovNullCheck) + 회원 등록/수정/가입 폼에
+  직업유형 드롭다운(COM034, '00' 제외). 시드: user=학생(01), 신규 user2=회사원(02), admin=공무원(03), user1=학생(01).
+- **검색/필터(참여목록)**: ① 제목검색(QESTNR_SJ) ② 회원유형 필터(MINE=설문대상이 '00'/빈값 또는 로그인 직업유형 일치)
+  ③ 참여여부 필터(Y/N). 로그인 직업유형은 `selectLoginUserOccp`(VW_USER_MASTER.USER_OCCP)로 조회.
+- **참여완료 상태**: 목록에 `PARTCPTN_AT` 서브쿼리(응답테이블에 로그인 사용자 응답 존재 여부) → '참여완료'/'미참여' 배지.
+- **⚠️ MyBatis OGNL 함정**: `<if test="x == 'Y'">`처럼 **단일문자 작은따옴표는 char 리터럴로 처리돼 DataAccessException**
+  (dataAccessFailure 화면)을 유발. 반드시 `== &quot;Y&quot;`(문자열)로 작성. (MINE 등 멀티문자는 정상)
+- **egovMap 키 케이싱**: 언더스코어 없는 별칭은 소문자(`qestnrSj`→`qestnrsj`), 언더스코어 포함은 카멜(`QESTNR_ID`→`qestnrId`).
+  목록 링크가 빈값이던 버그는 `A.QESTNR_ID`에 별칭 `qestnrId` 부여(키 `qestnrid`)로 해결. char(20) 패딩은 `TRIM()`.
+- **검증**: 시드/모달 문항 렌더·응답 제출→참여완료 전환·제목검색·MINE/참여여부 필터·회원 직업유형 저장/수정 반영
+  모두 HTTP 200·예외 0 확인. 회귀(메인·게시판·설문 6종·회원·권한) 200 유지.
+- **DBMS 파리티**: hsql(런타임 검증)·postgresql(DDL/DATA/매퍼) 반영. mysql/oracle/tibero/cubrid/altibase는 미반영(시간상 생략).
+
 ## 게시판(cop/bbs) CRUD — 전체 동작 검증 완료 (2026-06-03)
 - 등록/수정/답글/삭제 4종 모두 HTTP 302 성공·영속·한글 정상 검증.
 - **근본원인(과거 insert 미반영)**: `Board`의 `@EgovNullCheck`(ntcrNm·password·ntceBgnde·ntceEndde·nttSj·nttCn)

@@ -70,6 +70,16 @@ public class QustnrRespondInfoDao extends EgovAbstractMapper {
 	}
 
     /**
+	 * 로그인 사용자의 직업유형(COM034) 코드를 조회한다.
+	 * @param map - uniqId(ESNTL_ID)가 담긴 map
+	 * @return 직업유형 코드 문자열 (없으면 null)
+	 * @throws Exception
+	 */
+	public String selectLoginUserOccp(Map<?, ?> map) throws Exception{
+		return (String)selectOne("QustnrRespondInfo.selectLoginUserOccp", map);
+	}
+
+    /**
 	 * 설문정보를 조회한다.
 	 * @param map - 조회할 정보가 담긴 map
 	 * @return List
