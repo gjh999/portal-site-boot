@@ -23,22 +23,24 @@
                 다음달 <i class="bi bi-chevron-right"></i></a>
         </div>
 
-        <table class="tbl text-center align-middle" style="table-layout:fixed;" th:if="${restde != null}">
+        <div class="cal-toolbar text-end mb-2" th:if="${restde != null}">
+            <button type="button" class="krds-btn tertiary small" onclick="window.print()"><i class="bi bi-printer"></i> 인쇄</button>
+        </div>
+        <table class="cal-table" th:if="${restde != null}">
             <thead>
-            <tr><th scope="col" class="text-danger">일</th><th scope="col">월</th><th scope="col">화</th><th scope="col">수</th><th scope="col">목</th><th scope="col">금</th><th scope="col" class="text-primary">토</th></tr>
+            <tr><th scope="col" class="sun">일</th><th scope="col">월</th><th scope="col">화</th><th scope="col">수</th><th scope="col">목</th><th scope="col">금</th><th scope="col" class="sat">토</th></tr>
             </thead>
             <tbody>
             <tr th:each="r : ${#numbers.sequence(0, 5)}">
                 <td th:each="c : ${#numbers.sequence(0, 6)}"
                     th:with="dd=${r * 7 + c + 2 - restde.startWeekMonth}, dstr=${(dd lt 10 ? '0' : '') + dd}"
-                    th:classappend="${c == 0} ? ' text-danger' : (${c == 6} ? ' text-primary' : '')"
-                    style="height:72px; vertical-align:top;">
-                    <th:block th:if="${dd ge 1 and dd le restde.lastDayMonth}">
-                        <span th:text="${dd}"></span>
-                        <span class="krds-badge bg-danger d-inline-block mt-1" style="max-width:100%;"
-                              th:each="rd : ${RestdeList}" th:if="${rd.day == dstr}"
-                              th:text="${rd.restdeNm}"></span>
-                    </th:block>
+                    th:classappend="${c == 0} ? 'sun' : (${c == 6} ? 'sat' : '')">
+                    <div class="cal-day" th:if="${dd ge 1 and dd le restde.lastDayMonth}">
+                        <span class="cal-daynum" th:text="${dd}"></span>
+                        <th:block th:each="rd : ${RestdeList}" th:if="${rd.day == dstr}">
+                            <span class="cal-holiday" th:text="${rd.restdeNm}" th:title="${rd.restdeNm}"></span>
+                        </th:block>
+                    </div>
                 </td>
             </tr>
             </tbody>

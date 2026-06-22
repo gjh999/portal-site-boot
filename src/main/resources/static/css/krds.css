@@ -561,3 +561,21 @@ select.krds-form-select:focus{ outline:0; border-color:var(--krds-primary,#256EF
 .form-check-input{ margin-left:0 !important; accent-color:#256EF4; width:1.05em; height:1.05em; vertical-align:middle; }
 .form-check-label{ margin-left:.4rem; vertical-align:middle; cursor:pointer; }
 .form-check-inline{ display:inline-flex; align-items:center; margin-right:1.25rem; }
+
+/* ── 월간 달력 격자(균일 셀·테두리·일자 밑 휴일·인쇄) ── */
+.cal-table{ table-layout:fixed; width:100%; border-collapse:collapse; }
+.cal-table th, .cal-table td{ border:1px solid #D6DADF; }
+.cal-table thead th{ background:#F4F5F6; padding:.55rem 0; font-weight:700; text-align:center; }
+.cal-table thead th.sun{ color:#E63A3A; } .cal-table thead th.sat{ color:#256EF4; }
+.cal-table td{ height:98px; vertical-align:top; padding:0; }
+.cal-day{ display:flex; flex-direction:column; align-items:flex-start; gap:5px; padding:6px 8px; height:100%; }
+.cal-daynum{ font-weight:600; font-size:.92rem; line-height:1.2; }
+.cal-table td.sun .cal-daynum{ color:#E63A3A; } .cal-table td.sat .cal-daynum{ color:#256EF4; }
+.cal-holiday{ display:block; max-width:100%; font-size:.72rem; font-weight:700; color:#fff; background:#E63A3A;
+  border-radius:6px; padding:2px 7px; line-height:1.45; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+@media print {
+  .egov-header, .egov-nav, .egov-footer, nav[aria-label="breadcrumb"], .breadcrumb, .cal-toolbar { display:none !important; }
+  .egov-content, main, .container { padding:0 !important; margin:0 !important; max-width:100% !important; width:100% !important; }
+  .cal-table{ page-break-inside:avoid; } .cal-table td{ height:90px; }
+  a[href]::after{ content:none !important; }
+}
