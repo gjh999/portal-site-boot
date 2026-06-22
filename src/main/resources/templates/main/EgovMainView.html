@@ -51,51 +51,54 @@
             color:#eaf0ff; font-weight:700; padding:13px 24px; border-radius:14px; transition:.18s; }
         .lp-btn-ghost:hover { color:#fff; background: rgba(255,255,255,.14); transform:translateY(-2px); }
 
-        /* 통계 */
+        /* 통계 (KRDS 라이트) */
         .lp-stat { text-align:center; padding:22px 12px; border-radius:18px;
-            background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.09); }
+            background:#fff; border:1px solid var(--krds-gray-10,#E7E8EA); box-shadow:0 6px 18px rgba(30,33,36,.05); }
         .lp-stat .num { font-size: clamp(26px,3.4vw,40px); font-weight:800; letter-spacing:-.02em;
-            background: linear-gradient(120deg,#9db4ff,#69ecec); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-        .lp-stat .lbl { font-size:13.5px; color:#aab1d6; margin-top:4px; }
+            background: linear-gradient(120deg,#256EF4,#0B50D0); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+        .lp-stat .lbl { font-size:13.5px; color:#58616A; margin-top:4px; }
 
-        /* 섹션 제목 */
-        .lp-sec-title { font-size: clamp(22px,2.6vw,30px); font-weight:800; color:#fff; letter-spacing:-.01em; }
-        .lp-sec-desc { color:#9aa3cf; font-size:15px; }
+        /* 섹션 제목 (KRDS 라이트) */
+        .lp-sec-title { font-size: clamp(22px,2.6vw,30px); font-weight:800; color:#1E2124; letter-spacing:-.01em; }
+        .lp-sec-desc { color:#58616A; font-size:15px; }
 
-        /* 서비스 카드 */
+        /* 서비스 카드 (KRDS 라이트) */
         .lp-svc { display:block; height:100%; text-decoration:none; border-radius:20px; padding:26px 24px;
-            background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.02));
-            border:1px solid rgba(255,255,255,.10); transition: transform .2s, border-color .2s, box-shadow .2s; }
-        .lp-svc:hover { transform: translateY(-6px); border-color: rgba(124,150,255,.55);
-            box-shadow: 0 24px 54px rgba(0,0,0,.40); }
+            background:#fff; border:1px solid var(--krds-gray-10,#E7E8EA); box-shadow:0 8px 20px rgba(30,33,36,.05);
+            transition: transform .2s, border-color .2s, box-shadow .2s; }
+        .lp-svc:hover { transform: translateY(-6px); border-color: rgba(37,110,244,.45);
+            box-shadow: 0 20px 44px rgba(30,33,36,.12); }
         .lp-svc .ic { width:54px; height:54px; border-radius:15px; display:grid; place-items:center;
             font-size:24px; color:#fff; margin-bottom:16px;
-            background: linear-gradient(135deg, var(--ind), var(--ind2)); box-shadow:0 10px 24px rgba(79,107,255,.40); }
-        .lp-svc.c2 .ic { background: linear-gradient(135deg,#19d3da,#3aa0ff); box-shadow:0 10px 24px rgba(25,211,218,.35); }
-        .lp-svc.c3 .ic { background: linear-gradient(135deg,#ff5d8f,#a05cff); box-shadow:0 10px 24px rgba(255,93,143,.32); }
-        .lp-svc h3 { font-size:18px; font-weight:700; color:#fff; margin:0 0 6px; }
-        .lp-svc p { font-size:14px; color:#a9b0d6; margin:0; line-height:1.6; }
-        .lp-svc .go { margin-top:14px; font-size:13px; font-weight:700; color:#9db4ff; }
+            background: linear-gradient(135deg, var(--ind), var(--ind2)); box-shadow:0 10px 24px rgba(79,107,255,.30); }
+        .lp-svc.c2 .ic { background: linear-gradient(135deg,#19d3da,#3aa0ff); box-shadow:0 10px 24px rgba(25,211,218,.30); }
+        .lp-svc.c3 .ic { background: linear-gradient(135deg,#ff5d8f,#a05cff); box-shadow:0 10px 24px rgba(255,93,143,.28); }
+        .lp-svc h3 { font-size:18px; font-weight:700; color:#1E2124; margin:0 0 6px; }
+        .lp-svc p { font-size:14px; color:#58616A; margin:0; line-height:1.6; }
+        .lp-svc .go { margin-top:14px; font-size:13px; font-weight:700; color:#256EF4; }
 
-        /* 리스트 카드 */
-        .lp-panel { border-radius:20px; overflow:hidden; border:1px solid rgba(255,255,255,.10);
-            background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); height:100%; }
+        /* 리스트 카드 (KRDS 라이트) */
+        .lp-panel { border-radius:20px; overflow:hidden; border:1px solid var(--krds-gray-10,#E7E8EA);
+            background:#fff; box-shadow:0 8px 20px rgba(30,33,36,.05); height:100%; }
         .lp-panel-head { display:flex; align-items:center; justify-content:space-between;
-            padding:18px 22px; border-bottom:1px solid rgba(255,255,255,.08); }
-        .lp-panel-head .ttl { font-weight:700; color:#fff; font-size:16px; }
-        .lp-panel-head a { font-size:13px; color:#9db4ff; text-decoration:none; }
-        .lp-row { display:flex; justify-content:space-between; gap:14px; padding:13px 22px;
-            border-bottom:1px solid rgba(255,255,255,.05); }
+            padding:16px 20px; border-bottom:1px solid var(--krds-gray-10,#E7E8EA); background:var(--krds-gray-5,#F4F5F6); }
+        .lp-panel-head .ttl { font-weight:700; color:#1E2124; font-size:16px; }
+        .lp-panel-head a { font-size:13px; color:#256EF4; text-decoration:none; }
+        .lp-row { display:flex; justify-content:space-between; gap:14px; padding:13px 20px;
+            border-bottom:1px solid var(--krds-gray-10,#E7E8EA); }
         .lp-row:last-child { border-bottom:none; }
-        .lp-row a { color:#dfe5ff; text-decoration:none; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-        .lp-row a:hover { color:#fff; }
-        .lp-row .date { color:#8b93bd; font-size:12.5px; white-space:nowrap; }
+        .lp-row a { color:#33363D; text-decoration:none; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .lp-row a:hover { color:#256EF4; }
+        .lp-row .date { color:#8A949E; font-size:12.5px; white-space:nowrap; }
+        .lp-row .text-muted { color:#58616A !important; }
 
-        /* CTA */
+        /* CTA (다크 유지 — 대비 양호, 내부 텍스트 흰색 강제) */
         .lp-cta { border-radius:24px; padding: clamp(36px,5vw,64px);
             background: radial-gradient(700px 400px at 80% -40%, rgba(122,92,255,.35), transparent 60%),
                         linear-gradient(135deg,#171c49,#10143a);
             border:1px solid rgba(255,255,255,.10); text-align:center; }
+        .lp-cta .lp-sec-title { color:#fff; }
+        .lp-cta .lp-sec-desc { color:#c2c9ef; }
     </style>
     </th:block>
 </head>

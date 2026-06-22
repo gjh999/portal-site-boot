@@ -445,3 +445,45 @@ body { font-size: 1rem; line-height: 1.6; }
   padding:.5rem 1rem; background:rgba(255,255,255,.18); border-radius:8px; }
 .egov-official-banner:hover .ban-go{ background:rgba(255,255,255,.28); }
 @media (max-width:600px){ .egov-official-banner{ padding:14px 16px; } .egov-official-banner .ban-txt strong{ font-size:.98rem; } }
+
+/* ============================================================
+   KRDS 전환 화면 시각 보강 — 표/셀렉트/패널/드롭다운 가독성
+   (krds.min.css 기본값이 약하게 보이는 것을 16px 루트 기준으로 강제 정규화)
+   ============================================================ */
+
+/* ── 네이티브 <select>: KRDS 커스텀컴포넌트 mask 제거 + 표준 셀렉트 + 셰브론 ── */
+select.krds-form-select{
+  -webkit-mask-image:none!important; mask-image:none!important;
+  -webkit-appearance:none!important; -moz-appearance:none!important; appearance:none!important;
+  display:inline-block; width:auto; min-width:120px; max-width:100%; height:auto;
+  padding:.5rem 2.1rem .5rem .75rem!important; font-size:.95rem; line-height:1.5;
+  color:var(--krds-gray-90,#1E2124); background-color:#fff;
+  border:1px solid var(--krds-gray-30,#A8AFB6)!important; border-radius:var(--krds-radius,6px)!important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%2358616A' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round' d='M4 6l4 4 4-4'/%3E%3C/svg%3E")!important;
+  background-repeat:no-repeat!important; background-position:right .65rem center!important; background-size:1.05em!important;
+}
+select.krds-form-select:focus{ outline:0; border-color:var(--krds-primary,#256EF4)!important; box-shadow:0 0 0 3px rgba(37,110,244,.18); }
+
+/* ── 데이터 표(.tbl): 상단 강조선 + 헤더 배경 + 행 구분선 + 호버 (정부표준 톤) ── */
+.krds-table-wrap{ width:100%; overflow-x:auto; margin:0 0 1rem; }
+.krds-table-wrap table.tbl{ width:100%!important; border-collapse:collapse!important; background:#fff; margin:0; border-top:2px solid var(--krds-gray-50,#697077)!important; }
+.krds-table-wrap table.tbl thead th{
+  background:var(--krds-gray-5,#F4F5F6)!important; color:var(--krds-gray-90,#1E2124)!important; font-weight:700!important;
+  border-bottom:1px solid var(--krds-gray-30,#A8AFB6)!important; text-align:center; vertical-align:middle; }
+.krds-table-wrap table.tbl tbody td,.krds-table-wrap table.tbl tbody th{
+  border-bottom:1px solid var(--krds-gray-10,#E7E8EA)!important; vertical-align:middle; color:var(--krds-gray-80,#33363D); }
+.krds-table-wrap table.tbl tbody tr:hover{ background:var(--krds-primary-bg,#F0F6FF); }
+.krds-table-wrap table.tbl td a{ color:var(--krds-gray-90,#1E2124); text-decoration:none; }
+.krds-table-wrap table.tbl td a:hover{ color:var(--krds-primary,#256EF4); text-decoration:underline; }
+/* 라벨-값 정의표(.tbl.col): 라벨 칸 배경 + 좌측정렬 */
+.krds-table-wrap table.tbl.col th[scope="row"]{ background:var(--krds-gray-5,#F4F5F6)!important; text-align:left!important; font-weight:700; white-space:nowrap; }
+.krds-table-wrap table.tbl.col td{ text-align:left; }
+
+/* ── 카드 패널(.krds-panel) 헤더 구분 강화 ── */
+.krds-panel{ background:#fff; border:1px solid var(--krds-gray-10,#E7E8EA); border-radius:12px; }
+.krds-panel-head{ background:var(--krds-gray-5,#F4F5F6); border-bottom:1px solid var(--krds-gray-10,#E7E8EA); font-weight:700; }
+
+/* ── GNB 드롭다운 KRDS 톤(그림자·라운드·항목 호버) ── */
+.egov-nav .dropdown-menu{ border:1px solid var(--krds-gray-10,#E7E8EA); border-radius:10px; box-shadow:0 12px 28px rgba(0,0,0,.16); padding:6px; }
+.egov-nav .dropdown-menu .dropdown-item{ border-radius:6px; padding:.5rem .75rem; }
+.egov-nav .dropdown-menu .dropdown-header{ color:var(--krds-gray-50,#697077); font-size:.78rem; }
