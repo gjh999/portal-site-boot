@@ -20,7 +20,7 @@
             <input type="hidden" name="qestnrTmplatId" th:value="${r != null ? r.qestnrtmplatid : ''}"/>
             <div class="row g-3">
                 <div class="col-12"><label class="form-label">설문제목</label>
-                    <input class="form-control-plaintext" type="text" readonly th:value="${r != null ? r.qestnrCn : ''}"/></div>
+                    <input class="krds-input" type="text" readonly th:value="${r != null ? r.qestnrCn : ''}"/></div>
                 <div class="col-md-6"><label class="form-label">항목순번 <span class="text-danger">*</span></label>
                     <input class="krds-input" type="text" name="iemSn" th:value="${r != null ? r.iemSn : ''}" maxlength="5" required/></div>
                 <div class="col-md-6"><label class="form-label">기타답변여부</label>

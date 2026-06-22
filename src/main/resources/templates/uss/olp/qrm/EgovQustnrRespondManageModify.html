@@ -20,7 +20,7 @@
             <input type="hidden" name="brth" th:value="${r != null ? r.brthdy : ''}"/>
             <div class="row g-3">
                 <div class="col-12"><label class="form-label">설문제목</label>
-                    <input class="form-control-plaintext" type="text" readonly th:value="${r != null ? r.qestnrSj : ''}"/></div>
+                    <input class="krds-input" type="text" readonly th:value="${r != null ? r.qestnrSj : ''}"/></div>
                 <div class="col-md-6"><label class="form-label">성별 <span class="text-danger">*</span></label>
                     <select class="krds-form-select" name="sexdstnCode" required>
                         <option value="">선택</option>

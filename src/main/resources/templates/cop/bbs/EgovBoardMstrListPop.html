@@ -16,13 +16,13 @@
     <!-- 사용정보 미등록(이용 가능) 게시판 마스터만 조회된다 -->
     <form class="row g-2 mb-3" th:action="@{/cop/bbs/SelectBBSMasterInfsPop.do}" method="get">
         <div class="col-auto">
-            <select class="krds-form-select form-select-sm" name="searchCnd" title="검색조건 선택">
+            <select class="krds-form-select" name="searchCnd" title="검색조건 선택">
                 <option value="0" th:selected="${searchVO != null and searchVO.searchCnd == '0'}">게시판명</option>
                 <option value="1" th:selected="${searchVO != null and searchVO.searchCnd == '1'}">게시판유형</option>
             </select>
         </div>
         <div class="col-auto">
-            <input class="krds-input form-control-sm" type="text" name="searchWrd" maxlength="35" title="검색어"
+            <input class="krds-input" type="text" name="searchWrd" maxlength="35" title="검색어"
                    th:value="${searchVO != null ? searchVO.searchWrd : ''}" placeholder="검색어"/>
         </div>
         <div class="col-auto">
@@ -34,7 +34,7 @@
     </form>
 
     <div class="krds-table-wrap">
-    <table class="tbl table-sm">
+    <table class="tbl">
         <thead>
         <tr>
             <th scope="col" style="width:60px;">번호</th>

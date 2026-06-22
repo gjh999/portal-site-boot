@@ -22,7 +22,7 @@
         <h3 class="h6 mt-4">문항별 응답 통계</h3>
         <div th:each="q : ${Comtnqustnrqesitm}" class="mb-4">
             <p class="fw-bold mb-2"><span th:text="${q.qestnSn}"></span>. <span th:text="${q.qestnCn}"></span></p>
-            <div class="krds-table-wrap"><table class="tbl table-sm">
+            <div class="krds-table-wrap"><table class="tbl">
                 <thead><tr><th scope="col">항목/응답</th><th scope="col" style="width:90px;">응답수</th><th scope="col" style="width:110px;">비율(%)</th></tr></thead>
                 <tbody>
                 <tr th:each="s : ${qestnrStatistic1}" th:if="${s.qestnrqesitmid == q.qestnrqesitmid}">

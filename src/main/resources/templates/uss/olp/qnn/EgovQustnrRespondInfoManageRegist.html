@@ -56,7 +56,7 @@
                                th:type="${q.mxmmChoiseCo != null and q.mxmmChoiseCo > 1} ? 'checkbox' : 'radio'"
                                th:name="${q.qestnrqesitmid}" th:value="${iem.qustnrIemId}"/>
                         <label class="form-check-label" th:text="${iem.iemCn}">항목</label>
-                        <input class="krds-input form-control-sm mt-1" style="max-width:300px;" type="text"
+                        <input class="krds-input mt-1" style="max-width:300px;" type="text"
                                th:if="${iem.etcAnswerAt == 'Y'}" th:name="'ETC_' + ${iem.qustnrIemId}" placeholder="기타 의견"/>
                     </div>
                 </div>

@@ -12,7 +12,7 @@
 
     <form class="row g-2 mb-3" th:action="@{/cmm/sym/zip/EgovCcmZipSearchPopup.do}" method="get">
         <div class="col-auto">
-            <select class="krds-form-select form-select-sm" name="searchCondition" title="검색조건">
+            <select class="krds-form-select" name="searchCondition" title="검색조건">
                 <option value="4" th:selected="${searchVO.searchCondition == '4'}">읍면동명</option>
                 <option value="2" th:selected="${searchVO.searchCondition == '2'}">시도명</option>
                 <option value="3" th:selected="${searchVO.searchCondition == '3'}">시군구명</option>
@@ -20,7 +20,7 @@
             </select>
         </div>
         <div class="col-auto">
-            <input class="krds-input form-control-sm" name="searchKeyword" th:value="${searchVO.searchKeyword}"
+            <input class="krds-input" name="searchKeyword" th:value="${searchVO.searchKeyword}"
                    maxlength="20" placeholder="검색어" title="검색어" autofocus/>
         </div>
         <div class="col-auto">

@@ -28,7 +28,7 @@
         <form class="row g-2 mb-3" th:action="@{/uss/umt/mber/EgovMberManage.do}" method="get"
               th:with="sttusList=${entrprsMberSttus_result}">
             <div class="col-auto">
-                <select class="krds-form-select form-select-sm" name="sbscrbSttus" title="회원상태 선택"
+                <select class="krds-form-select" name="sbscrbSttus" title="회원상태 선택"
                         th:with="ss=${userSearchVO.sbscrbSttus}">
                     <option value="0" th:selected="${ss == '0'}">상태 전체</option>
                     <th:block th:if="${not #lists.isEmpty(sttusList)}">
@@ -43,7 +43,7 @@
                 </select>
             </div>
             <div class="col-auto">
-                <select class="krds-form-select form-select-sm" name="searchCondition" title="검색조건 선택"
+                <select class="krds-form-select" name="searchCondition" title="검색조건 선택"
                         th:with="sc=${userSearchVO.searchCondition}">
                     <option value="" th:selected="${sc == ''}">선택</option>
                     <option value="0" th:selected="${sc == '0'}">아이디</option>
@@ -51,7 +51,7 @@
                 </select>
             </div>
             <div class="col-auto">
-                <input class="krds-input form-control-sm" type="text" name="searchKeyword"
+                <input class="krds-input" type="text" name="searchKeyword"
                        th:value="${userSearchVO.searchKeyword}" maxlength="35" title="검색어 입력"/>
             </div>
             <div class="col-auto">

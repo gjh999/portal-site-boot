@@ -21,9 +21,9 @@
             <input type="hidden" name="qustnrIemId" th:value="${r != null ? r.qustnrIemId : ''}"/>
             <div class="row g-3">
                 <div class="col-12"><label class="form-label">설문제목</label>
-                    <input class="form-control-plaintext" type="text" readonly th:value="${r != null ? r.qestnrsj : ''}"/></div>
+                    <input class="krds-input" type="text" readonly th:value="${r != null ? r.qestnrsj : ''}"/></div>
                 <div class="col-12"><label class="form-label">질문내용</label>
-                    <input class="form-control-plaintext" type="text" readonly th:value="${r != null ? r.qestnCn : ''}"/></div>
+                    <input class="krds-input" type="text" readonly th:value="${r != null ? r.qestnCn : ''}"/></div>
                 <div class="col-12"><label class="form-label">응답자명 <span class="text-danger">*</span></label>
                     <input class="krds-input" type="text" name="respondNm" th:value="${r != null ? r.respondNm : ''}" maxlength="50" required/></div>
                 <div class="col-12"><label class="form-label">응답자답변내용</label>

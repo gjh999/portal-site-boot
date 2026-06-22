@@ -24,7 +24,7 @@
                 <tbody>
                 <tr>
                     <th scope="row" style="width:190px;">게시판 ID</th>
-                    <td><span class="form-control-plaintext" th:text="${result != null ? result.bbsId : ''}">bbsId</span></td>
+                    <td><span th:text="${result != null ? result.bbsId : ''}">bbsId</span></td>
                 </tr>
                 <tr th:if="${provdUrl != null}">
                     <th scope="row">제공 URL</th>
@@ -42,12 +42,12 @@
                 </tr>
                 <tr>
                     <th scope="row">게시판 유형</th>
-                    <td><span class="form-control-plaintext"
+                    <td><span
                               th:text="${result != null and result.bbsTyCodeNm != null and !#strings.isEmpty(result.bbsTyCodeNm) ? result.bbsTyCodeNm : (result != null ? result.bbsTyCode : '')}">유형</span></td>
                 </tr>
                 <tr>
                     <th scope="row">게시판 속성</th>
-                    <td><span class="form-control-plaintext"
+                    <td><span
                               th:text="${result != null and result.bbsAttrbCodeNm != null and !#strings.isEmpty(result.bbsAttrbCodeNm) ? result.bbsAttrbCodeNm : (result != null ? result.bbsAttrbCode : '')}">속성</span></td>
                 </tr>
                 <tr>

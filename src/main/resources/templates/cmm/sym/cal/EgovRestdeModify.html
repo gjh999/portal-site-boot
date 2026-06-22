@@ -20,12 +20,12 @@
             <input type="hidden" name="cmd" value="Modify"/>
             <input type="hidden" th:field="*{restdeNo}"/>
             <div class="krds-table-wrap">
-            <table class="tbl col align-middle">
+            <table class="tbl col">
                 <caption>휴일 수정</caption>
                 <tbody>
                 <tr>
                     <th scope="row" style="width:160px;">휴일번호</th>
-                    <td><input class="form-control-plaintext" type="text" th:value="*{restdeNo}" readonly/></td>
+                    <td><input class="krds-input" type="text" th:value="*{restdeNo}" readonly/></td>
                 </tr>
                 <tr>
                     <th scope="row">휴일일자</th>
