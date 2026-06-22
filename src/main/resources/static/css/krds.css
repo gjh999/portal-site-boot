@@ -493,3 +493,11 @@ select.krds-form-select:focus{ outline:0; border-color:var(--krds-primary,#256EF
 .egov-nav .nav-link, .egov-nav .nav-link.dropdown-toggle{ font-size:1rem !important; font-weight:600 !important; letter-spacing:-0.01em; }
 .egov-nav .dropdown-item{ font-family: var(--krds-font) !important; font-size:.95rem; }
 .egov-header .egov-header-logo span, .egov-header .fs-5{ font-family: var(--krds-font) !important; }
+
+/* ── 다크 푸터 링크/소셜 (심플 공개 푸터형) ── */
+.egov-footer .footer-col a{ display:block; color:#9EA4AA; font-size:.875rem; margin-bottom:.5rem; text-decoration:none; }
+.egov-footer .footer-col a:hover{ color:#fff; }
+.egov-footer .footer-col h6{ color:#fff; font-size:.9rem; }
+.egov-footer .footer-soc{ display:flex; gap:14px; font-size:1.15rem; }
+.egov-footer .footer-soc a{ color:#9EA4AA; }
+.egov-footer .footer-soc a:hover{ color:#fff; }
