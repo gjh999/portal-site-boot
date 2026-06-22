@@ -290,6 +290,15 @@ public class EgovQustnrManageController {
 		if (!"save".equals(sCmd)) {
 			bindingResult = new BeanPropertyBindingResult(qustnrManageVO, "qustnrManageVO");
 			model.addAttribute(BindingResult.MODEL_KEY_PREFIX + "qustnrManageVO", bindingResult);
+
+			// 설문 기간 기본값: 시작일=오늘, 종료일=오늘+7일 (yyyy-MM-dd)
+			java.time.LocalDate today = java.time.LocalDate.now();
+			if (qustnrManageVO.getQestnrBeginDe() == null || qustnrManageVO.getQestnrBeginDe().isEmpty()) {
+				qustnrManageVO.setQestnrBeginDe(today.toString());
+			}
+			if (qustnrManageVO.getQestnrEndDe() == null || qustnrManageVO.getQestnrEndDe().isEmpty()) {
+				qustnrManageVO.setQestnrEndDe(today.plusDays(7).toString());
+			}
 		}
 
 		//공통코드  직업유형 조회

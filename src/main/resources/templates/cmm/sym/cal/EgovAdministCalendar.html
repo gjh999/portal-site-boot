@@ -35,7 +35,7 @@
                     style="height:72px; vertical-align:top;">
                     <th:block th:if="${dd ge 1 and dd le restde.lastDayMonth}">
                         <span th:text="${dd}"></span>
-                        <span class="krds-badge bg-danger d-block mt-1"
+                        <span class="krds-badge bg-danger d-inline-block mt-1" style="max-width:100%;"
                               th:each="rd : ${resultList}" th:if="${rd.day == dstr}"
                               th:text="${rd.restdeNm}"></span>
                     </th:block>
