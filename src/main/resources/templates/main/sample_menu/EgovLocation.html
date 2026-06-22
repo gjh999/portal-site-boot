@@ -38,8 +38,9 @@
             <div class="col-lg-4">
                 <div class="krds-panel h-100">
                     <div class="krds-panel-head fw-bold"><i class="bi bi-qr-code"></i> QR코드로 위치알아보기</div>
-                    <div class="krds-panel-body">
-                        <p class="mb-0">스마트폰에서 QR코드 리더를 이용해 사진·지도 등 다양한 정보를 확인하세요.</p>
+                    <div class="krds-panel-body text-center">
+                        <img th:src="@{/images/intro/qrcode.png}" alt="위치 QR코드" style="width:120px;height:120px;"/>
+                        <p class="small text-muted mt-2 mb-0">스마트폰 QR 리더로 사진·지도 등 정보를 확인하세요.</p>
                     </div>
                 </div>
             </div>
@@ -68,6 +69,14 @@
                         </dl>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="krds-panel mt-4">
+            <div class="krds-panel-head fw-bold"><i class="bi bi-map"></i> 약도</div>
+            <div class="krds-panel-body text-center">
+                <img th:src="@{/images/intro/map.png}" alt="표준프레임워크센터 약도"
+                     style="max-width:100%;height:auto;border-radius:8px;"/>
             </div>
         </div>
     </div>
