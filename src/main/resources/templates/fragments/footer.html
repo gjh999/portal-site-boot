@@ -2,6 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <body>
 <footer th:fragment="footer" class="egov-footer border-top mt-5 py-4">
+    <div class="container">
+        <!-- 전자정부표준프레임워크 공식 홈페이지 배너 -->
+        <a href="https://www.egovframe.go.kr/home/main.do" target="_blank" rel="noopener"
+           class="egov-official-banner" th:title="#{footer.official.title}">
+            <span class="ban-txt">
+                <strong><i class="bi bi-hexagon-fill"></i> <span th:text="#{footer.official.title}">전자정부표준프레임워크 공식 홈페이지</span></strong>
+                <small th:text="#{footer.official.desc}">가이드·다운로드·커뮤니티 — egovframe.go.kr</small>
+            </span>
+            <span class="ban-go"><span th:text="#{footer.official.go}">바로가기</span> <i class="bi bi-box-arrow-up-right"></i></span>
+        </a>
+    </div>
     <div class="container text-center text-muted small">
         <p class="mb-1">전자정부 표준프레임워크 포털사이트 (Spring Boot + Thymeleaf)</p>
         <p class="mb-0">© <span th:text="${#temporals.year(#temporals.createNow())}">2026</span>

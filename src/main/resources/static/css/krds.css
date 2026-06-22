@@ -428,3 +428,20 @@ body { font-size: 1rem; line-height: 1.6; }
 .krds-quicklink{ width:100%; flex-direction:column; gap:.4rem; padding:1.1rem .5rem; height:auto; }
 .krds-quicklink i{ font-size:1.6rem; }
 .krds-quicklink .label{ font-size:.9rem; font-weight:600; }
+
+/* ── 전자정부표준프레임워크 공식 홈페이지 배너(푸터) ── */
+.egov-official-banner{
+  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  padding:16px 22px; margin:0 0 1.25rem; border-radius:12px; text-decoration:none; color:#fff;
+  background:linear-gradient(135deg, var(--krds-primary,#256EF4), var(--krds-primary-hover,#0B50D0));
+  box-shadow:0 8px 24px rgba(37,110,244,.32); transition:transform .2s ease, box-shadow .2s ease;
+}
+.egov-official-banner:hover{ transform:translateY(-2px); box-shadow:0 12px 30px rgba(37,110,244,.45); color:#fff; }
+.egov-official-banner:focus-visible{ outline:3px solid #fff; outline-offset:2px; }
+.egov-official-banner .ban-txt{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+.egov-official-banner .ban-txt strong{ font-size:1.05rem; font-weight:800; display:flex; align-items:center; gap:.45rem; }
+.egov-official-banner .ban-txt small{ font-size:.85rem; opacity:.92; }
+.egov-official-banner .ban-go{ display:inline-flex; align-items:center; gap:.4rem; font-weight:700; white-space:nowrap;
+  padding:.5rem 1rem; background:rgba(255,255,255,.18); border-radius:8px; }
+.egov-official-banner:hover .ban-go{ background:rgba(255,255,255,.28); }
+@media (max-width:600px){ .egov-official-banner{ padding:14px 16px; } .egov-official-banner .ban-txt strong{ font-size:.98rem; } }
