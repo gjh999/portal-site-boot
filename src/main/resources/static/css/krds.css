@@ -487,3 +487,9 @@ select.krds-form-select:focus{ outline:0; border-color:var(--krds-primary,#256EF
 .egov-nav .dropdown-menu{ border:1px solid var(--krds-gray-10,#E7E8EA); border-radius:10px; box-shadow:0 12px 28px rgba(0,0,0,.16); padding:6px; }
 .egov-nav .dropdown-menu .dropdown-item{ border-radius:6px; padding:.5rem .75rem; }
 .egov-nav .dropdown-menu .dropdown-header{ color:var(--krds-gray-50,#697077); font-size:.78rem; }
+
+/* ── 헤더/GNB 글꼴 통일 (메뉴별 폰트 불일치 방지) ── */
+.egov-header, .egov-header *, .egov-nav, .egov-nav *{ font-family: var(--krds-font) !important; }
+.egov-nav .nav-link, .egov-nav .nav-link.dropdown-toggle{ font-size:1rem !important; font-weight:600 !important; letter-spacing:-0.01em; }
+.egov-nav .dropdown-item{ font-family: var(--krds-font) !important; font-size:.95rem; }
+.egov-header .egov-header-logo span, .egov-header .fs-5{ font-family: var(--krds-font) !important; }

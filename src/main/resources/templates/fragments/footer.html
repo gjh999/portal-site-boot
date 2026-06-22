@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <body>
-<footer th:fragment="footer" class="egov-footer border-top mt-5 py-4">
+<footer th:fragment="footer" class="egov-footer bg-dark text-white py-4 mt-5">
     <div class="container">
         <!-- 전자정부표준프레임워크 공식 홈페이지 배너 -->
         <a href="https://www.egovframe.go.kr/home/main.do" target="_blank" rel="noopener"
@@ -12,11 +12,25 @@
             </span>
             <span class="ban-go"><span th:text="#{footer.official.go}">바로가기</span> <i class="bi bi-box-arrow-up-right"></i></span>
         </a>
-    </div>
-    <div class="container text-center text-muted small">
-        <p class="mb-1">전자정부 표준프레임워크 포털사이트 (Spring Boot + Thymeleaf)</p>
-        <p class="mb-0">© <span th:text="${#temporals.year(#temporals.createNow())}">2026</span>
-            eGovFramework Portal. All rights reserved.</p>
+        <!-- 바로가기 링크 -->
+        <div class="d-flex flex-wrap gap-3 mb-3" style="font-size:.85rem;">
+            <a th:href="@{/}" class="text-white text-decoration-none">홈</a>
+            <a th:href="@{/cop/bbs/selectBoardList.do(bbsId='BBSMSTR_AAAAAAAAAAAA')}" class="text-white text-decoration-none">공지사항</a>
+            <a th:href="@{/uss/olh/faq/FaqListInqire.do}" class="text-white text-decoration-none">FAQ</a>
+            <a th:href="@{/uss/olh/qna/QnaListInqire.do}" class="text-white text-decoration-none">Q&amp;A</a>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h6 class="fw-bold">전자정부 표준프레임워크 포털</h6>
+                <p class="text-muted small mb-0">행정안전부 | eGovFrame 5.0 · Spring Boot + Thymeleaf</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <p class="text-muted small mb-0">
+                    Copyright &copy; <span th:text="${#temporals.year(#temporals.createNow())}">2026</span>
+                    eGovFramework Portal. All rights reserved.
+                </p>
+            </div>
+        </div>
     </div>
 </footer>
 </body>
