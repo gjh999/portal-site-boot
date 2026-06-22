@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/default}" lang="ko">
 <head>
     <title>포탈사이트 템플릿 소개</title>
@@ -15,97 +16,112 @@
             </ol>
         </nav>
 
-        <h1 class="h4 mb-3"><i class="bi bi-info-circle"></i> 포탈사이트 템플릿 소개</h1>
+        <div class="intro-hero">
+            <img th:src="@{/images/intro/main_visual.png}" alt="" class="intro-hero-bg" aria-hidden="true"/>
+            <div class="intro-hero-text">
+                <span class="intro-hero-eyebrow"><i class="bi bi-info-circle"></i> 템플릿 소개</span>
+                <h1>포탈사이트 메뉴 구성</h1>
+                <p>공통컴포넌트 기반으로 현재 포털에 구현된 메뉴 구조입니다. 각 항목을 클릭하면 해당 화면으로 이동합니다.</p>
+            </div>
+        </div>
 
-        <ul class="list-group list-group-flush mb-4">
-            <li class="list-group-item">경량환경 템플릿은 개발자가 프레임워크 쉽게 이해하고 활용할 수 있도록 지원합니다.</li>
-            <li class="list-group-item">홈페이지 템플릿은 공통컴포넌트를 기반으로 아래 그림과 같이 메뉴가 구성됩니다.</li>
-            <li class="list-group-item">관리자로 로그인하면 관리자용 메뉴를 추가로 사용할 수 있습니다.</li>
-            <li class="list-group-item">기울임체로 표시된 메뉴는 구성을 위한 샘플페이지가 제공되며 기능은 구현되지 않은 상태입니다.</li>
-        </ul>
+        <div class="krds-panel mb-4">
+            <div class="krds-panel-body">
+                <ul class="mb-0" style="padding-left:1.1rem; color:#454C53; line-height:1.9;">
+                    <li>경량환경 템플릿은 개발자가 프레임워크를 쉽게 이해하고 활용할 수 있도록 지원합니다.</li>
+                    <li>아래는 <strong>현재 구현·연결된 메뉴</strong> 기준의 사이트맵입니다(GNB와 동기화).</li>
+                    <li><span class="badge-admin">관리자</span> 표시 메뉴는 관리자(ADMIN) 권한으로 로그인해야 보입니다.</li>
+                </ul>
+            </div>
+        </div>
 
         <div class="row g-4">
+            <!-- 소개 -->
             <div class="col-md-6 col-lg-4">
-                <div class="krds-panel h-100">
-                    <div class="krds-panel-head fw-bold">사이트소개</div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">사이트소개</li>
-                        <li class="list-group-item">연혁</li>
-                        <li class="list-group-item">조직소개</li>
-                        <li class="list-group-item">찾아오시는길</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="krds-panel h-100">
-                    <div class="krds-panel-head fw-bold">민원광장</div>
-                    <ul class="list-group list-group-flush fst-italic">
-                        <li class="list-group-item">민원신청</li>
-                        <li class="list-group-item">민원결과확인</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="krds-panel h-100">
-                    <div class="krds-panel-head fw-bold">알림마당</div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">공지사항</li>
-                        <li class="list-group-item">자유게시판</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="krds-panel h-100">
-                    <div class="krds-panel-head fw-bold">정보마당</div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">FAQ</li>
-                        <li class="list-group-item">QnA</li>
-                        <li class="list-group-item">설문조사</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="krds-panel h-100">
-                    <div class="krds-panel-head fw-bold">서비스관리</div>
-                    <div class="krds-panel-body py-2">
-                        <p class="fw-semibold mb-1 mt-2">설문관리</p>
-                        <ul class="list-unstyled text-muted small mb-2">
-                            <li>- 설문지</li>
-                            <li>- 설문템플릿</li>
-                            <li>- 설문문항</li>
-                            <li>- 설문항목</li>
-                            <li>- 설문응답결과</li>
-                        </ul>
-                        <p class="fw-semibold mb-1">서비스관리</p>
-                        <ul class="list-unstyled text-muted small mb-2">
-                            <li>- FAQ관리</li>
-                            <li>- QnA관리</li>
-                            <li>- QnA답변관리</li>
-                            <li>- 게시판생성관리</li>
-                            <li>- 게시판사용관리</li>
-                            <li>- 공지사항관리</li>
-                            <li>- 자유게시판관리</li>
-                            <li>- 배너관리</li>
+                <div class="krds-panel h-100 sitemap-card">
+                    <div class="krds-panel-head fw-bold"><i class="bi bi-building"></i> 소개</div>
+                    <div class="krds-panel-body">
+                        <ul>
+                            <li><a th:href="@{/EgovPageLink.do(linkIndex=3)}">사이트소개</a></li>
+                            <li><a th:href="@{/EgovPageLink.do(linkIndex=4)}">연혁</a></li>
+                            <li><a th:href="@{/EgovPageLink.do(linkIndex=5)}">조직소개</a></li>
+                            <li><a th:href="@{/EgovPageLink.do(linkIndex=6)}">찾아오시는길</a></li>
+                            <li><a th:href="@{/EgovPageLink.do(linkIndex=7)}">템플릿 소개</a></li>
+                            <li><a th:href="@{/cmm/krds/EgovKrdsSample.do}">KRDS 컴포넌트 예시</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
+            <!-- 민원광장 (샘플) -->
             <div class="col-md-6 col-lg-4">
-                <div class="krds-panel h-100">
-                    <div class="krds-panel-head fw-bold">시스템관리</div>
-                    <div class="krds-panel-body py-2">
-                        <p class="fw-semibold mb-1 mt-2">사용자관리</p>
-                        <ul class="list-unstyled text-muted small mb-2">
-                            <li>- 회원관리</li>
-                            <li>- 이용약관관리</li>
-                            <li>- 개인정보보호관리</li>
+                <div class="krds-panel h-100 sitemap-card">
+                    <div class="krds-panel-head fw-bold"><i class="bi bi-file-earmark-text"></i> 민원광장 <span class="text-muted small fw-normal">(샘플)</span></div>
+                    <div class="krds-panel-body">
+                        <ul class="fst-italic">
+                            <li><a th:href="@{/EgovPageLink.do(linkIndex=0)}">민원발급</a></li>
+                            <li><a th:href="@{/EgovPageLink.do(linkIndex=1)}">민원신청</a></li>
+                            <li><a th:href="@{/EgovPageLink.do(linkIndex=2)}">민원결과확인</a></li>
                         </ul>
-                        <p class="fw-semibold mb-1">사용자권한관리</p>
-                        <ul class="list-unstyled text-muted small mb-2">
-                            <li>- 권한관리</li>
-                            <li>- 사용자그룹관리</li>
-                            <li>- 사용자별권한관리</li>
-                            <li>- 롤관리</li>
+                    </div>
+                </div>
+            </div>
+            <!-- 알림마당 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="krds-panel h-100 sitemap-card">
+                    <div class="krds-panel-head fw-bold"><i class="bi bi-megaphone"></i> 알림마당</div>
+                    <div class="krds-panel-body">
+                        <ul>
+                            <li><a th:href="@{/cop/bbs/selectBoardList.do(bbsId='BBSMSTR_AAAAAAAAAAAA')}">공지사항</a></li>
+                            <li><a th:href="@{/cop/bbs/selectBoardList.do(bbsId='BBSMSTR_BBBBBBBBBBBB')}">갤러리</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- 정보마당 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="krds-panel h-100 sitemap-card">
+                    <div class="krds-panel-head fw-bold"><i class="bi bi-collection"></i> 정보마당</div>
+                    <div class="krds-panel-body">
+                        <ul>
+                            <li><a th:href="@{/uss/olh/faq/FaqListInqire.do}">FAQ</a></li>
+                            <li><a th:href="@{/uss/olh/qna/QnaListInqire.do}">Q&amp;A</a></li>
+                            <li><a th:href="@{/uss/olp/qnn/EgovQustnrRespondInfoManageList.do}">설문참여</a></li>
+                            <li><a th:href="@{/uss/sam/stp/StplatListInqire.do}">이용약관</a></li>
+                            <li><a th:href="@{/uss/sam/ipm/listIndvdlInfoPolicy.do}">개인정보처리방침</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- 관리자 · 회원/권한 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="krds-panel h-100 sitemap-card">
+                    <div class="krds-panel-head fw-bold"><i class="bi bi-people"></i> 회원·권한 <span class="badge-admin">관리자</span></div>
+                    <div class="krds-panel-body">
+                        <ul>
+                            <li><a th:href="@{/uss/umt/mber/EgovMberManage.do}">회원관리</a></li>
+                            <li><a th:href="@{/sec/ram/EgovAuthorListView.do}">권한관리</a></li>
+                            <li><a th:href="@{/sec/rmt/EgovRoleListView.do}">롤관리</a></li>
+                            <li><a th:href="@{/sec/gmt/EgovGroupListView.do}">그룹관리</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- 관리자 · 콘텐츠·시스템 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="krds-panel h-100 sitemap-card">
+                    <div class="krds-panel-head fw-bold"><i class="bi bi-sliders"></i> 콘텐츠·시스템 <span class="badge-admin">관리자</span></div>
+                    <div class="krds-panel-body">
+                        <p class="grp-tit">콘텐츠</p>
+                        <ul>
+                            <li><a th:href="@{/cop/bbs/SelectBBSMasterInfs.do}">게시판마스터</a></li>
+                            <li><a th:href="@{/uss/olh/qnm/QnaAnswerListInqire.do}">Q&amp;A 답변관리</a></li>
+                            <li><a th:href="@{/uss/ion/bnr/selectBannerList.do}">배너관리</a></li>
+                        </ul>
+                        <p class="grp-tit">설문·시스템</p>
+                        <ul>
+                            <li><a th:href="@{/uss/olp/qmc/EgovQustnrManageList.do}">설문관리</a></li>
+                            <li><a th:href="@{/sym/cal/EgovRestdeList.do}">휴일관리</a></li>
+                            <li><a th:href="@{/sym/ccm/zip/EgovCcmZipList.do}">우편번호관리</a></li>
                         </ul>
                     </div>
                 </div>

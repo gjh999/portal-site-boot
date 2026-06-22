@@ -501,3 +501,38 @@ select.krds-form-select:focus{ outline:0; border-color:var(--krds-primary,#256EF
 .egov-footer .footer-soc{ display:flex; gap:14px; font-size:1.15rem; }
 .egov-footer .footer-soc a{ color:#9EA4AA; }
 .egov-footer .footer-soc a:hover{ color:#fff; }
+
+/* ── 푸터 상단 레이아웃(brand 좌 / 링크 우, 명시적 간격·반응형) ── */
+.egov-footer .footer-top{ display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:2.5rem 3rem; }
+.egov-footer .footer-brand{ flex:1 1 300px; min-width:260px; max-width:460px; }
+.egov-footer .footer-links{ display:flex; flex-wrap:wrap; gap:1rem 2.75rem; }
+.egov-footer .footer-col{ min-width:120px; }
+.egov-footer .footer-col h6{ white-space:nowrap; }
+.egov-footer .footer-col a{ white-space:nowrap; }
+@media (max-width:768px){
+  .egov-footer .footer-top{ flex-direction:column; gap:1.75rem; }
+  .egov-footer .footer-links{ gap:1.25rem 2rem; width:100%; }
+  .egov-footer .footer-col{ min-width:100px; }
+}
+
+/* ── 소개 페이지 오버레이 히어로(이미지+제목 통합) ── */
+.intro-hero{ position:relative; border-radius:14px; overflow:hidden; min-height:220px; display:flex; align-items:center; margin-bottom:1.75rem; box-shadow:0 10px 28px rgba(30,33,36,.12); }
+.intro-hero-bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+.intro-hero::after{ content:''; position:absolute; inset:0; z-index:1; background:linear-gradient(90deg, rgba(7,30,70,.85) 0%, rgba(7,30,70,.55) 50%, rgba(7,30,70,.18) 100%); }
+.intro-hero-text{ position:relative; z-index:2; padding:2.25rem 2.5rem; max-width:680px; }
+.intro-hero-eyebrow{ display:inline-flex; align-items:center; gap:.4rem; font-size:.82rem; font-weight:700; letter-spacing:.04em; color:#BBD4FF; background:rgba(255,255,255,.12); padding:.25rem .7rem; border-radius:999px; margin-bottom:.7rem; }
+.intro-hero-text h1{ color:#fff; font-weight:800; font-size:1.85rem; margin:0 0 .55rem; line-height:1.25; }
+.intro-hero-text p{ color:rgba(255,255,255,.92); margin:0; font-size:1rem; line-height:1.6; }
+@media (max-width:768px){
+  .intro-hero{ min-height:170px; }
+  .intro-hero-text{ padding:1.5rem 1.4rem; }
+  .intro-hero-text h1{ font-size:1.4rem; }
+}
+/* 템플릿소개 사이트맵 카드 — 내부 여백·링크 */
+.sitemap-card .krds-panel-body{ padding:1rem 1.25rem 1.15rem; }
+.sitemap-card a{ color:#33363D; text-decoration:none; }
+.sitemap-card a:hover{ color:#256EF4; text-decoration:underline; }
+.sitemap-card .grp-tit{ font-weight:700; color:#1E2124; margin:.6rem 0 .35rem; font-size:.92rem; }
+.sitemap-card ul{ list-style:none; padding-left:.25rem; margin:0 0 .4rem; }
+.sitemap-card li{ padding:.18rem 0; font-size:.9rem; color:#454C53; }
+.sitemap-card .badge-admin{ font-size:.7rem; font-weight:700; color:#0B50D0; background:#E8F0FE; border-radius:6px; padding:.1rem .45rem; margin-left:.4rem; }
