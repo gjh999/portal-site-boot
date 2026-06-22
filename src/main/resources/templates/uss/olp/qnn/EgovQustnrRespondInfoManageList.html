@@ -16,7 +16,7 @@
                 <th scope="col" style="width:60px;">번호</th>
                 <th scope="col">설문제목</th>
                 <th scope="col">설문목적</th>
-                <th scope="col" style="width:200px;">설문기간</th>
+                <th scope="col" style="width:220px;white-space:nowrap;">설문기간</th>
                 <th scope="col" style="width:120px;">등록자</th>
                 <th scope="col" style="width:120px;">등록일</th>
             </tr></thead>
@@ -25,7 +25,7 @@
                 <td class="text-center" th:text="${st.count}">1</td>
                 <td><a th:href="@{/uss/olp/qnn/EgovQustnrRespondInfoManageRegist.do(qestnrId=${item['qestnrid']},qestnrTmplatId=${item['qestnrtmplatid']})}" th:text="${item['qestnrsj']}">설문제목</a></td>
                 <td th:text="${item['qestnrpurps']}">목적</td>
-                <td class="text-center"><span th:text="${item['qestnrbeginde']}">시작</span> ~ <span th:text="${item['qestnrendde']}">종료</span></td>
+                <td class="text-center" style="white-space:nowrap;"><span th:text="${item['qestnrbeginde']}">시작</span> ~ <span th:text="${item['qestnrendde']}">종료</span></td>
                 <td class="text-center" th:text="${item['frstregisternm']}">등록자</td>
                 <td class="text-center" th:text="${item['frstregistpnttm']}">등록일</td>
             </tr>

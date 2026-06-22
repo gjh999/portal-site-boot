@@ -228,7 +228,7 @@ public class EgovQustnrRespondInfoController {
 		// 0. Spring Security 사용자권한 처리
 		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 		if (!isAuthenticated) {
-			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+			model.addAttribute("message", "로그인이 필요한 서비스입니다. 로그인 후 이용해 주세요.");
 			return "uat/uia/EgovLoginUsr";
 		}
 
@@ -410,7 +410,7 @@ public class EgovQustnrRespondInfoController {
 		// 0. Spring Security 사용자권한 처리
 		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 		if (!isAuthenticated) {
-			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+			model.addAttribute("message", "로그인이 필요한 서비스입니다. 로그인 후 이용해 주세요.");
 			return "uat/uia/EgovLoginUsr";
 		}
 
@@ -508,7 +508,7 @@ public class EgovQustnrRespondInfoController {
 		// 0. Spring Security 사용자권한 처리
 		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 		if (!isAuthenticated) {
-			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+			model.addAttribute("message", "로그인이 필요한 서비스입니다. 로그인 후 이용해 주세요.");
 			return "uat/uia/EgovLoginUsr";
 		}
 
@@ -568,7 +568,7 @@ public class EgovQustnrRespondInfoController {
 		// 0. Spring Security 사용자권한 처리
 		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 		if (!isAuthenticated) {
-			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+			model.addAttribute("message", "로그인이 필요한 서비스입니다. 로그인 후 이용해 주세요.");
 			return "uat/uia/EgovLoginUsr";
 		}
 
