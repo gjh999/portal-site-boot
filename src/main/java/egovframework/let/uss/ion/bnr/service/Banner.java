@@ -40,9 +40,8 @@ public class Banner extends ComDefaultVO {
 	@Size(max=30)
 	private String bannerNm;
 	/**
-	 * 링크 URL
+	 * 링크 URL (선택사항 — 없으면 이미지/슬라이드만 표시)
 	 */
-	@EgovNullCheck
 	private String linkUrl;
 	/**
 	 * 배너 이미지
@@ -71,6 +70,26 @@ public class Banner extends ComDefaultVO {
 	 * 배너 유형 (MAIN: 메인, POPUP: 팝업, FOOTER: 푸터)
 	 */
 	private String bannerTy;
+	/**
+	 * 팝업 좌표 X(left, px)
+	 */
+	private Integer popupLeft;
+	/**
+	 * 팝업 좌표 Y(top, px)
+	 */
+	private Integer popupTop;
+	/**
+	 * 팝업 너비(px)
+	 */
+	private Integer popupWidth;
+	/**
+	 * 팝업 높이(px)
+	 */
+	private Integer popupHeight;
+	/**
+	 * 팝업 묶음 표출 여부 (Y: 여러 팝업을 한 팝업 캐러셀로 묶음, N: 각각 별도 팝업)
+	 */
+	private String popupGroupAt;
 	/**
 	 * 사용자 ID
 	 */
@@ -191,6 +210,36 @@ public class Banner extends ComDefaultVO {
 	 */
 	public void setBannerTy(String bannerTy) {
 		this.bannerTy = bannerTy;
+	}
+	public Integer getPopupLeft() {
+		return popupLeft;
+	}
+	public void setPopupLeft(Integer popupLeft) {
+		this.popupLeft = popupLeft;
+	}
+	public Integer getPopupTop() {
+		return popupTop;
+	}
+	public void setPopupTop(Integer popupTop) {
+		this.popupTop = popupTop;
+	}
+	public Integer getPopupWidth() {
+		return popupWidth;
+	}
+	public void setPopupWidth(Integer popupWidth) {
+		this.popupWidth = popupWidth;
+	}
+	public Integer getPopupHeight() {
+		return popupHeight;
+	}
+	public void setPopupHeight(Integer popupHeight) {
+		this.popupHeight = popupHeight;
+	}
+	public String getPopupGroupAt() {
+		return popupGroupAt;
+	}
+	public void setPopupGroupAt(String popupGroupAt) {
+		this.popupGroupAt = popupGroupAt;
 	}
 	/**
 	 * @return the userId

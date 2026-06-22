@@ -53,29 +53,57 @@
         document.cookie = name + '=' + value + ';expires=' + d.toUTCString() + ';path=/';
     }
 
+    function num(v) { var n = parseInt(v, 10); return isNaN(n) ? null : n; }
+
     function initPopup(overlay) {
         var key = overlay.getAttribute('data-cookie-key') || 'bnrPopupHide';
         if (getCookie(key) === 'Y') {
-            overlay.parentNode.removeChild(overlay);
+            if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
             return;
         }
-        overlay.style.display = 'flex';
+
+        // 좌표/크기 지정(있으면 .bnr-popup 에 반영)
+        var popup = overlay.querySelector('.bnr-popup');
+        var left = num(overlay.getAttribute('data-left'));
+        var top = num(overlay.getAttribute('data-top'));
+        var width = num(overlay.getAttribute('data-width'));
+        var height = num(overlay.getAttribute('data-height'));
+        if (popup) {
+            if (width !== null) popup.style.width = width + 'px';
+            if (height !== null) popup.style.height = height + 'px';
+            if (left !== null || top !== null) {
+                overlay.classList.add('is-positioned');
+                if (left !== null) popup.style.left = left + 'px';
+                if (top !== null) popup.style.top = top + 'px';
+            }
+        }
+
+        // 팝업 안에 캐러셀(여러 팝업 묶음)이 있으면 초기화
+        var inner = overlay.querySelector('.bnr-carousel');
+        if (inner) initCarousel(inner);
+
+        overlay.classList.add('is-open');
 
         function close(remember) {
             if (remember) {
                 var chk = overlay.querySelector('.bnr-popup-today');
                 if (chk && chk.checked) setCookie(key, 'Y', 24);
             }
+            overlay.classList.remove('is-open');
             if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
         }
-        var btnClose = overlay.querySelector('.bnr-popup-close');
-        if (btnClose) btnClose.addEventListener('click', function () { close(true); });
-        // 오버레이 배경 클릭 시 닫기(체크박스 상태 반영)
+        overlay.querySelectorAll('.bnr-popup-close').forEach(function (b) {
+            b.addEventListener('click', function () { close(true); });
+        });
+        // 오버레이 배경 클릭 시 닫기(체크박스 상태 반영). 위치지정(block) 모드에서는 팝업 외부 클릭만.
         overlay.addEventListener('click', function (e) { if (e.target === overlay) close(true); });
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.bnr-carousel').forEach(initCarousel);
+        // 팝업 내부 캐러셀은 initPopup 에서 별도 초기화하므로 팝업 밖 캐러셀만 우선 초기화
+        document.querySelectorAll('.bnr-carousel').forEach(function (c) {
+            if (!c.closest('.bnr-popup-overlay')) initCarousel(c);
+        });
         document.querySelectorAll('.bnr-popup-overlay').forEach(initPopup);
     });
 })();

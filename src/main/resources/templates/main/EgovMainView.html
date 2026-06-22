@@ -106,34 +106,66 @@
 <main layout:fragment="content">
 <div class="lp-wrap container" style="max-width:1200px;">
 
-    <!-- ===== HERO ===== -->
-    <section class="lp-hero">
-        <span class="lp-eyebrow"><i class="bi bi-shield-check"></i> 전자정부 표준프레임워크 5.0</span>
-        <h1 class="lp-title">신뢰할 수 있는<br><span class="grad">디지털 정부 서비스</span>의 표준</h1>
-        <p class="lp-sub">
-            Spring Boot와 Thymeleaf로 재구축한 표준 포털 플랫폼입니다.
-            게시판·민원·설문·회원·권한 등 공공 서비스에 필요한 모든 기능을 하나의 일관된 경험으로 제공합니다.
-        </p>
-        <div class="d-flex flex-wrap gap-3 mt-4">
-            <a class="lp-btn-primary" href="#services"><i class="bi bi-grid-1x2"></i> 서비스 둘러보기</a>
-            <a sec:authorize="!isAuthenticated()" class="lp-btn-ghost" th:href="@{/uss/umt/cmm/EgovMberSbscrbView.do}">
-                <i class="bi bi-person-plus"></i> 회원가입</a>
-            <a sec:authorize="isAuthenticated()" class="lp-btn-ghost" th:href="@{/uss/olh/qna/QnaListInqire.do}">
-                <i class="bi bi-chat-dots"></i> 문의하기</a>
+    <!-- ===== 메인 캐러셀 : 1번 슬라이드=히어로, 이후 메인 배너들과 한 캐러셀로 통합 ===== -->
+    <section>
+        <div class="bnr-carousel bnr-main bnr-has-hero" th:attr="data-interval=${bannerInterval}">
+            <div class="bnr-track">
+                <!-- 슬라이드 1 : 히어로(홈 히어로 내용을 첫 슬라이드로 편입) -->
+                <div class="bnr-slide bnr-hero-slide">
+                    <section class="lp-hero">
+                        <span class="lp-eyebrow"><i class="bi bi-shield-check"></i> 전자정부 표준프레임워크 5.0</span>
+                        <h1 class="lp-title">신뢰할 수 있는<br><span class="grad">디지털 정부 서비스</span>의 표준</h1>
+                        <p class="lp-sub">
+                            Spring Boot와 Thymeleaf로 재구축한 표준 포털 플랫폼입니다.
+                            게시판·민원·설문·회원·권한 등 공공 서비스에 필요한 모든 기능을 하나의 일관된 경험으로 제공합니다.
+                        </p>
+                        <div class="d-flex flex-wrap gap-3 mt-4">
+                            <a class="lp-btn-primary" href="#services"><i class="bi bi-grid-1x2"></i> 서비스 둘러보기</a>
+                            <a sec:authorize="!isAuthenticated()" class="lp-btn-ghost" th:href="@{/uss/umt/cmm/EgovMberSbscrbView.do}">
+                                <i class="bi bi-person-plus"></i> 회원가입</a>
+                            <a sec:authorize="isAuthenticated()" class="lp-btn-ghost" th:href="@{/uss/olh/qna/QnaListInqire.do}">
+                                <i class="bi bi-chat-dots"></i> 문의하기</a>
+                        </div>
+                        <div class="lp-chips">
+                            <span class="lp-chip">Spring Boot 3.5</span>
+                            <span class="lp-chip">Thymeleaf</span>
+                            <span class="lp-chip">eGovFrame 5.0</span>
+                            <span class="lp-chip">Spring Security</span>
+                            <span class="lp-chip">KRDS 디자인</span>
+                            <span class="lp-chip">PostgreSQL · HSQL</span>
+                        </div>
+                    </section>
+                </div>
+                <!-- 슬라이드 2~ : 메인 배너 목록 -->
+                <div class="bnr-slide" th:each="b : ${mainBannerList}"
+                     th:if="${mainBannerList != null and !#lists.isEmpty(mainBannerList)}">
+                    <a th:if="${b.linkUrl != null and b.linkUrl != ''}" th:href="${b.linkUrl}" target="_blank" rel="noopener">
+                        <img th:src="@{'/images/banner/' + ${b.bannerImage}}" th:alt="${b.bannerNm}"
+                             onerror="this.src='/images/intro/main_visual.png';"/>
+                        <span class="bnr-cap" th:if="${b.bannerNm != null}">
+                            <span th:text="${b.bannerNm}">배너명</span>
+                            <small th:if="${b.bannerDc != null and b.bannerDc != ''}" th:text="${b.bannerDc}">설명</small>
+                        </span>
+                    </a>
+                    <th:block th:unless="${b.linkUrl != null and b.linkUrl != ''}">
+                        <img th:src="@{'/images/banner/' + ${b.bannerImage}}" th:alt="${b.bannerNm}"
+                             onerror="this.src='/images/intro/main_visual.png';"/>
+                        <span class="bnr-cap" th:if="${b.bannerNm != null}">
+                            <span th:text="${b.bannerNm}">배너명</span>
+                            <small th:if="${b.bannerDc != null and b.bannerDc != ''}" th:text="${b.bannerDc}">설명</small>
+                        </span>
+                    </th:block>
+                </div>
+            </div>
+            <button type="button" class="bnr-nav bnr-prev" aria-label="이전 배너">&#10094;</button>
+            <button type="button" class="bnr-nav bnr-next" aria-label="다음 배너">&#10095;</button>
+            <div class="bnr-dots">
+                <button type="button" class="bnr-dot active" aria-label="배너 1"></button>
+                <button type="button" class="bnr-dot" th:each="b,st : ${mainBannerList}"
+                        th:if="${mainBannerList != null and !#lists.isEmpty(mainBannerList)}"
+                        th:attr="aria-label='배너 ' + ${st.count + 1}"></button>
+            </div>
         </div>
-        <div class="lp-chips">
-            <span class="lp-chip">Spring Boot 3.5</span>
-            <span class="lp-chip">Thymeleaf</span>
-            <span class="lp-chip">eGovFrame 5.0</span>
-            <span class="lp-chip">Spring Security</span>
-            <span class="lp-chip">KRDS 디자인</span>
-            <span class="lp-chip">PostgreSQL · HSQL</span>
-        </div>
-    </section>
-
-    <!-- ===== 메인 배너 슬라이드(캐러셀) ===== -->
-    <section class="mt-4" th:if="${mainBannerList != null and !#lists.isEmpty(mainBannerList)}">
-        <div th:replace="~{fragments/banner :: carousel(${mainBannerList}, ${bannerInterval}, 'bnr-main')}"></div>
     </section>
 
     <!-- ===== 통계 ===== -->

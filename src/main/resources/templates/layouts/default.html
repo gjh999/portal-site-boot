@@ -45,7 +45,7 @@
 </main>
 
 <!-- 팝업 배너 (페이지 진입 시 표출, '오늘 하루 보지 않기' 쿠키 24h) -->
-<th:block th:replace="~{fragments/banner :: popup(${popupBannerList})}"></th:block>
+<th:block th:replace="~{fragments/banner :: popup(${popupBannerList}, ${bannerInterval})}"></th:block>
 
 <!-- 푸터 -->
 <footer class="egov-footer" th:replace="~{fragments/footer :: footer}"></footer>

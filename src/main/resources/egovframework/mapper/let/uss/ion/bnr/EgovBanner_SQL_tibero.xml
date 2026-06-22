@@ -15,6 +15,11 @@
         <result property="sortOrdr" column="SORT_ORDR"/>
         <result property="reflctAt" column="REFLCT_AT"/>
         <result property="bannerTy" column="BANNER_TY"/>
+        <result property="popupLeft" column="POPUP_LEFT"/>
+        <result property="popupTop" column="POPUP_TOP"/>
+        <result property="popupWidth" column="POPUP_WIDTH"/>
+        <result property="popupHeight" column="POPUP_HEIGHT"/>
+        <result property="popupGroupAt" column="POPUP_GROUP_AT"/>
         <result property="userId" column="FRST_REGISTER_ID"/>
         <result property="regDate" column="FRST_REGIST_PNTTM"/>
     </resultMap>
@@ -95,11 +100,16 @@
                    BANNER_IMAGE_FILE,   
                    BANNER_DC,
                    SORT_ORDR,            
-                   REFLCT_AT,            
+                   REFLCT_AT,
+                   POPUP_LEFT,
+                   POPUP_TOP,
+                   POPUP_WIDTH,
+                   POPUP_HEIGHT,
+                   POPUP_GROUP_AT,
                    FRST_REGISTER_ID,
-                   FRST_REGIST_PNTTM     
+                   FRST_REGIST_PNTTM
               FROM TB_BANNER
-             WHERE BANNER_ID = #{bannerId}    
+             WHERE BANNER_ID = #{bannerId}
         
     </select>
 
@@ -115,6 +125,11 @@
                     SORT_ORDR,        
                     REFLCT_AT,            
                     BANNER_TY,
+                    POPUP_LEFT,
+                    POPUP_TOP,
+                    POPUP_WIDTH,
+                    POPUP_HEIGHT,
+                    POPUP_GROUP_AT,
                     FRST_REGISTER_ID,
                     FRST_REGIST_PNTTM)
             VALUES (#{bannerId},
@@ -126,8 +141,13 @@
                     #{sortOrdr},
                     #{reflctAt},
                     #{bannerTy},
+                    #{popupLeft},
+                    #{popupTop},
+                    #{popupWidth},
+                    #{popupHeight},
+                    #{popupGroupAt},
                     #{userId},
-                    SYSDATE)   
+                    SYSDATE)
         
     </insert>     
 
@@ -143,6 +163,11 @@
                    SORT_ORDR = #{sortOrdr},
                    REFLCT_AT = #{reflctAt},
                    BANNER_TY = #{bannerTy},
+                   POPUP_LEFT = #{popupLeft},
+                   POPUP_TOP = #{popupTop},
+                   POPUP_WIDTH = #{popupWidth},
+                   POPUP_HEIGHT = #{popupHeight},
+                   POPUP_GROUP_AT = #{popupGroupAt},
                    LAST_UPDUSR_ID = #{userId},
                    LAST_UPDT_PNTTM = SYSDATE   
              WHERE BANNER_ID = #{bannerId}    
@@ -187,6 +212,11 @@
                    SORT_ORDR,
                    REFLCT_AT,
                    BANNER_TY,
+                   POPUP_LEFT,
+                   POPUP_TOP,
+                   POPUP_WIDTH,
+                   POPUP_HEIGHT,
+                   POPUP_GROUP_AT,
                    FRST_REGISTER_ID
               FROM TB_BANNER
              WHERE REFLCT_AT = 'Y'
