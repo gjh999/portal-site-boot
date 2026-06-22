@@ -9,18 +9,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title layout:title-pattern="$CONTENT_TITLE - 전자정부표준프레임워크">전자정부표준프레임워크</title>
 
-    <!--
-        KRDS (한국 정부 통합 디자인 시스템)
-        공식 CDN: https://uiux.egovframe.go.kr
-        현재: Bootstrap 5 기반 임시 적용 — KRDS 파일 제공 시 krds.css/krds.js로 교체
-    -->
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <!-- KRDS (디지털정부 표준 디자인시스템, 행정안전부 https://www.krds.go.kr) — 로컬 자원만, Bootstrap 프레임워크 미사용 -->
+    <!-- Pretendard GOV 폰트 프리로드 (FOUT/글꼴 교체 깜빡임 최소화) -->
+    <link rel="preload" th:href="@{/krds/resources/fonts/PretendardGOV-Regular.subset.woff2}" as="font" type="font/woff2" crossorigin/>
+    <link rel="preload" th:href="@{/krds/resources/fonts/PretendardGOV-Medium.subset.woff2}" as="font" type="font/woff2" crossorigin/>
+    <link rel="preload" th:href="@{/krds/resources/fonts/PretendardGOV-Bold.subset.woff2}" as="font" type="font/woff2" crossorigin/>
+    <!-- Bootstrap Icons(아이콘 폰트만) → 공식 KRDS → 공통 → 호환 레이어 → 스킨(최종 권위) -->
     <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}">
-    <link rel="stylesheet" th:href="@{/css/krds.css}"/>
-    <!-- 공통 CSS -->
+    <link rel="stylesheet" th:href="@{/krds/resources/cdn/krds.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
-    <!-- 모던 다크 테마 (전역 오버라이드) -->
-    <link rel="stylesheet" th:href="@{/css/theme.css}"/>
+    <link rel="stylesheet" th:href="@{/css/krds-compat.css}"/>
+    <link rel="stylesheet" th:href="@{/css/krds.css}"/>
     <link rel="icon" type="image/svg+xml" th:href="@{/images/logo.svg}"/>
 
     <!-- 페이지별 추가 CSS -->
@@ -47,9 +46,9 @@
 <!-- 푸터 -->
 <footer class="egov-footer" th:replace="~{fragments/footer :: footer}"></footer>
 
-<!-- Bootstrap 5 JS (로컬) -->
-<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
-<!-- KRDS JS (로컬 오버라이드) -->
+<!-- 공식 KRDS JS(탭·아코디언 등) + 호환 JS(data-bs-* 대체) -->
+<script th:src="@{/krds/resources/cdn/krds.min.js}"></script>
+<script th:src="@{/js/krds-compat.js}"></script>
 <script th:src="@{/js/krds.js}"></script>
 <!-- 공통 JS -->
 <script th:src="@{/js/common.js}"></script>

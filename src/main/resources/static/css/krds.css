@@ -1,115 +1,430 @@
 /*
- * KRDS (Korea Representative Design System) CSS
- * 공식 사이트: https://uiux.egovframe.go.kr
+ * ============================================================
+ * KRDS (Korea Design System) 적용 스타일
+ * 디지털정부 표준 디자인 시스템 (행정안전부) — https://www.krds.go.kr
+ * ------------------------------------------------------------
+ * 이 파일은 KRDS 공개 디자인 토큰(색·타이포·간격·컴포넌트 규칙)을 기반으로
+ * 본 프로젝트(Bootstrap 5 마크업)에 KRDS 디자인 언어를 입히는 레이어입니다.
  *
- * 이 파일은 공식 KRDS 파일이 제공되면 교체하세요.
- * 현재는 eGovFrame 정부 디자인 가이드라인 기반 커스텀 스타일 적용
+ * 적용 방식:
+ *  1) :root 에 KRDS 디자인 토큰을 정의하고, Bootstrap 의 --bs-* 변수를 KRDS 값으로 재매핑
+ *     → 템플릿을 수정하지 않아도 btn/card/table/form 등 기존 Bootstrap 컴포넌트가 KRDS 톤으로 표시됨
+ *  2) egov-header / egov-nav(GNB) / egov-footer / breadcrumb 등 구조 요소에 KRDS 스타일 적용
+ *  3) 웹접근성(KWCAG): skip-nav, 선명한 focus-visible 링, 충분한 명도대비
+ *
+ * 로드 순서: bootstrap.min.css → bootstrap-icons → common.css → (이 파일, 최종 권위)
+ * 폰트: KRDS 권장 Pretendard GOV. CDN 미사용 정책에 따라 로컬/시스템 폰트로 폴백한다.
+ *       (픽셀 정합이 필요하면 Pretendard GOV 웹폰트를 /css/fonts 에 추가)
+ * ============================================================
  */
 
-/* ── 정부 공통 컬러 팔레트 ── */
+/* ── KRDS 디자인 토큰 ── */
 :root {
-    /* 주요 색상 */
-    --krds-blue: #0054A6;
-    --krds-blue-dark: #003D7A;
-    --krds-blue-light: #E8F0FB;
+  /* Primary (KRDS Primary) */
+  --krds-primary:        #256EF4;
+  --krds-primary-hover:  #0B50D0;
+  --krds-primary-active: #0A47B5;
+  --krds-primary-light:  #E8F0FE;
+  --krds-primary-bg:     #F0F6FF;
 
-    /* 텍스트 */
-    --krds-text-primary: #1A1A1A;
-    --krds-text-secondary: #555555;
-    --krds-text-muted: #888888;
+  /* Gray scale */
+  --krds-gray-0:  #FFFFFF;
+  --krds-gray-5:  #F4F5F6;
+  --krds-gray-10: #E7E8EA;
+  --krds-gray-20: #CDD1D5;
+  --krds-gray-40: #9EA4AA;
+  --krds-gray-60: #58616A;
+  --krds-gray-80: #33363D;
+  --krds-gray-90: #1E2124;
 
-    /* 배경 */
-    --krds-bg-white: #FFFFFF;
-    --krds-bg-gray: #F5F6F8;
+  /* Semantic */
+  --krds-success: #228738;
+  --krds-danger:  #DE3412;
+  --krds-warning: #FF9000;
+  --krds-info:    #256EF4;
 
-    /* 보더 */
-    --krds-border: #DDDDDD;
-    --krds-border-focus: #0054A6;
+  /* Surface / text / border */
+  --krds-text:        var(--krds-gray-90);
+  --krds-text-sub:    var(--krds-gray-60);
+  --krds-bg:          var(--krds-gray-0);
+  --krds-bg-alt:      var(--krds-gray-5);
+  --krds-border:      var(--krds-gray-10);
+  --krds-border-strong: var(--krds-gray-20);
 
-    /* 상태 */
-    --krds-success: #0EA800;
-    --krds-danger: #E2000F;
-    --krds-warning: #F5A200;
-    --krds-info: #0077C8;
+  /* Shape */
+  --krds-radius-sm: 4px;
+  --krds-radius:    6px;
+  --krds-radius-lg: 12px;
+
+  /* Typography */
+  --krds-font: "Pretendard GOV", "Pretendard", -apple-system, BlinkMacSystemFont,
+               system-ui, "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", sans-serif;
+
+  /* ── Bootstrap(--bs-*) 재매핑: 템플릿 수정 없이 KRDS 컬러로 치환 ── */
+  --bs-primary:        #256EF4;
+  --bs-primary-rgb:    37, 110, 244;
+  --bs-link-color:     #256EF4;
+  --bs-link-color-rgb: 37, 110, 244;
+  --bs-link-hover-color: #0B50D0;
+  --bs-body-color:     #1E2124;
+  --bs-body-color-rgb: 30, 33, 36;
+  --bs-body-font-family: var(--krds-font);
+  --bs-border-color:   #E7E8EA;
+  --bs-border-radius:  6px;
 }
 
-/* ── 기본 타이포그래피 ── */
+/* ── 기본 타이포 ── */
+html { font-size: 16px; }
+body.egov-body,
 body {
-    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-    font-size: 14px;
-    color: var(--krds-text-primary);
-    background-color: var(--krds-bg-gray);
-    -webkit-font-smoothing: antialiased;
+  font-family: var(--krds-font);
+  color: var(--krds-text);
+  background-color: var(--krds-bg);
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+}
+h1, h2, h3, h4, h5, h6 { font-weight: 700; color: var(--krds-gray-90); letter-spacing: -0.02em; }
+a { color: var(--krds-primary); }
+a:hover { color: var(--krds-primary-hover); }
+
+/* ── 웹접근성: 선명한 포커스 링 (KWCAG) ── */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.btn:focus-visible,
+.form-control:focus-visible,
+.nav-link:focus-visible,
+.dropdown-item:focus-visible {
+  outline: 3px solid #4A91FF;
+  outline-offset: 2px;
+  box-shadow: none;
 }
 
-/* ── 헤더 ── */
+/* ── 접근성: 본문 바로가기(skip navigation) ── */
+.skip-nav {
+  position: absolute;
+  left: 50%;
+  top: -60px;
+  transform: translateX(-50%);
+  z-index: 2000;
+  padding: 10px 24px;
+  background: var(--krds-gray-90);
+  color: #fff;
+  border-radius: 0 0 var(--krds-radius) var(--krds-radius);
+  text-decoration: none;
+  font-weight: 600;
+  transition: top .15s ease;
+}
+.skip-nav:focus { top: 0; color: #fff; }
+
+/* ── 헤더 (KRDS 마스트헤드) ── */
 .egov-header {
-    height: 64px;
-    background: #fff;
-    border-bottom: 1px solid var(--krds-border);
+  background: var(--krds-gray-0) !important;
+  border-bottom: 1px solid var(--krds-border) !important;
+  box-shadow: none !important;
 }
-
-/* ── 네비게이션 ── */
-.egov-nav {
-    background-color: var(--krds-blue) !important;
-    min-height: 48px;
+.egov-header .text-primary { color: var(--krds-primary) !important; }
+.egov-lang { display: inline-flex; border: 1px solid var(--krds-border-strong); border-radius: var(--krds-radius); overflow: hidden; }
+.egov-lang .lang-btn {
+  padding: 4px 12px; font-size: .875rem; color: var(--krds-gray-60);
+  text-decoration: none; background: #fff; border: 0;
 }
+.egov-lang .lang-btn + .lang-btn { border-left: 1px solid var(--krds-border); }
+.egov-lang .lang-btn.active { background: var(--krds-primary); color: #fff; font-weight: 600; }
 
-/* ── 버튼 오버라이드 ── */
+/* ── 전역 내비게이션 GNB (KRDS) ── */
+.egov-nav.navbar {
+  background: var(--krds-primary) !important;
+  --bs-navbar-color: rgba(255,255,255,.88);
+  --bs-navbar-hover-color: #fff;
+  --bs-navbar-active-color: #fff;
+}
+.egov-nav .nav-link { font-weight: 600; padding: 14px 18px; position: relative; }
+.egov-nav .nav-link:hover,
+.egov-nav .nav-link:focus { background: rgba(255,255,255,.12); }
+/* KRDS 메인메뉴 관례: 활성/호버 하단 인디케이터 + 포커스 링(접근성).
+   드롭다운 토글은 캐럿(::after)을 쓰므로 인디케이터 대상에서 제외. */
+.egov-nav .nav-link:not(.dropdown-toggle)::after{ content:""; position:absolute; left:18px; right:18px; bottom:7px;
+  height:2px; background:#fff; transform:scaleX(0); transform-origin:left; transition:transform .2s ease; }
+.egov-nav .nav-link:not(.dropdown-toggle):hover::after,
+.egov-nav .nav-link:not(.dropdown-toggle):focus-visible::after,
+.egov-nav .nav-link[aria-current="page"]:not(.dropdown-toggle)::after{ transform:scaleX(1); }
+.egov-nav .nav-link[aria-current="page"]{ font-weight:700; }
+.egov-nav .nav-link:focus-visible{ outline:2px solid #fff; outline-offset:-3px; border-radius:4px; }
+.egov-nav .dropdown-menu {
+  border: 1px solid var(--krds-border); border-radius: var(--krds-radius);
+  box-shadow: 0 6px 20px rgba(0,0,0,.12); padding: 6px;
+}
+.egov-nav .dropdown-item { border-radius: var(--krds-radius-sm); padding: 8px 14px; font-weight: 500; }
+.egov-nav .dropdown-item:hover,
+.egov-nav .dropdown-item:focus { background: var(--krds-primary-light); color: var(--krds-primary-hover); }
+.egov-nav .dropdown-item.active { background: var(--krds-primary); color: #fff; }
+
+/* ── 본문 영역 ── */
+.egov-content { background: var(--krds-bg); }
+
+/* ── 브레드크럼 (KRDS) ── */
+.breadcrumb {
+  background: var(--krds-bg-alt);
+  border: 1px solid var(--krds-border);
+  border-radius: var(--krds-radius);
+  padding: 10px 16px;
+  font-size: .9rem;
+}
+.breadcrumb-item a { color: var(--krds-gray-60); text-decoration: none; }
+.breadcrumb-item a:hover { color: var(--krds-primary); text-decoration: underline; }
+.breadcrumb-item.active { color: var(--krds-gray-90); font-weight: 600; }
+
+/* ── 버튼 (KRDS) — Bootstrap 변수 재매핑 ── */
+.btn { border-radius: var(--krds-radius); font-weight: 600; }
 .btn-primary {
-    background-color: var(--krds-blue);
-    border-color: var(--krds-blue);
+  --bs-btn-bg: var(--krds-primary); --bs-btn-border-color: var(--krds-primary);
+  --bs-btn-hover-bg: var(--krds-primary-hover); --bs-btn-hover-border-color: var(--krds-primary-hover);
+  --bs-btn-active-bg: var(--krds-primary-active); --bs-btn-active-border-color: var(--krds-primary-active);
+  --bs-btn-disabled-bg: var(--krds-gray-20); --bs-btn-disabled-border-color: var(--krds-gray-20);
 }
-.btn-primary:hover, .btn-primary:focus {
-    background-color: var(--krds-blue-dark);
-    border-color: var(--krds-blue-dark);
+.btn-outline-primary {
+  --bs-btn-color: var(--krds-primary); --bs-btn-border-color: var(--krds-primary);
+  --bs-btn-hover-bg: var(--krds-primary); --bs-btn-hover-border-color: var(--krds-primary);
+  --bs-btn-active-bg: var(--krds-primary-hover); --bs-btn-active-border-color: var(--krds-primary-hover);
 }
-
-/* ── 테이블 ── */
-.table thead th {
-    background-color: #EEF3FA;
-    border-bottom: 2px solid var(--krds-blue);
-    color: var(--krds-text-primary);
-    font-weight: 600;
-    font-size: 13px;
-}
-
-/* ── 폼 컨트롤 ── */
-.form-control:focus, .form-select:focus {
-    border-color: var(--krds-blue);
-    box-shadow: 0 0 0 3px rgba(0, 84, 166, 0.15);
+.btn-outline-secondary {
+  --bs-btn-color: var(--krds-gray-60); --bs-btn-border-color: var(--krds-border-strong);
+  --bs-btn-hover-bg: var(--krds-gray-5); --bs-btn-hover-color: var(--krds-gray-90);
+  --bs-btn-hover-border-color: var(--krds-border-strong);
 }
 
-/* ── 페이지네이션 ── */
-.pagination .page-link {
-    color: var(--krds-blue);
-    border-color: var(--krds-border);
-}
-.pagination .page-item.active .page-link {
-    background-color: var(--krds-blue);
-    border-color: var(--krds-blue);
-}
-.pagination .page-link:hover {
-    background-color: var(--krds-blue-light);
-    color: var(--krds-blue-dark);
-}
+/* ── 링크/배경 유틸리티 KRDS 치환 ── */
+.bg-primary { background-color: var(--krds-primary) !important; }
+.text-primary { color: var(--krds-primary) !important; }
+.btn-link { color: var(--krds-primary); }
 
-/* ── 카드 ── */
+/* ── 카드 (KRDS) ── */
 .card {
-    border: 1px solid var(--krds-border);
-    border-radius: 6px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  border: 1px solid var(--krds-border);
+  border-radius: var(--krds-radius-lg);
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
 }
 .card-header {
-    background-color: #F5F7FB;
-    border-bottom: 1px solid var(--krds-border);
-    font-weight: 600;
-    font-size: 15px;
-    padding: 14px 20px;
+  background: var(--krds-bg-alt);
+  border-bottom: 1px solid var(--krds-border);
+  font-weight: 700;
 }
 
-/* ── 알림창 ── */
-.alert {
-    border-radius: 6px;
-    font-size: 14px;
+/* ── 표 (KRDS) ── */
+.table { --bs-table-border-color: var(--krds-border); color: var(--krds-text); }
+.table > thead th {
+  background: var(--krds-gray-5);
+  color: var(--krds-gray-90);
+  font-weight: 700;
+  border-bottom: 2px solid var(--krds-border-strong);
+  vertical-align: middle;
 }
+.table > tbody td { vertical-align: middle; }
+.table-hover > tbody > tr:hover > * { background-color: var(--krds-primary-bg); }
+
+/* ── 폼 (KRDS) ── */
+.form-label { font-weight: 600; color: var(--krds-gray-80); }
+.form-control, .form-select {
+  border: 1px solid var(--krds-border-strong);
+  border-radius: var(--krds-radius);
+  color: var(--krds-gray-90);
+  padding: .5rem .75rem;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--krds-primary);
+  box-shadow: 0 0 0 3px rgba(37,110,244,.18);
+}
+.form-control::placeholder { color: var(--krds-gray-40); }
+.required, label .req { color: var(--krds-danger); }
+
+/* ── 배지 / 알림 (KRDS 시맨틱 컬러) ── */
+.badge.bg-primary { background-color: var(--krds-primary) !important; }
+.alert-primary { --bs-alert-bg: var(--krds-primary-bg); --bs-alert-border-color: var(--krds-primary-light); --bs-alert-color: var(--krds-primary-active); }
+.alert-success { --bs-alert-color: var(--krds-success); }
+.alert-danger  { --bs-alert-color: var(--krds-danger); }
+.alert-warning { --bs-alert-color: #8a5200; }
+
+/* ── 페이지네이션 (KRDS) ── */
+.pagination { --bs-pagination-color: var(--krds-gray-60); --bs-pagination-hover-bg: var(--krds-primary-light);
+  --bs-pagination-active-bg: var(--krds-primary); --bs-pagination-active-border-color: var(--krds-primary);
+  --bs-pagination-border-color: var(--krds-border); --bs-pagination-border-radius: var(--krds-radius); }
+
+/* ── 푸터 (KRDS 정부 푸터: 진회색) ── */
+.egov-footer {
+  background: var(--krds-gray-90) !important;
+  color: #C7CCD1 !important;
+  margin-top: 3rem;
+}
+.egov-footer h6 { color: #fff; }
+.egov-footer .text-muted { color: #9EA4AA !important; }
+
+/* ── 페이지 제목/섹션 헤딩 (KRDS) ── */
+.page-title, .content-title {
+  font-size: 1.75rem; font-weight: 800; color: var(--krds-gray-90);
+  padding-bottom: .75rem; border-bottom: 3px solid var(--krds-primary);
+  margin-bottom: 1.5rem; display: inline-block;
+}
+
+/* ── 로그인 페이지 (KRDS) — 기존 다크 theme.css 대체 ── */
+/* 언어 토글: 로그인 화면 우상단 고정 (.egov-lang 시각은 위에서 정의) */
+.login-lang { position: absolute; top: 20px; right: 24px; z-index: 5; }
+.login-card .form-label { color: var(--krds-gray-80); }
+.login-card hr { border-color: var(--krds-border); }
+
+/* 회원가입 안내 / 홈으로 */
+.login-signup-hint { color: var(--krds-gray-60); font-size: 14px; }
+.login-signup-link { color: var(--krds-primary); font-weight: 700; text-decoration: none; margin-left: 4px; }
+.login-signup-link:hover { text-decoration: underline; }
+.login-back { color: var(--krds-gray-60); font-size: 13px; text-decoration: none; }
+.login-back:hover { color: var(--krds-primary); }
+
+/* 구분선 ("또는 SNS 계정으로 로그인") */
+.login-divider { display: flex; align-items: center; gap: 12px; margin: 22px 0 18px; color: var(--krds-gray-40); font-size: 12.5px; }
+.login-divider::before, .login-divider::after { content: ""; flex: 1; height: 1px; background: var(--krds-border); }
+
+/* SNS 로그인 버튼 (브랜드 컬러 유지) */
+.sns-login { display: flex; flex-direction: column; gap: 10px; }
+.sns-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 11px 16px; border-radius: var(--krds-radius);
+  font-weight: 700; font-size: 14.5px; text-decoration: none;
+  border: 1px solid transparent; transition: filter .2s ease, transform .2s ease;
+}
+.sns-btn:hover { transform: translateY(-1px); filter: brightness(.97); }
+.sns-naver { background: #03C75A; color: #fff; }
+.sns-naver .sns-mark { font-weight: 900; }
+.sns-kakao { background: #FEE500; color: #191600; }
+
+/* ── 페이지 타이틀 바 (전 페이지 공통 · 상하 여백/글씨 밸런스) ── */
+.page-title-bar { padding: .85rem 0 .25rem; }
+/* 브레드크럼: 회색 박스 제거 + 작고 단정하게 */
+.page-title-bar .breadcrumb {
+  font-size: .85rem !important; padding: 2px 0 !important; margin: 0 0 .35rem !important;
+  background: transparent !important; border: 0 !important;
+}
+.page-title-bar .breadcrumb-item.active { font-weight: 600; }
+/* 타이틀(h1/h2 공통): 균형 크기 + KRDS 강조 바 */
+.page-title-bar h1, .page-title-bar h2 {
+  font-size: 1.4rem; font-weight: 800; color: var(--krds-gray-90);
+  margin: .1rem 0 0; padding-left: .65rem; position: relative; letter-spacing: -.02em; line-height: 1.3;
+}
+.page-title-bar h1::before, .page-title-bar h2::before {
+  content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 4px; height: 1.05em; border-radius: 3px; background: var(--krds-primary);
+}
+
+/* ── 환영 히어로 배너 (KRDS — 장식 패턴·글로우·링 아이콘) ── */
+.egov-hero {
+  position: relative; overflow: hidden; color: #fff;
+  background: linear-gradient(135deg, #256EF4 0%, #0B50D0 100%);
+  border-radius: var(--krds-radius-lg);
+  box-shadow: 0 14px 34px rgba(37,110,244,.28);
+}
+.egov-hero::before {            /* 은은한 도트 패턴 */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(rgba(255,255,255,.16) 1.5px, transparent 1.6px);
+  background-size: 22px 22px; opacity: .5;
+}
+.egov-hero::after {             /* 우상단 소프트 글로우 */
+  content: ""; position: absolute; right: -70px; top: -70px; width: 280px; height: 280px;
+  border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(255,255,255,.22), transparent 70%);
+}
+.egov-hero .egov-hero-body { position: relative; z-index: 1; }
+.egov-hero-badge {
+  display: inline-flex; align-items: center; font-size: .8rem; font-weight: 700;
+  padding: 5px 12px; border-radius: 999px; margin-bottom: 14px;
+  background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.35); color: #fff;
+}
+.egov-hero-title {
+  font-size: clamp(1.4rem, 2.4vw, 2rem); letter-spacing: -.02em;
+  text-shadow: 0 2px 12px rgba(0,0,0,.12); margin-bottom: .35rem; color: #fff;
+}
+.egov-hero-sub { color: rgba(255,255,255,.85); font-weight: 500; }
+.egov-hero-icon {
+  width: 88px; height: 88px; border-radius: 24px; display: grid; place-items: center;
+  font-size: 42px; color: #fff;
+  background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.32);
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+}
+
+/* ── 로그인/랜딩 로고 배지 크기 (theme.css 대체) ── */
+.logo-badge { width: 56px; height: 56px; }
+
+/* ============================================================
+   KRDS 컴포넌트 크기 정규화 (16px 루트 기준 밸런스 조정)
+   KRDS 토큰은 root 62.5%(10px) 기준이라, 본 프로젝트의 16px 루트에서는
+   1.6배 커진다. 아래에서 실제 사용 KRDS 컴포넌트를 균형 있는 크기로 보정한다.
+   ============================================================ */
+body { font-size: 1rem; line-height: 1.6; }
+
+/* 버튼 — KRDS 사이즈 토큰(10px 기준 height)이 16px 루트에서 과대해지지 않도록 전 변형 보정 */
+.krds-btn{
+  height: auto; min-height: 0; line-height: 1.4; gap: .4em;
+  font-size: .95rem; padding: .5rem 1rem; border-radius: var(--krds-radius, 6px);
+}
+/* 사이즈 변형: 토큰 height 무력화(자동) + 균형 패딩/폰트 (specificity 0,2,0 으로 krds.min.css 덮어씀) */
+.krds-btn.xsmall,.krds-btn.small,.krds-btn.medium,.krds-btn.large,.krds-btn.xlarge{ height: auto; min-height: 0; }
+.krds-btn.xsmall,.krds-btn.small{ font-size: .85rem; padding: .35rem .75rem; }
+.krds-btn.medium{ font-size: .95rem; padding: .5rem 1rem; }
+.krds-btn.large{ font-size: 1.05rem; padding: .6rem 1.25rem; }
+.krds-btn.xlarge{ font-size: 1.1rem; padding: .7rem 1.4rem; }
+.krds-btn.icon{ padding: .45rem; }
+/* 삭제 등 위험 동작 버튼(KRDS 기본 변형에 없음 → 보조 정의: 빨강 아웃라인) */
+.krds-btn.danger{ background:#fff; color: var(--krds-danger,#E63946); border:1px solid var(--krds-danger,#E63946); }
+.krds-btn.danger:hover{ background: var(--krds-light-danger,#FDECEE); color: var(--krds-danger,#E63946); }
+
+/* 폼 입력/셀렉트 */
+.krds-input,.krds-form-select{ height: auto; font-size: .95rem; padding: .5rem .75rem; line-height: 1.5; }
+
+/* 표 (KRDS 토큰이 16px 루트에서 과대 → !important 로 강제 정규화) */
+.krds-table-wrap .tbl{ font-size: .95rem !important; }
+.krds-table-wrap .tbl th,.krds-table-wrap .tbl td,
+.krds-table-wrap .tbl.data thead th,.krds-table-wrap .tbl.data tbody td{
+  font-size: .95rem !important; padding: .7rem .75rem !important; }
+
+/* 브레드크럼 (KRDS 네이티브) — 상하 여백/글씨 컴팩트 강제 정규화 */
+.krds-breadcrumb-wrap{ margin: 0 0 .5rem !important; padding: 0 !important; }
+.krds-breadcrumb-wrap,.krds-breadcrumb-wrap .breadcrumb li,
+.krds-breadcrumb-wrap .breadcrumb li a,.krds-breadcrumb-wrap .breadcrumb li .txt{ font-size: .85rem !important; }
+.krds-breadcrumb-wrap .breadcrumb{ background: transparent !important; border: 0 !important; padding: 2px 0 !important; margin: 0 !important; gap: .25rem !important; }
+.krds-breadcrumb-wrap .breadcrumb li .txt{ padding: 2px 4px !important; }
+.krds-breadcrumb-wrap .breadcrumb .home .txt::before{ width: 1em !important; height: 1em !important; }
+/* 페이지네이션 / 배지 */
+.krds-pagination .page-link,.krds-pagination .page-navi{
+  min-width: 2.1rem !important; height: 2.1rem !important; padding: 0 .55rem !important; font-size: .9rem !important; }
+.krds-badge{ font-size: .8rem !important; }
+
+/* 탭 */
+.krds-tab-area .tab .btn-tab,.krds-tab-area .btn-tab{
+  height: auto !important; font-size: 1rem !important; padding: .7rem 1rem !important; }
+
+/* 아코디언 — 제목/본문 글자 균형 + 본문 여백(상단 밀착 방지) */
+.krds-accordion .accordion-item .btn-accordion{ font-size: 1.1rem !important; padding: 1rem 1.25rem !important; }
+.krds-accordion .accordion-item.active .accordion-body{
+  font-size: .95rem !important; line-height: 1.65 !important; padding: 1rem 1.25rem 1.25rem !important; }
+
+/* 헤딩 정규화(KRDS 디스플레이 토큰 과대 방지) */
+.egov-content h1{ font-size: 1.75rem; } .egov-content h2{ font-size: 1.375rem; }
+.egov-content h3{ font-size: 1.15rem; } .egov-content h4{ font-size: 1.05rem; }
+
+/* KRDS svg-icon 기본 크기 보정(글자에 비례) */
+.svg-icon{ width: 1.15em; height: 1.15em; }
+
+/* ── KRDS 패널(카드 대체: KRDS엔 card 컴포넌트가 없어 토큰 기반 박스로 구성) ── */
+.krds-panel{ display:flex; flex-direction:column; background:#fff;
+  border:1px solid var(--krds-gray-10); border-radius:12px; overflow:hidden; }
+.krds-panel-head{ display:flex; justify-content:space-between; align-items:center;
+  gap:.5rem; padding:.8rem 1.1rem; background:var(--krds-gray-5);
+  border-bottom:1px solid var(--krds-gray-10); font-weight:700; font-size:1rem; }
+.krds-panel-body{ flex:1 1 auto; padding:1rem 1.1rem; }
+.krds-panel-body.flush{ padding:0; }
+.krds-panel .tbl{ border-radius:0; }
+.krds-panel .tbl thead th{ border-top:0; }
+/* 바로가기 타일(krds-btn 기반 세로형) */
+.krds-quicklink{ width:100%; flex-direction:column; gap:.4rem; padding:1.1rem .5rem; height:auto; }
+.krds-quicklink i{ font-size:1.6rem; }
+.krds-quicklink .label{ font-size:.9rem; font-weight:600; }

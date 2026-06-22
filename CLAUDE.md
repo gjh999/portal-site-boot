@@ -46,7 +46,14 @@ cd "/c/eGovFrame/workspace-egov/portal-site-boot"
 - **뷰**: 컨트롤러 반환 뷰명(예: `cop/bbs/EgovNoticeList`)을 그대로 사용 →
   `templates/cop/bbs/EgovNoticeList.html` 매핑. JSP는 작성하지 않는다.
 - **레이아웃**: `templates/layouts/default.html`(Thymeleaf Layout Dialect) +
-  `templates/fragments/{header,nav,footer}.html`. 정적자원 `static/css|js|images`(KRDS+Bootstrap5, 로컬).
+  `templates/fragments/{header,nav,footer}.html`. 정적자원: **공식 KRDS(`static/krds/`) + 호환 레이어(`static/css/krds-compat.css`)**, 로컬. (Bootstrap 프레임워크 미사용)
+
+## 다국어(i18n) 룰 — 신규 기능·화면 추가/변경 시 **반드시 확인** (스킬 `egov-component` §8)
+- ⚠️ **현황**: 본 프로젝트 템플릿은 **대부분 하드코딩 한글**(레거시 JSP 포팅분, `#{}` 미사용). **신규/변경·KRDS 전환 시 i18n 키로 전환**한다.
+- 사용자 노출 텍스트(라벨·버튼·placeholder·title·alt·검증 메시지)는 **하드코딩 금지** → Thymeleaf `th:text="#{key}"`.
+- 메시지는 `egovframework/message/message-ui_{ko,en}.properties`에 **ko·en 동일 키**로 추가(프레임워크 공통은 `message/com/message-common_{ko,en}`). 언어전환 `/cmm/lang(lang='ko'|'en')`.
+- **변경/추가 작업마다**: ① 노출 문구 전부 메시지 키 처리 ② ko/en 양쪽 값 존재(키 집합 일치) ③ 누락/한글 fallback 0 — 확인.
+- 검증: `comm -3`로 ko/en 키 diff, 변경 html에서 `#{` 없는 한글 스캔.
 
 ## DB 명명 규칙
 

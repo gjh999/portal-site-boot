@@ -44,7 +44,7 @@ public class SecurityConfig {
 			"/EgovPageLink.do",      // 소개 페이지(whitelist 뷰 포워딩)
 			"/validator.do",         // validation rule JS
 			// 정적 리소스
-			"/css/**", "/js/**", "/images/**", "/fonts/**", "/static/**",
+			"/css/**", "/js/**", "/krds/**", "/images/**", "/fonts/**", "/static/**",
 			"/favicon.ico",
 			// swagger
 			"/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui.html",

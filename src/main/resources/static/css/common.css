@@ -6,8 +6,8 @@
 
 /* KRDS 컬러 변수 */
 :root {
-    --egov-primary: #0054A6;       /* 정부 대표 파란색 */
-    --egov-primary-dark: #003D7A;
+    --egov-primary: #256EF4;       /* KRDS Primary (디지털정부 표준) */
+    --egov-primary-dark: #0B50D0;  /* KRDS Primary hover */
     --egov-secondary: #00A0E9;
     --egov-success: #28A745;
     --egov-danger: #DC3545;
