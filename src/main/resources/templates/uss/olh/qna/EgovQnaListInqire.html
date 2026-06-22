@@ -54,7 +54,7 @@
             <tr th:each="item : ${resultList}">
                 <td class="text-center">
                     <span class="krds-badge"
-                          th:classappend="${item.qnaProcessSttusCode == '3'} ? 'bg-success' : 'bg-gray'"
+                          th:classappend="${item.qnaProcessSttusCodeNm == '처리완료' ? 'bg-success' : (item.qnaProcessSttusCodeNm == '처리중' ? 'bg-warning' : 'bg-primary')}"
                           th:text="${item.qnaProcessSttusCodeNm ?: '접수'}">상태</span>
                 </td>
                 <td>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <body>
-<footer th:fragment="footer" class="egov-footer bg-dark text-white py-5 mt-5">
+<footer th:fragment="footer" class="pub-foot">
     <div class="container">
         <!-- 전자정부표준프레임워크 공식 홈페이지 배너 -->
         <a href="https://www.egovframe.go.kr/home/main.do" target="_blank" rel="noopener"
@@ -13,48 +13,39 @@
             <span class="ban-go"><span th:text="#{footer.official.go}">바로가기</span> <i class="bi bi-box-arrow-up-right"></i></span>
         </a>
 
-        <div class="footer-top d-flex justify-content-between flex-wrap gap-4 pt-2">
-            <!-- 브랜드 + 소개 (좌측) -->
-            <div class="footer-brand">
-                <div class="d-flex align-items-center gap-2 mb-2">
-                    <img th:src="@{/images/logo.svg}" alt="eGovFrame" width="34" height="34"/>
-                    <span class="fs-5 fw-bold">전자정부 표준프레임워크 포털</span>
-                </div>
-                <p class="small mb-0" style="color:#9EA4AA; max-width:42ch;">
-                    Spring Boot + Thymeleaf 기반 표준 포털 — 게시판·민원·설문·회원·권한 등 공공 서비스 공통 기능을 KRDS 디자인으로 제공합니다.
-                </p>
+        <div class="pub-foot-top">
+            <div>
+                <a th:href="@{/}" class="pub-brand">
+                    <img class="mark" th:src="@{/images/logo.svg}" alt="eGovFrame"/>
+                    <span>전자정부 표준프레임워크 포털</span>
+                </a>
+                <p class="desc">Spring Boot + Thymeleaf 기반 표준 포털 — 게시판·민원·설문·회원·권한 등 공공 서비스 공통 기능을 KRDS 디자인으로 제공합니다.</p>
             </div>
-            <!-- 링크 3열 (우측) -->
-            <div class="footer-links d-flex flex-wrap gap-5">
-                <div class="footer-col">
-                    <h6 class="fw-bold mb-3" style="letter-spacing:.04em;">바로가기</h6>
+            <div class="pub-foot-cols">
+                <div class="pub-foot-col">
+                    <h4>바로가기</h4>
                     <a th:href="@{/EgovPageLink.do(linkIndex=3)}">소개</a>
                     <a th:href="@{/cop/bbs/selectBoardList.do(bbsId='BBSMSTR_AAAAAAAAAAAA')}">공지사항</a>
                     <a th:href="@{/uss/olh/faq/FaqListInqire.do}">FAQ</a>
                 </div>
-                <div class="footer-col">
-                    <h6 class="fw-bold mb-3" style="letter-spacing:.04em;">서비스</h6>
+                <div class="pub-foot-col">
+                    <h4>서비스</h4>
                     <a th:href="@{/uss/olh/qna/QnaListInqire.do}">Q&amp;A</a>
                     <a th:href="@{/uss/olp/qnn/EgovQustnrRespondInfoManageList.do}">설문참여</a>
                     <a th:href="@{/uss/sam/stp/StplatListInqire.do}">이용약관</a>
                 </div>
-                <div class="footer-col">
-                    <h6 class="fw-bold mb-3" style="letter-spacing:.04em;">지원</h6>
+                <div class="pub-foot-col">
+                    <h4>지원</h4>
                     <a th:href="@{/uat/uia/egovLoginUsr.do}">로그인</a>
-                    <a th:href="@{/cmm/krds/EgovKrdsSample.do}" style="white-space:nowrap;">KRDS 예시</a>
+                    <a th:href="@{/cmm/krds/EgovKrdsSample.do}">KRDS 예시</a>
                     <a href="/swagger-ui/index.html" target="_blank">API 문서</a>
                 </div>
             </div>
         </div>
 
-        <!-- 하단: 카피라이트 + 소셜(홈·GitHub·KRDS) -->
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-4 pt-3"
-             style="border-top:1px solid rgba(255,255,255,.12);">
-            <span class="small" style="color:#6D7882;">
-                © <span th:text="${#temporals.year(#temporals.createNow())}">2026</span>
-                전자정부 표준프레임워크 포털. All rights reserved.
-            </span>
-            <span class="footer-soc">
+        <div class="pub-foot-bottom">
+            <span>© <span th:text="${#temporals.year(#temporals.createNow())}">2026</span> 전자정부 표준프레임워크 포털. All rights reserved.</span>
+            <span class="soc">
                 <a th:href="@{/}" aria-label="포털 홈"><i class="bi bi-house"></i></a>
                 <a href="https://github.com/gjh999/portal-site-boot" target="_blank" rel="noopener" aria-label="GitHub 저장소"><i class="bi bi-github"></i></a>
                 <a href="https://www.egovframe.go.kr/home/main.do" target="_blank" rel="noopener" aria-label="전자정부표준프레임워크 공식 홈페이지"><i class="bi bi-globe"></i></a>

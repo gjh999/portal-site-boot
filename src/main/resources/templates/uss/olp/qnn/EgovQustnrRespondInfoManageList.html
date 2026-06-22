@@ -32,6 +32,8 @@
             <tr th:if="${#lists.isEmpty(resultList)}"><td colspan="6" class="text-center text-muted py-4">진행 중인 설문조사가 없습니다.</td></tr>
             </tbody>
         </table></div>
+
+        <div th:replace="~{fragments/pagination :: paginationSearch(paginationInfo=${paginationInfo}, baseUrl='/uss/olp/qnn/EgovQustnrRespondInfoManageList.do', searchCondition=${searchVO != null ? searchVO.searchCondition : ''}, searchKeyword=${searchVO != null ? searchVO.searchKeyword : ''})}"></div>
     </div>
 </main>
 </body>

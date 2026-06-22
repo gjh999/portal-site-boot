@@ -536,3 +536,21 @@ select.krds-form-select:focus{ outline:0; border-color:var(--krds-primary,#256EF
 .sitemap-card ul{ list-style:none; padding-left:.25rem; margin:0 0 .4rem; }
 .sitemap-card li{ padding:.18rem 0; font-size:.9rem; color:#454C53; }
 .sitemap-card .badge-admin{ font-size:.7rem; font-weight:700; color:#0B50D0; background:#E8F0FE; border-radius:6px; padding:.1rem .45rem; margin-left:.4rem; }
+
+/* ── 푸터: 심플 공개형(pub-foot)과 동일 통일 ── */
+.pub-foot{ background:#1E2124; padding:52px 0 32px; margin-top:3rem; color:#fff; }
+/* 심플 .pub-wrap(max-width:1180px, padding:0 24px)과 폭 일치 */
+.pub-foot > .container{ max-width:1180px; padding-left:24px; padding-right:24px; }
+.pub-foot-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:30px; margin-top:1.25rem; }
+.pub-foot .pub-brand{ display:flex; align-items:center; gap:12px; font-weight:800; font-size:20px; letter-spacing:-.02em; color:#fff; text-decoration:none; margin-bottom:12px; }
+.pub-foot .pub-brand .mark{ width:38px; height:38px; border-radius:11px; }
+.pub-foot .desc{ color:#9EA4AA; font-size:14.5px; max-width:42ch; margin:0; line-height:1.6; }
+.pub-foot-cols{ display:flex; gap:64px; flex-wrap:wrap; }
+.pub-foot-col h4{ font-size:14px; color:#fff; margin:0 0 14px; letter-spacing:.04em; }
+.pub-foot-col a{ display:block; color:#9EA4AA; font-size:14px; margin-bottom:10px; text-decoration:none; white-space:nowrap; }
+.pub-foot-col a:hover{ color:#fff; }
+.pub-foot-bottom{ margin-top:40px; padding-top:24px; border-top:1px solid rgba(255,255,255,.12); display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; color:#6D7882; font-size:13px; align-items:center; }
+.pub-foot-bottom .soc{ display:flex; gap:14px; font-size:18px; }
+.pub-foot-bottom .soc a{ color:#9EA4AA; }
+.pub-foot-bottom .soc a:hover{ color:#fff; }
+@media (max-width:768px){ .pub-foot-cols{ gap:32px; } .pub-foot{ padding:36px 0 28px; } }
