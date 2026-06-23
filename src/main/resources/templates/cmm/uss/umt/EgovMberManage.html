@@ -14,50 +14,69 @@
                 <li class="breadcrumb-item active">회원관리</li>
             </ol>
         </nav>
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="h4 mb-0"><i class="bi bi-people"></i> 회원관리</h1>
-            <span class="text-muted small">총 <strong
-                    th:text="${paginationInfo != null ? paginationInfo.totalRecordCount : 0}">0</strong> 건</span>
-        </div>
+        <h1 class="h4 mb-3"><i class="bi bi-people"></i> 회원관리</h1>
 
         <div class="alert alert-success py-2" th:if="${resultMsg == 'success.common.insert'}">등록되었습니다.</div>
         <div class="alert alert-success py-2" th:if="${resultMsg == 'success.common.update'}">수정되었습니다.</div>
         <div class="alert alert-success py-2" th:if="${resultMsg == 'success.common.delete'}">삭제되었습니다.</div>
 
-        <!-- 검색조건 (JSP: 상태 sbscrbSttus / 조건 searchCondition 0=아이디·1=이름 / 키워드) -->
-        <form class="row g-2 mb-3" th:action="@{/uss/umt/mber/EgovMberManage.do}" method="get"
-              th:with="sttusList=${entrprsMberSttus_result}">
-            <div class="col-auto">
-                <select class="krds-form-select" name="sbscrbSttus" title="회원상태 선택"
-                        th:with="ss=${userSearchVO.sbscrbSttus}">
-                    <option value="0" th:selected="${ss == '0'}">상태 전체</option>
-                    <th:block th:if="${not #lists.isEmpty(sttusList)}">
-                        <option th:each="c : ${sttusList}" th:value="${c.code}" th:text="${c.codeNm}"
-                                th:selected="${ss == c.code}">상태</option>
-                    </th:block>
-                    <th:block th:if="${#lists.isEmpty(sttusList)}">
-                        <option value="A" th:selected="${ss == 'A'}">가입신청</option>
-                        <option value="P" th:selected="${ss == 'P'}">가입승인</option>
-                        <option value="D" th:selected="${ss == 'D'}">가입삭제</option>
-                    </th:block>
-                </select>
-            </div>
-            <div class="col-auto">
-                <select class="krds-form-select" name="searchCondition" title="검색조건 선택"
-                        th:with="sc=${userSearchVO.searchCondition}">
-                    <option value="" th:selected="${sc == ''}">선택</option>
-                    <option value="0" th:selected="${sc == '0'}">아이디</option>
-                    <option value="1" th:selected="${sc == '1'}">이름</option>
-                </select>
-            </div>
-            <div class="col-auto">
-                <input class="krds-input" type="text" name="searchKeyword"
-                       th:value="${userSearchVO.searchKeyword}" maxlength="35" title="검색어 입력"/>
-            </div>
-            <div class="col-auto">
-                <button class="krds-btn tertiary small" type="submit"><i class="bi bi-search"></i> 조회</button>
+        <!-- 검색 영역 (게시판 목록 표준) — 상태/검색구분/검색어 -->
+        <form th:action="@{/uss/umt/mber/EgovMberManage.do}" method="get" class="search-bar krds-search mb-3"
+              th:with="sttusList=${entrprsMberSttus_result}, ss=${userSearchVO.sbscrbSttus}, sc=${userSearchVO.searchCondition}">
+            <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="form-tit"><label for="sbscrbSttus">회원상태</label></div>
+                        <div class="form-conts">
+                            <select id="sbscrbSttus" name="sbscrbSttus" class="krds-form-select" title="회원상태 선택">
+                                <option value="0" th:selected="${ss == '0'}">상태 전체</option>
+                                <th:block th:if="${not #lists.isEmpty(sttusList)}">
+                                    <option th:each="c : ${sttusList}" th:value="${c.code}" th:text="${c.codeNm}"
+                                            th:selected="${ss == c.code}">상태</option>
+                                </th:block>
+                                <th:block th:if="${#lists.isEmpty(sttusList)}">
+                                    <option value="A" th:selected="${ss == 'A'}">가입신청</option>
+                                    <option value="P" th:selected="${ss == 'P'}">가입승인</option>
+                                    <option value="D" th:selected="${ss == 'D'}">가입삭제</option>
+                                </th:block>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="form-tit"><label for="searchCondition">검색구분</label></div>
+                        <div class="form-conts">
+                            <select id="searchCondition" name="searchCondition" class="krds-form-select" title="검색구분 선택">
+                                <option value="" th:selected="${sc == ''}">선택</option>
+                                <option value="0" th:selected="${sc == '0'}">아이디</option>
+                                <option value="1" th:selected="${sc == '1'}">이름</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="form-tit"><label for="searchKeyword">검색어</label></div>
+                        <div class="form-conts">
+                            <input type="text" id="searchKeyword" name="searchKeyword" class="krds-input"
+                                   th:value="${userSearchVO.searchKeyword}" placeholder="검색어를 입력하세요" maxlength="35"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="krds-btn primary medium w-100"><i class="bi bi-search"></i> 검색</button>
+                </div>
             </div>
         </form>
+
+        <!-- 목록 헤더: 전체 건수 + 등록 버튼(우측) -->
+        <div class="d-flex justify-content-between align-items-center mb-2 mt-3">
+            <span class="text-muted">전체 <strong th:text="${paginationInfo != null ? paginationInfo.totalRecordCount : 0}">0</strong>건</span>
+            <a class="krds-btn primary small" th:href="@{/uss/umt/mber/EgovMberInsertView.do}">
+                <i class="bi bi-person-plus"></i> 회원 등록
+            </a>
+        </div>
 
         <form id="listForm" th:action="@{/uss/umt/mber/EgovMberDelete.do}" method="post">
             <input type="hidden" name="checkedIdForDel" id="checkedIdForDel"/>
@@ -98,41 +117,33 @@
                 </tbody>
             </table></div>
 
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-start">
                 <button type="button" class="krds-btn danger small" onclick="deleteChecked()">
                     <i class="bi bi-trash"></i> 선택 삭제
                 </button>
-                <a class="krds-btn primary small" th:href="@{/uss/umt/mber/EgovMberInsertView.do}">
-                    <i class="bi bi-person-plus"></i> 회원 등록
-                </a>
             </div>
         </form>
 
-        <!-- 페이징 (검색조건 유지: sbscrbSttus/searchCondition/searchKeyword) -->
+        <!-- 페이징 (KRDS, 검색조건 유지: sbscrbSttus/searchCondition/searchKeyword) -->
         <nav aria-label="페이지 네비게이션" class="mt-3"
              th:if="${paginationInfo != null and paginationInfo.totalRecordCount > 0}">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${paginationInfo.firstPageNoOnPageList == 1} ? 'disabled' : ''">
-                    <a class="page-link" aria-label="이전"
-                       th:href="${paginationInfo.firstPageNoOnPageList > 1}
-                                ? @{/uss/umt/mber/EgovMberManage.do(pageIndex=${paginationInfo.firstPageNoOnPageList - 1},sbscrbSttus=${userSearchVO.sbscrbSttus},searchCondition=${userSearchVO.searchCondition},searchKeyword=${userSearchVO.searchKeyword})}
-                                : '#'"><span aria-hidden="true">&laquo;</span></a>
-                </li>
-                <th:block th:each="pageNo : ${#numbers.sequence(paginationInfo.firstPageNoOnPageList, paginationInfo.lastPageNoOnPageList)}">
-                    <li class="page-item" th:classappend="${pageNo == paginationInfo.currentPageNo} ? 'active' : ''">
-                        <a class="page-link"
-                           th:href="@{/uss/umt/mber/EgovMberManage.do(pageIndex=${pageNo},sbscrbSttus=${userSearchVO.sbscrbSttus},searchCondition=${userSearchVO.searchCondition},searchKeyword=${userSearchVO.searchKeyword})}"
-                           th:text="${pageNo}">1</a>
-                    </li>
-                </th:block>
-                <li class="page-item"
-                    th:classappend="${paginationInfo.lastPageNoOnPageList == paginationInfo.totalPageCount} ? 'disabled' : ''">
-                    <a class="page-link" aria-label="다음"
-                       th:href="${paginationInfo.lastPageNoOnPageList < paginationInfo.totalPageCount}
-                                ? @{/uss/umt/mber/EgovMberManage.do(pageIndex=${paginationInfo.lastPageNoOnPageList + 1},sbscrbSttus=${userSearchVO.sbscrbSttus},searchCondition=${userSearchVO.searchCondition},searchKeyword=${userSearchVO.searchKeyword})}
-                                : '#'"><span aria-hidden="true">&raquo;</span></a>
-                </li>
-            </ul>
+            <div class="krds-pagination">
+                <span th:if="${paginationInfo.firstPageNoOnPageList == 1}" class="page-navi prev disabled">이전</span>
+                <a th:unless="${paginationInfo.firstPageNoOnPageList == 1}" class="page-navi prev"
+                   th:href="@{/uss/umt/mber/EgovMberManage.do(pageIndex=${paginationInfo.firstPageNoOnPageList - 1},sbscrbSttus=${userSearchVO.sbscrbSttus},searchCondition=${userSearchVO.searchCondition},searchKeyword=${userSearchVO.searchKeyword})}">이전</a>
+                <div class="page-links">
+                    <th:block th:each="pageNo : ${#numbers.sequence(paginationInfo.firstPageNoOnPageList, paginationInfo.lastPageNoOnPageList)}">
+                        <a class="page-link" th:classappend="${pageNo == paginationInfo.currentPageNo} ? 'active' : ''"
+                           th:href="@{/uss/umt/mber/EgovMberManage.do(pageIndex=${pageNo},sbscrbSttus=${userSearchVO.sbscrbSttus},searchCondition=${userSearchVO.searchCondition},searchKeyword=${userSearchVO.searchKeyword})}">
+                            <span th:if="${pageNo == paginationInfo.currentPageNo}" class="sr-only">현재페이지 </span>
+                            <span th:text="${pageNo}">1</span>
+                        </a>
+                    </th:block>
+                </div>
+                <span th:if="${paginationInfo.lastPageNoOnPageList == paginationInfo.totalPageCount}" class="page-navi next disabled">다음</span>
+                <a th:unless="${paginationInfo.lastPageNoOnPageList == paginationInfo.totalPageCount}" class="page-navi next"
+                   th:href="@{/uss/umt/mber/EgovMberManage.do(pageIndex=${paginationInfo.lastPageNoOnPageList + 1},sbscrbSttus=${userSearchVO.sbscrbSttus},searchCondition=${userSearchVO.searchCondition},searchKeyword=${userSearchVO.searchKeyword})}">다음</a>
+            </div>
         </nav>
     </div>
     <script>

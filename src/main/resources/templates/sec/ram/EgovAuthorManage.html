@@ -10,24 +10,34 @@
             <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
             <li class="breadcrumb-item active">권한관리</li>
         </ol></nav>
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="h4 mb-0"><i class="bi bi-shield-check"></i> 권한관리</h1>
-            <span class="text-muted small">총 <strong
-                    th:text="${paginationInfo != null ? paginationInfo.totalRecordCount : 0}">0</strong> 건</span>
-        </div>
+        <h1 class="h4 mb-3"><i class="bi bi-shield-check"></i> 권한관리</h1>
 
-        <!-- 검색 (searchCondition=1: 권한명) -->
-        <form class="row g-2 mb-3" th:action="@{/sec/ram/EgovAuthorList.do}" method="get">
+        <!-- 검색 영역 (게시판 목록 표준) — 권한명 (searchCondition=1 고정) -->
+        <form th:action="@{/sec/ram/EgovAuthorList.do}" method="get" class="search-bar krds-search mb-3">
             <input type="hidden" name="searchCondition" value="1"/>
-            <div class="col-auto"><label class="col-form-label col-form-label-sm">권한명</label></div>
-            <div class="col-auto">
-                <input class="krds-input" type="text" name="searchKeyword"
-                       th:value="${authorManageVO != null ? authorManageVO.searchKeyword : ''}" maxlength="35"/>
-            </div>
-            <div class="col-auto">
-                <button class="krds-btn tertiary small" type="submit"><i class="bi bi-search"></i> 조회</button>
+            <div class="row g-2 align-items-end">
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <div class="form-tit"><label for="searchKeyword">권한명</label></div>
+                        <div class="form-conts">
+                            <input type="text" id="searchKeyword" name="searchKeyword" class="krds-input"
+                                   th:value="${authorManageVO != null ? authorManageVO.searchKeyword : ''}"
+                                   placeholder="검색어를 입력하세요" maxlength="35"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="krds-btn primary medium w-100"><i class="bi bi-search"></i> 검색</button>
+                </div>
             </div>
         </form>
+
+        <!-- 목록 헤더: 전체 건수 + 등록 버튼(우측) -->
+        <div class="d-flex justify-content-between align-items-center mb-2 mt-3">
+            <span class="text-muted">전체 <strong th:text="${paginationInfo != null ? paginationInfo.totalRecordCount : 0}">0</strong>건</span>
+            <a class="krds-btn primary small" th:href="@{/sec/ram/EgovAuthorInsertView.do}">
+                <i class="bi bi-plus-lg"></i> 권한 등록</a>
+        </div>
 
         <form id="listForm" th:action="@{/sec/ram/EgovAuthorListDelete.do}" method="post">
             <input type="hidden" name="authorCodes" id="authorCodes"/>
@@ -65,6 +75,7 @@
                 </div>
             </div>
         </form>
+        <!-- (권한별 롤 / 사용자별 권한 관리는 보조 액션으로 표 하단 우측 유지) -->
 
         <!-- 페이징 -->
         <div class="mt-3"
