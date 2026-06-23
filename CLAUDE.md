@@ -7,7 +7,7 @@
   (`portal-site-jsp`·`simple-homepage`는 별도 저장소의 외부 참조이며, 본 저장소는 이에 의존하지 않는 **단독 프로젝트**다.)
 - **Java**: 17 / **빌드**: Maven 3.9.9 (eGovCI-5.0.0-Windows-64bit 내장)
 - **DB**: 개발=내장 HSQL(`db/shtdb.sql`) / 운영=PostgreSQL(`DATABASE/postgresql/`)
-- **포트**: 8080, context-path: `/`, 패키지 루트: `egovframework`
+- **포트**: 18080(`server.port`), context-path: `/`, 패키지 루트: `egovframework`
 
 ## 빌드·실행
 
@@ -18,7 +18,7 @@ cd "/c/eGovFrame/workspace-egov/portal-site-boot"
 "$MVN" clean compile                 # 컴파일 검증
 "$MVN" spring-boot:run -Dspring-boot.run.jvmArguments="-Dfile.encoding=UTF-8"
 ```
-포트 충돌 시(PowerShell): `Get-NetTCPConnection -LocalPort 8080 | %{ Stop-Process -Id $_.OwningProcess -Force }`
+포트 충돌 시(PowerShell): `Get-NetTCPConnection -LocalPort 18080 | %{ Stop-Process -Id $_.OwningProcess -Force }`
 
 > 주의: `spring-boot:run`은 `target/classes`의 리소스를 사용한다. 서버 가동 중 템플릿을
 > 수정하면 `cp -r src/main/resources/templates/. target/classes/templates/` 로 동기화하거나 재기동한다.
@@ -140,6 +140,26 @@ cd "/c/eGovFrame/workspace-egov/portal-site-boot"
   ③ **응답폼 문항 렌더**: 시드/모달/서술형 등록 모두 정상 렌더 확인(end-to-end). 키 케이싱(`qestnTyCode`/`qestnCn`/`mxmmChoiseCo`/`qestnrqesitmid`) 정합.
   ④ **수정폼 문항 표시/재저장**: Modify 컨트롤러가 qri 서비스로 기존 문항/보기를 `existingQuestionsJson`으로 모델에 담고, 수정폼이 등록폼과 동일한 모달+아코디언으로 초기 로드.
      저장 시 `deleteQustnrQestnManageByQestnr`(설문지+템플릿 단위 문항/보기/응답 일괄삭제, qqm hsql+postgresql 매퍼/DAO/서비스 추가) 후 `saveQuestions` 재등록 → 수정/추가/삭제 반영(round-trip 검증).
+
+## KRDS 전면 적용 — UI 표준화 (2026-06)
+- **공식 KRDS(디지털정부 표준 디자인시스템) 전환**: Bootstrap 프레임워크 제거, 190+ 템플릿을 KRDS 네이티브 마크업으로 전환(Wave1·2 + 잔존 정리, 레거시 부트스트랩 0건). 네이티브 컴포넌트 + 호환 레이어(`krds-compat.css`: 그리드/유틸/GNB)·`krds.css`(토큰 정규화) 구성. 정적 자산 로컬(CDN 금지), 폰트 **Pretendard GOV**. 전환·검증 절차는 스킬 `krds-conversion` 참조.
+- **페이지네이션 KRDS 통일**(이전/숫자/다음), 게시판 검색폼+전체건수 정렬, **Q&A 상태 색상 배지**, 폼 라디오/체크박스 가시성 보정.
+- **푸터 심플형 통일**: 공식 홈페이지 배너 + 3컬럼 + 소셜 링크(i18n). 소개 페이지 히어로 통합, 전 페이지 **'맨 위로'** 스크롤 버튼(우하단 고정, 스크롤 300px↑ 표시, 인쇄 숨김).
+- ⚠️ **KRDS `.input-group` 충돌**: KRDS가 `.input-group{flex-direction:column}`을 강제 → 회원 등록/수정 폼의 가로 입력그룹이 세로로 깨짐. `krds.css`에서 해당 폼 input-group을 `flex-direction:row`로 강제 교정. (스킬 `krds-conversion`에 'KRDS 최우선' 원칙·이 사례 기록)
+
+## 배너(uss/ion/bnr) 기능 — 유형 구분·캐러셀·팝업 (2026-06)
+- **유형 구분**: 메인/팝업/푸터. 메인 배너는 **히어로 슬라이드 캐러셀**로 편입, 자동전환 주기 `portal.banner.interval`(properties, 기본 5000ms).
+- **팝업**: 좌표/크기/묶음 지정, **'오늘 하루 보지 않기'** 체크 즉시 닫힘(쿠키), **로그인 화면 제외**. 링크 URL 선택 노출.
+- 캡션 가독성·런타임 영속 등 버그 3건 수정 완료.
+
+## 달력(sym/cal)·휴일 — 격자형 재설계 (2026-06)
+- 월간 달력을 **격자형**(균일 셀·테두리·일자 밑 휴일 배지)으로 재설계. **인쇄 시 달력 영역만** 출력.
+- 일반/관리자 월간 달력 툴바에 **휴일관리 이동 버튼**(목록 `/sym/cal/EgovRestdeList.do`) 추가(인쇄 버튼 옆).
+
+## 약관·파일·개발DB 기타 (2026-06)
+- **약관 등록 유형 구분**: 이용약관/개인정보처리방침을 유형 구분해 등록.
+- **파일 첨부 허용 확장자 확장**: `Globals.fileUpload.Extensions`=gif/jpg/jpeg/png/xls/xlsx/pdf/doc/docx/ppt/pptx/hwp/hwpx/txt/zip(화이트리스트). 미허용 확장자는 등록 화면에서 사유 안내.
+- **개발용 HSQL 파일 영속**: `jdbc:hsqldb:file:./.localdb/portaldb`로 영속화. `shtdb.sql` SHA-256을 `.localdb/.seedhash`에 기록해 두고 기동 시 비교 → **shtdb.sql 변경 시 자동으로 `.localdb` 삭제 후 재시드**(수동 삭제 불필요). 매 기동 강제 초기화는 `Globals.localdb.resetEachStart=true`. `.localdb`는 `.gitignore` 제외, 운영(jar, postgresql) 무관(hsql 전용 분기). 설정: `EgovConfigAppDatasource`.
 
 ## 게시판(cop/bbs) CRUD — 전체 동작 검증 완료 (2026-06-03)
 - 등록/수정/답글/삭제 4종 모두 HTTP 302 성공·영속·한글 정상 검증.
