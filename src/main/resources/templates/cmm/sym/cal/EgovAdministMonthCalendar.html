@@ -11,7 +11,7 @@
             <li class="breadcrumb-item active">행정달력 월간</li>
         </ol></nav>
 
-        <div class="d-flex align-items-center justify-content-between mb-3" th:if="${restde != null}"
+        <div class="d-flex align-items-center justify-content-between mb-3 cal-page-head" th:if="${restde != null}"
              th:with="im=${#conversions.convert(restde.month, 'java.lang.Integer')}">
             <a class="krds-btn tertiary small"
                th:href="@{/sym/cal/EgovAdministMonthCalendar.do(year=${restde.year}, month=${im - 1})}">
@@ -48,8 +48,8 @@
         </table>
         <div th:if="${restde == null}" class="alert alert-secondary">표시할 달력 데이터가 없습니다.</div>
 
-        <h2 class="h6 mt-4">휴일 목록</h2>
-        <ul class="list-group">
+        <h2 class="h6 mt-4 cal-print-hide">휴일 목록</h2>
+        <ul class="list-group cal-print-hide">
             <li class="list-group-item d-flex justify-content-between" th:each="rd : ${RestdeList}">
                 <span th:text="${rd.restdeDe}">일자</span>
                 <span th:text="${rd.restdeNm}">휴일명</span>

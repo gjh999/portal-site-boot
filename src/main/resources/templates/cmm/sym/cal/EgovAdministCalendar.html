@@ -11,7 +11,7 @@
             <li class="breadcrumb-item active">행정달력</li>
         </ol></nav>
 
-        <div class="d-flex align-items-center justify-content-between mb-3" th:if="${restde != null}"
+        <div class="d-flex align-items-center justify-content-between mb-3 cal-page-head" th:if="${restde != null}"
              th:with="im=${#conversions.convert(restde.month, 'java.lang.Integer')}">
             <a class="krds-btn tertiary small"
                th:href="@{/sym/cmm/EgovselectAdministCalendar.do(year=${restde.year}, month=${im - 1})}">

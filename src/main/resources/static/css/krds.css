@@ -584,7 +584,10 @@ input.form-check-input[type=checkbox]{
 .cal-holiday{ display:block; max-width:100%; font-size:.72rem; font-weight:700; color:#fff; background:#E63A3A;
   border-radius:6px; padding:2px 7px; line-height:1.45; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 @media print {
-  .egov-header, .egov-nav, .egov-footer, nav[aria-label="breadcrumb"], .breadcrumb, .cal-toolbar { display:none !important; }
+  /* 달력 영역만 인쇄: 헤더/네비/브레드크럼/푸터(+푸터배너)/툴바/이동버튼/휴일목록/맨위로 숨김 */
+  .egov-header, .egov-nav, .pub-foot, .egov-footer, nav[aria-label="breadcrumb"], .breadcrumb,
+  .cal-toolbar, .scroll-top-btn, .cal-print-hide { display:none !important; }
+  .cal-page-head .krds-btn { display:none !important; }      /* 이전달/다음달 버튼 */
   .egov-content, main, .container { padding:0 !important; margin:0 !important; max-width:100% !important; width:100% !important; }
   .cal-table{ page-break-inside:avoid; } .cal-table td{ height:90px; }
   a[href]::after{ content:none !important; }
