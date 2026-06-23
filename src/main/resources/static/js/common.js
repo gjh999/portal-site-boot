@@ -97,3 +97,51 @@ document.addEventListener('DOMContentLoaded', function () {
     }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 });
+
+/* =========================================================================
+ * 전화번호/휴대폰 자동 하이픈 (순수 JS, 숫자만 입력·백스페이스 정상)
+ *  - data-phone-format="mobile" : 010-1234-5678 (3-4-4)
+ *  - data-phone-format="tel"    : 02-123-4567 / 031-123-4567 (지역번호 가변)
+ *  키인 시 숫자 외 문자는 제거하고 자리수에 따라 하이픈을 삽입한다.
+ * ========================================================================= */
+(function () {
+    function formatMobile(d) {
+        d = d.replace(/\D/g, '').slice(0, 11);
+        if (d.length < 4) return d;
+        if (d.length < 8) return d.slice(0, 3) + '-' + d.slice(3);
+        return d.slice(0, 3) + '-' + d.slice(3, 7) + '-' + d.slice(7);
+    }
+    function formatTel(d) {
+        d = d.replace(/\D/g, '').slice(0, 11);
+        // 서울(02)은 2자리 지역번호, 그 외는 3자리
+        if (d.startsWith('02')) {
+            if (d.length < 3) return d;
+            if (d.length < 6) return d.slice(0, 2) + '-' + d.slice(2);
+            if (d.length < 10) return d.slice(0, 2) + '-' + d.slice(2, 5) + '-' + d.slice(5);
+            return d.slice(0, 2) + '-' + d.slice(2, 6) + '-' + d.slice(6, 10);
+        }
+        if (d.length < 4) return d;
+        if (d.length < 7) return d.slice(0, 3) + '-' + d.slice(3);
+        if (d.length < 11) return d.slice(0, 3) + '-' + d.slice(3, 6) + '-' + d.slice(6);
+        return d.slice(0, 3) + '-' + d.slice(3, 7) + '-' + d.slice(7);
+    }
+    function bind(el) {
+        var kind = el.getAttribute('data-phone-format');
+        var fmt = (kind === 'mobile') ? formatMobile : formatTel;
+        function handle() {
+            var prev = el.value;
+            var next = fmt(prev);
+            if (next !== prev) {
+                el.value = next;
+                // 커서를 끝으로(백스페이스로 하이픈 지워도 다음 입력 정상)
+                try { el.setSelectionRange(next.length, next.length); } catch (e) {}
+            }
+        }
+        el.addEventListener('input', handle);
+        // 초기 표시값(수정 화면 등)도 정규화
+        if (el.value) el.value = fmt(el.value);
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('[data-phone-format]').forEach(bind);
+    });
+})();

@@ -615,3 +615,29 @@ input.form-check-input[type=checkbox]{
   border:1px solid #CAD0D7; color:#33363D; }
 .input-group > :not(:first-child){ border-top-left-radius:0; border-bottom-left-radius:0; margin-left:-1px; }
 .input-group > :not(:last-child){ border-top-right-radius:0; border-bottom-right-radius:0; }
+
+/* ── 폼 섹션(회원 등록/수정 등) — 라벨은 항상 입력칸 위, 영역 구분 명확 ──
+   KRDS 클래스명 충돌 회피 위해 krds-form-section 네임스페이스 사용. */
+.krds-form-section{ border:1px solid var(--krds-gray-10,#E7E8EA); border-radius:12px;
+  padding:18px 20px 6px; margin:0 0 20px; }
+.krds-form-section > .krds-form-section-title{ float:none; width:auto; font-size:1rem; font-weight:700;
+  color:var(--krds-gray-90,#1E2124); margin:0 0 14px; padding:0; line-height:1.4; }
+.krds-form-section .form-group > .form-label{ display:block; font-weight:600; margin:0 0 6px; }
+.krds-form-section .form-group > .krds-input,
+.krds-form-section .form-group > .krds-form-select{ width:100%; }
+
+/* ── 정보 툴팁 아이콘(첨부파일 안내 등) — bi-info-circle + 마우스오버 말풍선 ──
+   폰트는 KRDS 본문 대비 작게(13px) 유지해 "툴팁 글자 과대" 문제를 방지. native title 미사용. */
+.egov-file-help{ display:inline-flex; align-items:center; justify-content:center;
+  position:relative; cursor:help; color:var(--krds-primary,#246BEB); margin-left:4px; }
+.egov-file-help > .bi{ font-size:1rem; line-height:1; }
+.egov-file-help::after{ content:attr(data-tip); position:absolute; left:0; top:calc(100% + 8px);
+  z-index:30; width:max-content; max-width:340px; white-space:normal; text-align:left;
+  background:#26282B; color:#fff; font-size:.8125rem; font-weight:400; line-height:1.45;
+  padding:8px 11px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,.18);
+  opacity:0; visibility:hidden; transition:opacity .12s ease; pointer-events:none; }
+.egov-file-help::before{ content:""; position:absolute; left:8px; top:calc(100% + 2px); z-index:31;
+  border:6px solid transparent; border-bottom-color:#26282B;
+  opacity:0; visibility:hidden; transition:opacity .12s ease; }
+.egov-file-help:hover::after, .egov-file-help:focus::after,
+.egov-file-help:hover::before, .egov-file-help:focus::before{ opacity:1; visibility:visible; }

@@ -63,14 +63,12 @@
                                 th:value="${c.code}" th:text="${c.codeNm}">직업</option>
                     </select>
                     <div class="text-danger small" th:if="${#fields.hasErrors('occpTy')}" th:errors="*{occpTy}"></div></div>
-                <div class="col-md-6"><label class="form-label">핸드폰번호</label>
-                    <input class="krds-input" type="text" th:field="*{moblphonNo}" maxlength="15"/></div>
-                <div class="col-md-4"><label class="form-label">지역번호</label>
-                    <input class="krds-input" type="text" th:field="*{areaNo}" maxlength="4"/></div>
-                <div class="col-md-4"><label class="form-label">국번</label>
-                    <input class="krds-input" type="text" th:field="*{middleTelno}" maxlength="4"/></div>
-                <div class="col-md-4"><label class="form-label">끝번호</label>
-                    <input class="krds-input" type="text" th:field="*{endTelno}" maxlength="4"/></div>
+                <div class="col-md-6"><label class="form-label">휴대폰번호</label>
+                    <input class="krds-input" type="text" th:field="*{moblphonNo}" maxlength="13"
+                           data-phone-format="mobile" inputmode="numeric" placeholder="010-1234-5678"/></div>
+                <div class="col-md-6"><label class="form-label">전화번호</label>
+                    <input class="krds-input" type="text" th:field="*{telno}" maxlength="13"
+                           data-phone-format="tel" inputmode="numeric" placeholder="02-123-4567"/></div>
                 <div class="col-md-6"><label class="form-label">팩스번호</label>
                     <input class="krds-input" type="text" th:field="*{mberFxnum}" maxlength="15"/></div>
                 <div class="col-md-6"><label class="form-label">이메일주소</label>

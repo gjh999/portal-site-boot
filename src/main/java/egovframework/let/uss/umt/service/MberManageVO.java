@@ -54,6 +54,12 @@ public class MberManageVO extends UserDefaultVO{
 	 */
 	private String endTelno;
 	/**
+	 * 전화번호(단일 키인값) - 사용자가 입력한 그대로 저장(자동 하이픈 포함). 예: 02-123-4567
+	 * 기존 areaNo/middleTelno/endTelno 3분할 대신 단일 컬럼(TELNO)로 저장/표시한다.
+	 */
+	@Size(max=20)
+	private String telno;
+	/**
 	 * 팩스번호
 	 */
 	@Size(max=15)
@@ -219,6 +225,20 @@ public class MberManageVO extends UserDefaultVO{
 	 */
 	public void setEndTelno(String endTelno) {
 		this.endTelno = endTelno;
+	}
+	/**
+	 * telno attribute 값을 리턴한다.
+	 * @return String
+	 */
+	public String getTelno() {
+		return telno;
+	}
+	/**
+	 * telno attribute 값을 설정한다.
+	 * @param telno String
+	 */
+	public void setTelno(String telno) {
+		this.telno = telno;
 	}
 	/**
 	 * mberFxnum attribute 값을  리턴한다.
