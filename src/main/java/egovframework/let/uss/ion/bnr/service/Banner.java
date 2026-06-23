@@ -99,6 +99,18 @@ public class Banner extends ComDefaultVO {
 	 */
 	private String regDate;
 	/**
+	 * 수정일시 (LAST_UPDT_PNTTM)
+	 */
+	private String lastUpdtPnttm;
+	/**
+	 * 게시기간 시작일 (EXPSR_BGNDE, nullable — 미설정 시 상시 노출)
+	 */
+	private String expsrBgnde;
+	/**
+	 * 게시기간 종료일 (EXPSR_ENDDE, nullable — 미설정 시 상시 노출)
+	 */
+	private String expsrEndde;
+	/**
 	 * 파일첨부여부
 	 */
 	private boolean isAtchFile;
@@ -264,6 +276,42 @@ public class Banner extends ComDefaultVO {
 	 */
 	public void setRegDate(String regDate) {
 		this.regDate = regDate;
+	}
+	/**
+	 * @return the lastUpdtPnttm
+	 */
+	public String getLastUpdtPnttm() {
+		return lastUpdtPnttm;
+	}
+	/**
+	 * @param lastUpdtPnttm the lastUpdtPnttm to set
+	 */
+	public void setLastUpdtPnttm(String lastUpdtPnttm) {
+		this.lastUpdtPnttm = lastUpdtPnttm;
+	}
+	/**
+	 * @return the expsrBgnde
+	 */
+	public String getExpsrBgnde() {
+		return expsrBgnde;
+	}
+	/**
+	 * @param expsrBgnde the expsrBgnde to set
+	 */
+	public void setExpsrBgnde(String expsrBgnde) {
+		this.expsrBgnde = expsrBgnde;
+	}
+	/**
+	 * @return the expsrEndde
+	 */
+	public String getExpsrEndde() {
+		return expsrEndde;
+	}
+	/**
+	 * @param expsrEndde the expsrEndde to set
+	 */
+	public void setExpsrEndde(String expsrEndde) {
+		this.expsrEndde = expsrEndde;
 	}
 	/**
 	 * @return the isAtchFile

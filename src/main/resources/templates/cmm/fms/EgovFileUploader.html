@@ -13,6 +13,12 @@
 <div xmlns:th="http://www.thymeleaf.org" class="egov-file-uploader"
      th:fragment="uploader(maxCnt, existCnt)"
      th:attr="data-max=${maxCnt != null ? maxCnt : ''},data-exist=${existCnt != null ? existCnt : 0}">
+    <!-- 첨부파일 안내: 장문 텍스트 대신 정보 툴팁 아이콘(마우스오버) -->
+    <span class="egov-file-help" tabindex="0" role="button"
+          aria-label="첨부파일 안내"
+          th:attr="data-tip='최대 ' + ${maxCnt != null and maxCnt > 0 ? maxCnt : 3} + '개, 파일당 10MB 이하 · 허용 확장자: gif, jpg, jpeg, png, xls, xlsx, pdf, doc, docx, ppt, pptx, hwp, hwpx, txt, zip'">
+        <i class="bi bi-info-circle" aria-hidden="true"></i>
+    </span>
     <input class="krds-input mb-2" type="file" name="file_1"/>
     <button type="button" class="krds-btn tertiary small" onclick="egovAddFileInput(this);">
         <i class="bi bi-plus-lg"></i> 파일 추가

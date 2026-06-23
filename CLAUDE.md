@@ -109,6 +109,25 @@ cd "/c/eGovFrame/workspace-egov/portal-site-boot"
 
 > 검증: 위 20개 화면 HTTP 200, FAQ 등록 생성 플로우(채번→insert→목록반영) 검증 완료. 로그인/로그아웃/권한가드 동작.
 
+## 회원 폼 통일·전화 단일저장 / 첨부 툴팁 / 배너 게시기간 (2026-06-23)
+- **회원 등록/수정/가입 폼 통일**: 라벨을 항상 입력칸 위로(KRDS `form-group`), `krds-form-section`(fieldset+legend)로
+  섹션 구분(계정 정보·기본 정보·연락처·주소). 클래스명은 KRDS 충돌 회피 위해 `krds-form-section*` 네임스페이스(krds.css).
+- **전화번호 단일 키인 저장(비파괴)**: 기존 3분할(`AREA_NO`/`MIDDLE_TELNO`/`END_TELNO`, 각 VARCHAR(4)) 대신
+  단일 `TELNO VARCHAR(20)` ADD COLUMN(`TB_GNRL_MBER`, hsql+postgresql). 폼은 단일 입력 1개(`MberManageVO.telno`).
+  분할 컬럼은 유지(회귀 안전, 폼에서만 제거). 매퍼 insert/update/select에 `TELNO` 추가.
+- **자동 하이픈(순수 JS)**: `common.js`에 `data-phone-format="mobile|tel"` 바인더. mobile=010-1234-5678(3-4-4),
+  tel=02-123-4567(서울 02 2자리)/031-123-4567(3자리). 숫자만 허용·백스페이스 정상. 휴대폰(`MBTLNUM`)도 단일+자동하이픈.
+- **첨부파일 안내 → 정보 툴팁**: `cmm/fms/EgovFileUploader` 프래그먼트에 `bi-info-circle`+CSS 툴팁(`.egov-file-help[data-tip]`).
+  장문 안내(최대 N개·10MB·허용확장자)를 마우스오버/포커스 말풍선으로. 폰트 13px(과대 방지, native title 미사용). max는 게시판 `posblAtchFileNumber`.
+- **배너 개선**: ① 셀렉트 라벨 '반영여부 Y/N'→'노출여부 노출/비노출'(Regist/Updt/List 일관) ② 수정일시(`LAST_UPDT_PNTTM`) 표시(Updt)
+  ③ **게시기간**: `TB_BANNER`에 `EXPSR_BGNDE/EXPSR_ENDDE DATE nullable` ADD COLUMN(hsql+postgresql). 폼 date 입력 2개,
+  `selectBannerListByType`(메인·푸터·팝업 공통 조회)에 `(BGNDE IS NULL OR <=CURRENT_DATE) AND (ENDDE IS NULL OR >=CURRENT_DATE)` 필터
+  (기간 미설정=상시). pg는 `CAST(#{x} AS DATE)`, 빈문자→NULL `<choose>`. POPUP_* 컬럼도 pg DDL에 보강(파리티).
+- **검증(admin/1, HTTP)**: 회원 등록(telno=02-123-4567·mobile=010-1234-5678) insert→edit 라운드트립 DB 영속 확인,
+  배너 게시기간 과거설정 시 메인에서 즉시 비노출→해제 시 복귀, 수정일시 표시(`2026-06-23 15:15:39`), 첨부 툴팁 렌더,
+  회원/배너/게시판 폼 9종 200·예외 0. 헤드리스 스크린샷으로 섹션 레이아웃·툴팁 폰트 적정 확인. `.localdb` 재시드.
+- **DBMS 파리티**: hsql(런타임 검증)·postgresql(DDL/매퍼) 반영. mysql/oracle/tibero/cubrid/altibase는 미반영(기존 popup 컬럼도 미반영 상태 동일).
+
 ## 설문(survey) 기능 개선 — end-to-end 구현·검증 완료 (2026-06-23)
 - **문항 모달 등록(아코디언)**: 설문 등록(`EgovQustnrManageRegist`)에서 템플릿유형(객관식/서술형) 선택 후
   순수 JS 모달(외부 라이브러리 없음, KRDS 클래스)로 질문+보기 등록 → 아코디언 표시. hidden `questionsJson`(JSON 배열)으로

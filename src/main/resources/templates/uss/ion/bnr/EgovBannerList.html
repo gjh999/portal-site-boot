@@ -33,7 +33,7 @@
         <table class="tbl">
             <thead><tr>
                 <th scope="col" style="width:60px;">순서</th><th scope="col" style="width:90px;">유형</th><th scope="col">배너명</th><th scope="col">링크</th><th scope="col">설명</th>
-                <th scope="col" style="width:90px;">반영여부</th><th scope="col" style="width:110px;">등록일</th>
+                <th scope="col" style="width:90px;">노출여부</th><th scope="col" style="width:110px;">등록일</th>
             </tr></thead>
             <tbody>
             <tr th:each="item : ${bannerList}">
@@ -48,7 +48,7 @@
                 <td class="text-center">
                     <span class="krds-badge"
                           th:classappend="${item.reflctAt == 'Y'} ? 'bg-success' : 'bg-gray'"
-                          th:text="${item.reflctAt == 'Y'} ? '반영' : '미반영'">반영</span>
+                          th:text="${item.reflctAt == 'Y'} ? '노출' : '비노출'">노출</span>
                 </td>
                 <td class="text-center" th:text="${item.regDate}">등록일</td>
             </tr>
