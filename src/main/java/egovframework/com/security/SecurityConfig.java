@@ -42,6 +42,17 @@ public class SecurityConfig {
 			"/uat/uia/**",           // 로그인/로그아웃 화면 및 처리
 			"/cmm/lang",             // 다국어 전환
 			"/EgovPageLink.do",      // 소개 페이지(whitelist 뷰 포워딩)
+			"/cmm/user-types",       // 사용자 구분 안내(공개)
+			// 회원가입 진입점(일반/기업) — 비로그인 접근 허용
+			"/uss/umt/cmm/EgovMberSbscrbSelect.do",
+			"/uss/umt/cmm/EgovStplatCnfirmMber.do",
+			"/uss/umt/cmm/EgovStplatCnfirmEntrprs.do",
+			"/uss/umt/cmm/EgovMberSbscrbView.do",
+			"/uss/umt/cmm/EgovMberSbscrb.do",
+			"/uss/umt/cmm/EgovEntrprsMberSbscrbView.do",
+			"/uss/umt/cmm/EgovEntrprsMberSbscrb.do",
+			"/uss/umt/EgovIdDplctCnfirmView.do",
+			"/uss/umt/cmm/EgovIdDplctCnfirm.do",
 			"/validator.do",         // validation rule JS
 			// 정적 리소스
 			"/css/**", "/js/**", "/krds/**", "/images/**", "/fonts/**", "/static/**",
