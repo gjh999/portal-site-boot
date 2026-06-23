@@ -41,7 +41,19 @@ public class StplatManageVO extends StplatManageDefaultVO {
     /** 정보제공동의내용 */
     @EgovNullCheck
     private String infoProvdAgreCn;
-    
+
+    /**
+     * 약관 유형 (stp=이용약관 / ipm=개인정보처리방침)
+     * 등록폼의 유형 선택 값을 컨트롤러로 전달하기 위한 전용 필드(저장 안 함).
+     */
+    private String stplatType;
+
+    /**
+     * 개인정보처리방침 동의여부 (유형=ipm 일 때만 사용, INDVDL_INFO_POLICY_AGRE_AT 매핑).
+     * 이용약관 저장 시에는 사용하지 않으며 검증 대상도 아니다(저장 안 함).
+     */
+    private String indvdlInfoYn;
+
     /** 최초등록시점 */
     private String frstRegisterPnttm;
 
@@ -116,6 +128,38 @@ public class StplatManageVO extends StplatManageDefaultVO {
 	 */
 	public void setInfoProvdAgreCn(String infoProvdAgreCn) {
 		this.infoProvdAgreCn = infoProvdAgreCn;
+	}
+
+	/**
+	 * stplatType attribute 를 리턴한다.
+	 * @return the String
+	 */
+	public String getStplatType() {
+		return stplatType;
+	}
+
+	/**
+	 * stplatType attribute 값을 설정한다.
+	 * @param stplatType String
+	 */
+	public void setStplatType(String stplatType) {
+		this.stplatType = stplatType;
+	}
+
+	/**
+	 * indvdlInfoYn attribute 를 리턴한다.
+	 * @return the String
+	 */
+	public String getIndvdlInfoYn() {
+		return indvdlInfoYn;
+	}
+
+	/**
+	 * indvdlInfoYn attribute 값을 설정한다.
+	 * @param indvdlInfoYn String
+	 */
+	public void setIndvdlInfoYn(String indvdlInfoYn) {
+		this.indvdlInfoYn = indvdlInfoYn;
 	}
 
 	/**

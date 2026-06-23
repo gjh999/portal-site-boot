@@ -17,6 +17,10 @@
             <input type="hidden" name="cmd" value="save"/>
             <input type="hidden" th:field="*{indvdlInfoId}"/>
             <div class="mb-3">
+                <label class="form-label">유형</label>
+                <input class="krds-input" type="text" value="개인정보처리방침" readonly disabled/>
+            </div>
+            <div class="mb-3">
                 <label class="form-label">개인정보보호정책 명 <span class="text-danger">*</span></label>
                 <input class="krds-input" type="text" th:field="*{indvdlInfoNm}" maxlength="255" required/>
                 <div class="text-danger small" th:if="${#fields.hasErrors('indvdlInfoNm')}" th:errors="*{indvdlInfoNm}"></div>

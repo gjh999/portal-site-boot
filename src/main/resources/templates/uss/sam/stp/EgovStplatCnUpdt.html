@@ -15,6 +15,10 @@
         <form th:action="@{/uss/sam/stp/StplatCnUpdt.do}" th:object="${stplatManageVO}" method="post">
             <input type="hidden" th:field="*{useStplatId}"/>
             <div class="mb-3">
+                <label class="form-label">유형</label>
+                <input class="krds-input" type="text" value="이용약관" readonly disabled/>
+            </div>
+            <div class="mb-3">
                 <label class="form-label">이용약관명 <span class="text-danger">*</span></label>
                 <input class="krds-input" type="text" th:field="*{useStplatNm}" maxlength="100" required/>
                 <div class="text-danger small" th:if="${#fields.hasErrors('useStplatNm')}" th:errors="*{useStplatNm}"></div>

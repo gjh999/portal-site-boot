@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.com.cmm.LoginVO;
+import egovframework.let.uss.sam.ipm.service.EgovIndvdlInfoPolicyService;
+import egovframework.let.uss.sam.ipm.service.IndvdlInfoPolicy;
 import egovframework.let.uss.sam.stp.service.EgovStplatManageService;
 import egovframework.let.uss.sam.stp.service.StplatManageDefaultVO;
 import egovframework.let.uss.sam.stp.service.StplatManageVO;
@@ -45,6 +47,10 @@ public class EgovStplatManageController {
 
 	@Resource(name = "StplatManageService")
 	private EgovStplatManageService stplatManageService;
+
+	/** 개인정보처리방침(ipm) 서비스 — 약관 등록폼에서 '개인정보처리방침' 유형 선택 시 위임 */
+	@Resource(name = "egovIndvdlInfoPolicyService")
+	private EgovIndvdlInfoPolicyService egovIndvdlInfoPolicyService;
 
 	/** EgovPropertyService */
 	@Resource(name = "propertiesService")
@@ -178,6 +184,7 @@ public class EgovStplatManageController {
 	 */
 	@RequestMapping("/uss/sam/stp/StplatCnRegist.do")
 	public String insertStplatCn(@ModelAttribute("searchVO") StplatManageDefaultVO searchVO,
+			@RequestParam(value = "stplatType", required = false, defaultValue = "stp") String stplatType,
 			@Valid @ModelAttribute("stplatManageVO") StplatManageVO stplatManageVO,
 			BindingResult bindingResult, ModelMap model) throws Exception {
 
@@ -187,16 +194,38 @@ public class EgovStplatManageController {
 			return "uat/uia/EgovLoginUsr";
 		}
 
-		if (bindingResult.hasErrors()) {
-
-			return "uss/sam/stp/EgovStplatCnRegist";
-
-		}
-
 		// 로그인VO에서 사용자 정보 가져오기
 		LoginVO loginVO = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
-
 		String frstRegisterId = loginVO.getUniqId();
+
+		// 유형이 '개인정보처리방침(ipm)'이면 ipm 서비스로 위임 저장한다.
+		// (이용약관 전용 필드 검증오류는 무시하고, 개인정보처리방침 필수값만 직접 검증)
+		if ("ipm".equals(stplatType)) {
+			IndvdlInfoPolicy policy = new IndvdlInfoPolicy();
+			policy.setIndvdlInfoNm(stplatManageVO.getUseStplatNm()); // 명칭 → INDVDL_INFO_POLICY_NM
+			policy.setIndvdlInfoDc(stplatManageVO.getUseStplatCn()); // 내용 → INDVDL_INFO_POLICY_CN
+			policy.setIndvdlInfoYn(stplatManageVO.getIndvdlInfoYn()); // 동의여부 → INDVDL_INFO_POLICY_AGRE_AT
+
+			// 개인정보처리방침 필수값 검증(명칭/내용/동의여부)
+			if (isBlank(policy.getIndvdlInfoNm()) || isBlank(policy.getIndvdlInfoDc())
+					|| isBlank(policy.getIndvdlInfoYn())) {
+				model.addAttribute("stplatType", stplatType);
+				model.addAttribute("ipmValidationError", true);
+				return "uss/sam/stp/EgovStplatCnRegist";
+			}
+
+			policy.setFrstRegisterId(frstRegisterId);
+			policy.setLastUpdusrId(frstRegisterId);
+			egovIndvdlInfoPolicyService.insertIndvdlInfoPolicy(policy);
+
+			return "forward:/uss/sam/ipm/listIndvdlInfoPolicy.do";
+		}
+
+		// 이용약관(stp) 저장
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("stplatType", stplatType);
+			return "uss/sam/stp/EgovStplatCnRegist";
+		}
 
 		stplatManageVO.setFrstRegisterId(frstRegisterId); // 최초등록자ID
 		stplatManageVO.setLastUpdusrId(frstRegisterId); // 최종수정자ID
@@ -204,6 +233,11 @@ public class EgovStplatManageController {
 		stplatManageService.insertStplatCn(stplatManageVO);
 
 		return "forward:/uss/sam/stp/StplatListInqire.do";
+	}
+
+	/** 문자열 공백 여부 */
+	private boolean isBlank(String s) {
+		return s == null || s.trim().isEmpty();
 	}
 
 	/**
