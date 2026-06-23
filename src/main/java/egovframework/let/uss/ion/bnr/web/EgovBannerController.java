@@ -138,9 +138,18 @@ public class EgovBannerController {
 	 * @return String - 리턴 Url
 	 */
 	@RequestMapping(value = "/uss/ion/bnr/addViewBanner.do")
-	public String insertViewBanner(@ModelAttribute("bannerVO") BannerVO bannerVO, ModelMap model) throws Exception {
+	public String insertViewBanner(@ModelAttribute("banner") Banner banner, ModelMap model) throws Exception {
 
-		model.addAttribute("banner", bannerVO);
+		// 게시기간 기본값: 시작일=오늘, 종료일=오늘+7일 (yyyy-MM-dd) — 설문 등록폼과 동일 방식
+		java.time.LocalDate today = java.time.LocalDate.now();
+		if (banner.getExpsrBgnde() == null || banner.getExpsrBgnde().isEmpty()) {
+			banner.setExpsrBgnde(today.toString());
+		}
+		if (banner.getExpsrEndde() == null || banner.getExpsrEndde().isEmpty()) {
+			banner.setExpsrEndde(today.plusDays(7).toString());
+		}
+
+		model.addAttribute("banner", banner);
 		return "uss/ion/bnr/EgovBannerRegist";
 	}
 

@@ -12,42 +12,57 @@
         </ol></nav>
         <h1 class="h4 mb-3"><i class="bi bi-ui-checks"></i> 설문조사 참여</h1>
 
-        <!-- 검색/필터 폼 -->
-        <form class="krds-panel mb-3" method="get" th:action="@{/uss/olp/qnn/EgovQustnrRespondInfoManageList.do}">
-            <div class="krds-panel-body">
-                <div class="row g-2 align-items-end">
-                    <div class="col-md-4">
-                        <label class="form-label mb-1">설문제목 검색</label>
-                        <input type="hidden" name="searchCondition" value="QESTNR_SJ"/>
-                        <input class="krds-input" type="text" name="searchKeyword"
-                               th:value="${searchKeyword}" placeholder="제목으로 검색"/>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label mb-1">회원유형 필터</label>
-                        <select class="krds-form-select" name="surveyTrgetFilter">
-                            <option value="" th:selected="${surveyTrgetFilter != 'MINE'}">전체 설문</option>
-                            <option value="MINE" th:selected="${surveyTrgetFilter == 'MINE'}">내 유형 대상만</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label mb-1">참여여부 필터</label>
-                        <select class="krds-form-select" name="surveyPartcptn">
-                            <option value="" th:selected="${surveyPartcptn == null or surveyPartcptn == ''}">전체</option>
-                            <option value="N" th:selected="${surveyPartcptn == 'N'}">미참여</option>
-                            <option value="Y" th:selected="${surveyPartcptn == 'Y'}">참여완료</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <button class="krds-btn primary w-100" type="submit"><i class="bi bi-search"></i> 검색</button>
+        <!-- 검색/필터 폼 (KRDS 폼) — 게시판 목록과 통일 -->
+        <form class="search-bar krds-search mb-3" method="get" th:action="@{/uss/olp/qnn/EgovQustnrRespondInfoManageList.do}">
+            <input type="hidden" name="searchCondition" value="QESTNR_SJ"/>
+            <div class="row g-2 align-items-end">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="form-tit"><label for="searchKeyword">설문제목 검색</label></div>
+                        <div class="form-conts">
+                            <input id="searchKeyword" class="krds-input" type="text" name="searchKeyword"
+                                   th:value="${searchKeyword}" placeholder="제목으로 검색"/>
+                        </div>
                     </div>
                 </div>
-                <p class="text-muted small mb-0 mt-2" th:if="${loginOccp != null and loginOccp != ''}">
-                    내 직업유형:
-                    <span th:each="c : ${comCode034}" th:if="${c.code == loginOccp}" th:text="${c.codeNm}"></span>
-                    <span> — ‘내 유형 대상만’ 선택 시 전체 대상 설문과 내 유형 대상 설문만 표시됩니다.</span>
-                </p>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="form-tit"><label for="surveyTrgetFilter">회원유형 필터</label></div>
+                        <div class="form-conts">
+                            <select id="surveyTrgetFilter" class="krds-form-select" name="surveyTrgetFilter">
+                                <option value="" th:selected="${surveyTrgetFilter != 'MINE'}">전체 설문</option>
+                                <option value="MINE" th:selected="${surveyTrgetFilter == 'MINE'}">내 유형 대상만</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="form-tit"><label for="surveyPartcptn">참여여부 필터</label></div>
+                        <div class="form-conts">
+                            <select id="surveyPartcptn" class="krds-form-select" name="surveyPartcptn">
+                                <option value="" th:selected="${surveyPartcptn == null or surveyPartcptn == ''}">전체</option>
+                                <option value="N" th:selected="${surveyPartcptn == 'N'}">미참여</option>
+                                <option value="Y" th:selected="${surveyPartcptn == 'Y'}">참여완료</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button class="krds-btn primary medium w-100" type="submit"><i class="bi bi-search"></i> 검색</button>
+                </div>
             </div>
+            <p class="text-muted small mb-0 mt-2" th:if="${loginOccp != null and loginOccp != ''}">
+                내 직업유형:
+                <span th:each="c : ${comCode034}" th:if="${c.code == loginOccp}" th:text="${c.codeNm}"></span>
+                <span> — ‘내 유형 대상만’ 선택 시 전체 대상 설문과 내 유형 대상 설문만 표시됩니다.</span>
+            </p>
         </form>
+
+        <!-- 목록 헤더: 전체 건수 (게시판과 동일하게 표 위 좌측) -->
+        <div class="d-flex justify-content-between align-items-center mb-2 mt-3">
+            <span class="text-muted">전체 <strong th:text="${paginationInfo != null ? paginationInfo.totalRecordCount : 0}">0</strong>건</span>
+        </div>
 
         <div class="krds-table-wrap"><table class="tbl">
             <thead><tr>
