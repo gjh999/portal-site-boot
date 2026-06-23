@@ -91,3 +91,12 @@ JS: `krds.min.js`(탭·아코디언) → `krds-compat.js`(data-bs-* 대체) → 
 - 호환 `.collapse{display:none}` 같은 광역 규칙은 KRDS 아코디언(max-height)과 충돌 → 제거.
 - 폰트는 로컬에 있어도 FOUT 발생 → **preload + font-display:optional**.
 - S3 등 외부 이미지: `curl 200`만으로 정상 판단 금지(CORS 미설정 시 Canvas 렌더 실패) — 실제 화면 확인.
+## ⭐ KRDS 최우선 원칙 (필수)
+디자인/UI 적용·수정 시 **KRDS를 최우선으로 적용**한다. 부트스트랩식 마크업을 호환 레이어로 덧대 패치하기보다
+**KRDS 네이티브 컴포넌트·클래스를 우선** 사용한다.
+- 새 화면/수정은 먼저 KRDS 네이티브(`krds-*`, `table.tbl`, `form-group/form-conts`, `krds-input`, `krds-form-select`,
+  `krds-btn`, `krds-badge`, `krds-panel`, `krds-pagination`)로 구현. 그리드·유틸·GNB 등 KRDS 미제공 구조만 `krds-compat.css` 유지.
+- **KRDS가 이미 정의한 클래스명을 부트스트랩식 용도로 재사용 금지.** 예: `.input-group` 은 KRDS 옵션그룹(세로,
+  `flex-direction:column`) 컴포넌트라, 부트스트랩식 가로 입력그룹(입력+버튼)에 그대로 쓰면 충돌해 세로로 깨진다.
+  → 별도 클래스(`egov-input-group` 등)나 KRDS 네이티브 인라인 패턴(`form-conts` 내 배치)을 쓴다.
+- 색·간격·타이포는 KRDS 토큰 우선. 부득이 호환 보정 시에도 KRDS 룩앤필을 따른다.
