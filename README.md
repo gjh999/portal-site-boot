@@ -203,7 +203,11 @@ portal-site-boot/
 
 ## 기여 / 라이선스
 
-- **라이선스**: [Apache License 2.0](LICENSE) — 자유롭게 사용·수정·재배포할 수 있습니다.
+- **라이선스**: [Apache License 2.0](LICENSE) — 자유롭게 사용·수정·재배포할 수 있습니다(eGovFramework 기반).
+- **오픈소스 고지**: 번들·의존된 서드파티의 라이선스 고지는 [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) 참조.
+  주요: eGovFramework RTE·Spring·Thymeleaf·MyBatis(Apache 2.0), **KRDS**(디지털정부 표준 디자인시스템 — KRDS 이용약관),
+  **Pretendard GOV**(SIL OFL 1.1), **Bootstrap Icons**·**Swiper**·**Lombok**(MIT),
+  **Andrej Karpathy Guidelines** 스킬(`.claude/skills/karpathy-guidelines/` — MIT, [출처](https://github.com/multica-ai/andrej-karpathy-skills)).
 - **표준프레임워크 호환**: eGovFrame 5.x (Spring Boot 3.5)
 - **기여 방법**: [Docs/CONTRIBUTING.md](Docs/CONTRIBUTING.md) 및
   [Docs/CONTRIBUTE_README.md](Docs/CONTRIBUTE_README.md) 참고.
