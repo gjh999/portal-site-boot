@@ -93,5 +93,12 @@ public interface EgovQustnrQestnManageService {
 	 */
 	void  deleteQustnrQestnManage(QustnrQestnManageVO qustnrQestnManageVO) throws Exception;
 
+    /**
+	 * 설문지(설문지+템플릿) 단위로 기존 문항/보기/응답을 일괄삭제한다.(설문 수정 재저장용)
+	 * @param qustnrQestnManageVO - qestnrId, qestnrTmplatId 가 담긴 VO
+	 * @throws Exception
+	 */
+	void  deleteQustnrQestnManageByQestnr(QustnrQestnManageVO qustnrQestnManageVO) throws Exception;
+
 
 }

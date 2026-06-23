@@ -131,6 +131,15 @@ cd "/c/eGovFrame/workspace-egov/portal-site-boot"
 - **검증**: 시드/모달 문항 렌더·응답 제출→참여완료 전환·제목검색·MINE/참여여부 필터·회원 직업유형 저장/수정 반영
   모두 HTTP 200·예외 0 확인. 회귀(메인·게시판·설문 6종·회원·권한) 200 유지.
 - **DBMS 파리티**: hsql(런타임 검증)·postgresql(DDL/DATA/매퍼) 반영. mysql/oracle/tibero/cubrid/altibase는 미반영(시간상 생략).
+- **버그수정 4건(2026-06-23)**:
+  ① **라디오/체크박스 비가시(근본원인)**: `krds.min.css`의 `input[type=checkbox],input[type=radio]{position:absolute;width:1px;height:1px;clip:rect(0,0,0,0)…!important}`
+     (KRDS는 label::before로 라디오를 그리는 sr-only 패턴)이 호환 `.form-check-input` 라디오/체크박스까지 1px로 클리핑해 완전히 숨김.
+     `krds.css`에 `input.form-check-input[type=radio|checkbox]{position:static;width/height:1.05em;clip:auto;appearance:auto …!important}` 추가로 네이티브 컨트롤 복원
+     (KRDS 네이티브 `.krds-form-check`는 영향 없음). → 템플릿유형(객관식/서술형)·복수선택·기타 체크박스가 보이고 선택 가능. 헤드리스 스크린샷으로 가시성 확인.
+  ② **복수선택 저장/렌더**: 모달 `복수선택` 체크 → `MXMM_CHOISE_CO='9'` 저장 → 응답폼이 `mxmmChoiseCo>1`이면 checkbox(복수)로 렌더(확인됨).
+  ③ **응답폼 문항 렌더**: 시드/모달/서술형 등록 모두 정상 렌더 확인(end-to-end). 키 케이싱(`qestnTyCode`/`qestnCn`/`mxmmChoiseCo`/`qestnrqesitmid`) 정합.
+  ④ **수정폼 문항 표시/재저장**: Modify 컨트롤러가 qri 서비스로 기존 문항/보기를 `existingQuestionsJson`으로 모델에 담고, 수정폼이 등록폼과 동일한 모달+아코디언으로 초기 로드.
+     저장 시 `deleteQustnrQestnManageByQestnr`(설문지+템플릿 단위 문항/보기/응답 일괄삭제, qqm hsql+postgresql 매퍼/DAO/서비스 추가) 후 `saveQuestions` 재등록 → 수정/추가/삭제 반영(round-trip 검증).
 
 ## 게시판(cop/bbs) CRUD — 전체 동작 검증 완료 (2026-06-03)
 - 등록/수정/답글/삭제 4종 모두 HTTP 302 성공·영속·한글 정상 검증.

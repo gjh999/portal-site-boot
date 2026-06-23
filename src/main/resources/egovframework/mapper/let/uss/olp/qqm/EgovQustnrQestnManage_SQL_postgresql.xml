@@ -53,10 +53,27 @@
 
 	<!-- 설문문항::삭제  -->
 	<delete id="deleteQustnrQestnManage">
-		
+
 			DELETE FROM TB_QUSTNR_QESITM
 			WHERE QUSTNR_QESITM_ID = #{qestnrQesitmId}
-		
+
+	</delete>
+
+	<!-- 설문 수정시 기존 문항/보기/응답 일괄삭제(설문지+템플릿 단위) -->
+	<delete id="deleteQustnrRespondInfoByQestnr">
+		DELETE FROM TB_QUSTNR_RSPNS_RESULT
+		WHERE TRIM(QESTNR_ID) = TRIM(#{qestnrId})
+		AND TRIM(QUSTNR_TMPLAT_ID) = TRIM(#{qestnrTmplatId})
+	</delete>
+	<delete id="deleteQustnrItemManageByQestnr">
+		DELETE FROM TB_QUSTNR_IEM
+		WHERE TRIM(QESTNR_ID) = TRIM(#{qestnrId})
+		AND TRIM(QUSTNR_TMPLAT_ID) = TRIM(#{qestnrTmplatId})
+	</delete>
+	<delete id="deleteQustnrQestnManageByQestnr">
+		DELETE FROM TB_QUSTNR_QESITM
+		WHERE TRIM(QESTNR_ID) = TRIM(#{qestnrId})
+		AND TRIM(QUSTNR_TMPLAT_ID) = TRIM(#{qestnrTmplatId})
 	</delete>
 
 	<!-- 설문문항::수정  -->

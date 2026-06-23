@@ -123,4 +123,18 @@ public class QustnrQestnManageDao extends EgovAbstractMapper {
 		//설문문항
 		delete("QustnrQestnManage.deleteQustnrQestnManage", qustnrQestnManageVO);
 	}
+
+    /**
+	 * 설문지(설문지+템플릿) 단위로 기존 문항/보기/응답을 일괄삭제한다.(설문 수정 재저장용)
+	 * @param qustnrQestnManageVO - qestnrId, qestnrTmplatId 가 담긴 VO
+	 * @throws Exception
+	 */
+	public void deleteQustnrQestnManageByQestnr(QustnrQestnManageVO qustnrQestnManageVO) throws Exception{
+		//설문조사(설문결과) 삭제
+		delete("QustnrQestnManage.deleteQustnrRespondInfoByQestnr", qustnrQestnManageVO);
+		//설문항목(보기) 삭제
+		delete("QustnrQestnManage.deleteQustnrItemManageByQestnr", qustnrQestnManageVO);
+		//설문문항 삭제
+		delete("QustnrQestnManage.deleteQustnrQestnManageByQestnr", qustnrQestnManageVO);
+	}
 }

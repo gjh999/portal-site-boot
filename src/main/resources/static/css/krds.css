@@ -556,9 +556,19 @@ select.krds-form-select:focus{ outline:0; border-color:var(--krds-primary,#256EF
 @media (max-width:768px){ .pub-foot-cols{ gap:32px; } .pub-foot{ padding:36px 0 28px; } }
 
 /* ── form-check 라디오/체크박스 가시성·정렬 보정 ──
-   compat의 .form-check-input{margin-left:-1.6em}가 보정 padding 없이 적용되어
-   라디오/체크박스가 화면 밖으로 밀려 보이지 않던 문제 수정(설문 템플릿 유형 등) */
-.form-check-input{ margin-left:0 !important; accent-color:#256EF4; width:1.05em; height:1.05em; vertical-align:middle; }
+   ① compat의 .form-check-input{margin-left:-1.6em}가 보정 padding 없이 적용돼 밀려 보이지 않던 문제,
+   ② krds.min.css의 input[type=checkbox],input[type=radio]{position:absolute;width:1px;height:1px;clip:rect(0,0,0,0)...!important}
+      (KRDS는 label::before로 라디오를 그리는 sr-only 패턴) 때문에 일반 .form-check-input 라디오/체크박스가
+      1px로 클리핑돼 완전히 사라지던 문제 수정. KRDS 네이티브(.krds-form-check)는 영향 없이, 호환 .form-check-input만
+      네이티브 컨트롤로 복원해 명확히 보이고 클릭/선택 가능하게 한다(설문 템플릿 유형·복수선택·기타 등). */
+input.form-check-input[type=radio],
+input.form-check-input[type=checkbox]{
+  position:static !important; width:1.05em !important; height:1.05em !important;
+  margin:0 !important; padding:0 !important; overflow:visible !important;
+  clip:auto !important; white-space:normal !important; border:initial !important;
+  -webkit-appearance:auto !important; -moz-appearance:auto !important; appearance:auto !important;
+  accent-color:#256EF4; vertical-align:middle; flex:0 0 auto; cursor:pointer;
+}
 .form-check-label{ margin-left:.4rem; vertical-align:middle; cursor:pointer; }
 .form-check-inline{ display:inline-flex; align-items:center; margin-right:1.25rem; }
 

@@ -1,5 +1,6 @@
 package egovframework.let.uss.olp.qmc.web;
 
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -29,6 +30,7 @@ import egovframework.let.uss.olp.qqm.service.EgovQustnrQestnManageService;
 import egovframework.let.uss.olp.qqm.service.QustnrQestnManageVO;
 import egovframework.let.uss.olp.qim.service.EgovQustnrItemManageService;
 import egovframework.let.uss.olp.qim.service.QustnrItemManageVO;
+import egovframework.let.uss.olp.qri.service.EgovQustnrRespondInfoService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -68,6 +70,9 @@ public class EgovQustnrManageController {
 
 	@Resource(name = "egovQustnrItemManageService")
 	private EgovQustnrItemManageService egovQustnrItemManageService;
+
+	@Resource(name = "egovQustnrRespondInfoService")
+	private EgovQustnrRespondInfoService egovQustnrRespondInfoService;
 
 	/** EgovPropertyService */
 	@Resource(name = "propertiesService")
@@ -256,6 +261,18 @@ public class EgovQustnrManageController {
 			qustnrManageVO.setLastUpdusrId(loginVO.getUniqId());
 
 			egovQustnrManageService.updateQustnrManage(qustnrManageVO);
+
+			// 모달로 수정한 문항/보기 재저장: 기존 문항/보기/응답 일괄삭제 후 questionsJson 재등록(등록폼과 동일 UX)
+			String questionsJson = commandMap.get("questionsJson") == null ? "" : (String) commandMap.get("questionsJson");
+			if (questionsJson != null && !questionsJson.trim().isEmpty()
+					&& qustnrManageVO.getQestnrTmplatId() != null && !qustnrManageVO.getQestnrTmplatId().isEmpty()) {
+				QustnrQestnManageVO delVO = new QustnrQestnManageVO();
+				delVO.setQestnrId(qustnrManageVO.getQestnrId());
+				delVO.setQestnrTmplatId(qustnrManageVO.getQestnrTmplatId());
+				egovQustnrQestnManageService.deleteQustnrQestnManageByQestnr(delVO);
+				saveQuestions(questionsJson, qustnrManageVO.getQestnrId(), qustnrManageVO.getQestnrTmplatId(), loginVO.getUniqId());
+			}
+
 			sLocationUrl = "redirect:/uss/olp/qmc/EgovQustnrManageList.do";
 		} else {
 			model.addAttribute("resultList", egovQustnrManageService.selectQustnrManageDetail(qustnrManageVO));
@@ -265,9 +282,72 @@ public class EgovQustnrManageController {
 
 			//설문템플릿 정보 불러오기
 			model.addAttribute("listQustnrTmplat", egovQustnrManageService.selectQustnrTmplatManageList(qustnrManageVO));
+
+			// 기존 등록된 문항/보기를 모달/아코디언 초기 로드용 JSON으로 구성
+			model.addAttribute("existingQuestionsJson",
+					buildExistingQuestionsJson(newQustnrManageVO.getQestnrId(), newQustnrManageVO.getQestnrTmplatId()));
 		}
 
 		return sLocationUrl;
+	}
+
+	/**
+	 * 설문 수정폼의 모달/아코디언 초기 로드용으로 기존 문항/보기를 JSON 배열 문자열로 구성한다.
+	 * 형식: [{"type":"1|2","content":"...","multi":bool,"items":[{"content":"...","etc":bool}]}, ...]
+	 */
+	private String buildExistingQuestionsJson(String qestnrId, String qestnrTmplatId) {
+		if (qestnrId == null || qestnrTmplatId == null || qestnrId.isEmpty() || qestnrTmplatId.isEmpty()) {
+			return "[]";
+		}
+		try {
+			Map<String, Object> param = new java.util.HashMap<>();
+			param.put("qestnrId", qestnrId.trim());
+			param.put("qestnrTmplatId", qestnrTmplatId.trim());
+
+			List<?> qList = egovQustnrRespondInfoService.selectQustnrRespondInfoManageComtnqustnrqesitm(param);
+			List<?> iList = egovQustnrRespondInfoService.selectQustnrRespondInfoManageComtnqustnriem(param);
+
+			com.fasterxml.jackson.databind.node.ArrayNode arr = new ObjectMapper().createArrayNode();
+			ObjectMapper om = new ObjectMapper();
+			for (Object qo : qList) {
+				@SuppressWarnings("unchecked")
+				Map<String, Object> q = (Map<String, Object>) qo;
+				String tyCode = strOf(q.get("qestnTyCode"));
+				String content = strOf(q.get("qestnCn"));
+				String qesitmId = strOf(q.get("qestnrqesitmid"));
+				String mxmm = strOf(q.get("mxmmChoiseCo"));
+
+				com.fasterxml.jackson.databind.node.ObjectNode qn = om.createObjectNode();
+				qn.put("type", "2".equals(tyCode) ? "2" : "1");
+				qn.put("content", content);
+				boolean multi = false;
+				try { multi = !mxmm.isEmpty() && Integer.parseInt(mxmm.trim()) > 1; } catch (NumberFormatException ignore) { }
+				qn.put("multi", multi);
+				com.fasterxml.jackson.databind.node.ArrayNode items = om.createArrayNode();
+				if (!"2".equals(tyCode)) {
+					for (Object io : iList) {
+						@SuppressWarnings("unchecked")
+						Map<String, Object> it = (Map<String, Object>) io;
+						if (qesitmId.equals(strOf(it.get("qestnrqesitmid")))) {
+							com.fasterxml.jackson.databind.node.ObjectNode in = om.createObjectNode();
+							in.put("content", strOf(it.get("iemCn")));
+							in.put("etc", "Y".equals(strOf(it.get("etcAnswerAt")).trim()));
+							items.add(in);
+						}
+					}
+				}
+				qn.set("items", items);
+				arr.add(qn);
+			}
+			return arr.toString();
+		} catch (Exception e) {
+			LOGGER.warn("기존 문항 JSON 구성 실패: {}", e.getMessage());
+			return "[]";
+		}
+	}
+
+	private static String strOf(Object o) {
+		return o == null ? "" : String.valueOf(o);
 	}
 
 	/**
