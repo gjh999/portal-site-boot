@@ -72,5 +72,8 @@ credentials.*
 # DB 백업 덤프 (전역 규칙 db-safe-migrate)
 .dbbackup/
 
+# 개발용 파일 기반 HSQL 영속 DB (런타임 데이터) — 절대 커밋 금지
+.localdb/
+
 # Claude Code 로컬 설정
 .claude/settings.local.json

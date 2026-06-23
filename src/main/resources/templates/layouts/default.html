@@ -44,8 +44,13 @@
     </th:block>
 </main>
 
-<!-- 팝업 배너 (페이지 진입 시 표출, '오늘 하루 보지 않기' 쿠키 24h) -->
-<th:block th:replace="~{fragments/banner :: popup(${popupBannerList}, ${bannerInterval})}"></th:block>
+<!-- 팝업 배너 (페이지 진입 시 표출, '오늘 하루 보지 않기' 쿠키 24h)
+     단, 로그인/인증·에러 화면(bannerPopupHidden)에서는 팝업을 띄우지 않는다.
+     ⚠️ th:replace(우선순위 100)는 th:unless(300)보다 먼저 처리되므로 같은 태그에 두면 조건이 무시된다.
+        반드시 바깥 th:block(th:unless)으로 감싸 안쪽 th:replace 를 조건부로 렌더링한다. -->
+<th:block th:unless="${bannerPopupHidden}">
+    <th:block th:replace="~{fragments/banner :: popup(${popupBannerList}, ${bannerInterval})}"></th:block>
+</th:block>
 
 <!-- 푸터 -->
 <footer class="egov-footer" th:replace="~{fragments/footer :: footer}"></footer>

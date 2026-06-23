@@ -3,13 +3,13 @@ package egovframework.let.uss.ion.bnr.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import egovframework.let.uss.ion.bnr.service.BannerVO;
 import egovframework.let.uss.ion.bnr.service.EgovBannerService;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -57,6 +57,29 @@ public class EgovBannerGlobalAdvice {
 	@ModelAttribute("popupBannerList")
 	public List<BannerVO> popupBannerList() {
 		return selectByType("POPUP");
+	}
+
+	/**
+	 * 현재 요청이 로그인/공개 인증 화면 등 팝업을 띄우지 말아야 하는 경로인지 여부를 모델에 주입한다.
+	 * default 레이아웃은 이 값이 true 이면 팝업 fragment 자체를 렌더링하지 않는다.
+	 *
+	 * <pre>
+	 * 제외 경로:
+	 *  - /uat/uia/  : 로그인/로그아웃/인증 화면(egovLoginUsr.do, actionSecurityLogin.do 등)
+	 *  - /error     : 에러 화면
+	 * </pre>
+	 */
+	@ModelAttribute("bannerPopupHidden")
+	public boolean bannerPopupHidden(HttpServletRequest request) {
+		String uri = request.getRequestURI();
+		if (uri == null) {
+			return false;
+		}
+		String ctx = request.getContextPath();
+		if (ctx != null && !ctx.isEmpty() && uri.startsWith(ctx)) {
+			uri = uri.substring(ctx.length());
+		}
+		return uri.startsWith("/uat/uia/") || uri.startsWith("/error");
 	}
 
 	private List<BannerVO> selectByType(String bannerTy) {
