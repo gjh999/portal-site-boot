@@ -95,6 +95,10 @@
         overlay.querySelectorAll('.bnr-popup-close').forEach(function (b) {
             b.addEventListener('click', function () { close(true); });
         });
+        // "오늘 하루 보지 않기" 체크 시 즉시 쿠키 저장 + 창 닫기
+        overlay.querySelectorAll('.bnr-popup-today').forEach(function (chk) {
+            chk.addEventListener('change', function () { if (chk.checked) close(true); });
+        });
         // 오버레이 배경 클릭 시 닫기(체크박스 상태 반영). 위치지정(block) 모드에서는 팝업 외부 클릭만.
         overlay.addEventListener('click', function (e) { if (e.target === overlay) close(true); });
     }
