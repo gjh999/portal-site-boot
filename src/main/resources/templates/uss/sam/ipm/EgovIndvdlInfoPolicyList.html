@@ -48,7 +48,7 @@
         <!-- 목록 헤더: 전체 건수 + 등록 버튼(우측) -->
         <div class="d-flex justify-content-between align-items-center mb-2 mt-3">
             <span class="text-muted">전체 <strong th:text="${paginationInfo != null ? paginationInfo.totalRecordCount : 0}">0</strong>건</span>
-            <a class="krds-btn primary small" sec:authorize="hasRole('ADMIN')" th:href="@{/uss/sam/ipm/registIndvdlInfoPolicy.do}">
+            <a class="krds-btn primary small" sec:authorize="hasRole('ADMIN')" th:href="@{/uss/sam/terms/registView.do(termsType='ipm')}">
                 <i class="bi bi-plus-lg"></i> 방침 등록</a>
         </div>
 

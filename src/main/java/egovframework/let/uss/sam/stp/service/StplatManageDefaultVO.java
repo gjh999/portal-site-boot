@@ -38,6 +38,17 @@ public class StplatManageDefaultVO implements Serializable {
     
     /** 검색사용여부 */
     private String searchUseYn = "";
+
+    /** 통합목록 유형필터 (""=전체 / "stplat"=이용약관 / "ipm"=개인정보처리방침) */
+    private String termsType = "";
+
+	public String getTermsType() {
+		return termsType;
+	}
+
+	public void setTermsType(String termsType) {
+		this.termsType = termsType;
+	}
     
     /** 현재페이지 */
     private int pageIndex = 1;

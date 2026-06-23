@@ -37,8 +37,8 @@
                     <h4>서비스</h4>
                     <a th:href="@{/uss/olh/qna/QnaListInqire.do}">Q&amp;A</a>
                     <a th:href="@{/uss/olp/qnn/EgovQustnrRespondInfoManageList.do}">설문참여</a>
-                    <a th:href="@{/uss/sam/stp/StplatListInqire.do}">이용약관</a>
-                    <a th:href="@{/uss/sam/ipm/listIndvdlInfoPolicy.do}">개인정보처리방침</a>
+                    <a href="#" data-terms-modal="stplat" th:text="#{terms.stplat}">이용약관</a>
+                    <a href="#" data-terms-modal="ipm" th:text="#{terms.ipm}">개인정보처리방침</a>
                 </div>
                 <div class="pub-foot-col">
                     <h4>지원</h4>
@@ -59,6 +59,118 @@
             </span>
         </div>
     </div>
+
+    <!-- 약관/개인정보처리방침 모달 (KRDS 네이티브 스타일, 순수 JS — 외부 라이브러리 없음) -->
+    <div id="termsModal" class="krds-modal" role="dialog" aria-modal="true" aria-labelledby="termsModalTitle" hidden>
+        <div class="modal-back" data-terms-close></div>
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="termsModalTitle">약관</h2>
+                    <button type="button" class="btn-close" data-terms-close
+                            th:title="#{button.close}" aria-label="닫기">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <div class="terms-modal-meta" id="termsModalMeta"></div>
+                <div class="modal-conts terms-modal-body" id="termsModalBody">
+                    <p class="text-center text-muted py-4" th:text="#{terms.loading}">불러오는 중...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+    (function () {
+        var modal = document.getElementById('termsModal');
+        if (!modal) { return; }
+        var titleEl = document.getElementById('termsModalTitle');
+        var metaEl = document.getElementById('termsModalMeta');
+        var bodyEl = document.getElementById('termsModalBody');
+        var ctx = /*[[@{/}]]*/ '/';
+        var lastFocus = null;
+
+        var I18N = {
+            verLabel: /*[[#{terms.version}]]*/ '버전',
+            aplcLabel: /*[[#{terms.aplcDe}]]*/ '적용일자',
+            loading: /*[[#{terms.loading}]]*/ '불러오는 중...',
+            empty: /*[[#{terms.empty}]]*/ '등록된 내용이 없습니다.',
+            error: /*[[#{terms.error}]]*/ '내용을 불러오지 못했습니다.',
+            stplat: /*[[#{terms.stplat}]]*/ '이용약관',
+            ipm: /*[[#{terms.ipm}]]*/ '개인정보처리방침'
+        };
+
+        function esc(s) {
+            return (s == null ? '' : String(s))
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        var backEl = modal.querySelector('.modal-back');
+        function openModal() {
+            lastFocus = document.activeElement;
+            modal.hidden = false;
+            // KRDS 모달 상태머신: .shown(display) -> .in(visibility/opacity/z-index)
+            modal.classList.add('shown');
+            if (backEl) { backEl.classList.add('in'); }
+            // reflow 후 .in 적용(트랜지션 보장)
+            void modal.offsetWidth;
+            modal.classList.add('in');
+            document.body.style.overflow = 'hidden';
+            var closeBtn = modal.querySelector('.btn-close');
+            if (closeBtn) { closeBtn.focus(); }
+        }
+        function closeModal() {
+            modal.classList.remove('in');
+            if (backEl) { backEl.classList.remove('in'); }
+            modal.classList.remove('shown');
+            modal.hidden = true;
+            document.body.style.overflow = '';
+            if (lastFocus && lastFocus.focus) { lastFocus.focus(); }
+        }
+
+        function load(type) {
+            titleEl.textContent = (type === 'ipm') ? I18N.ipm : I18N.stplat;
+            metaEl.innerHTML = '';
+            bodyEl.innerHTML = '<p class="text-center text-muted py-4">' + esc(I18N.loading) + '</p>';
+            openModal();
+
+            var url = ctx + 'uss/sam/terms/view.do?type=' + encodeURIComponent(type);
+            fetch(url, { headers: { 'Accept': 'application/json' }, credentials: 'same-origin' })
+                .then(function (r) { if (!r.ok) { throw new Error('http ' + r.status); } return r.json(); })
+                .then(function (data) {
+                    if (!data || !data.found) {
+                        bodyEl.innerHTML = '<p class="text-center text-muted py-4">' + esc(I18N.empty) + '</p>';
+                        return;
+                    }
+                    titleEl.textContent = data.nm || titleEl.textContent;
+                    var meta = '';
+                    if (data.ver) { meta += '<span class="terms-meta-item">' + esc(I18N.verLabel) + ' <strong>' + esc(data.ver) + '</strong></span>'; }
+                    if (data.aplcDe) { meta += '<span class="terms-meta-item">' + esc(I18N.aplcLabel) + ' <strong>' + esc(data.aplcDe) + '</strong></span>'; }
+                    metaEl.innerHTML = meta;
+                    bodyEl.innerHTML = '<div class="terms-content">' + esc(data.cn).replace(/\n/g, '<br>') + '</div>';
+                })
+                .catch(function () {
+                    bodyEl.innerHTML = '<p class="text-center text-muted py-4">' + esc(I18N.error) + '</p>';
+                });
+        }
+
+        document.addEventListener('click', function (e) {
+            var trigger = e.target.closest('[data-terms-modal]');
+            if (trigger) {
+                e.preventDefault();
+                load(trigger.getAttribute('data-terms-modal'));
+                return;
+            }
+            if (e.target.closest('[data-terms-close]')) {
+                e.preventDefault();
+                closeModal();
+            }
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !modal.hidden) { closeModal(); }
+        });
+    })();
+    </script>
 </footer>
 </body>
 </html>

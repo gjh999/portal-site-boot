@@ -58,6 +58,14 @@ public class IndvdlInfoPolicyDao extends EgovAbstractMapper {
     }
 
     /**
+     * 대표(현행) 개인정보처리방침 1건을 조회한다. (모달 표출용)
+     * @return 대표 개인정보처리방침 (없으면 null)
+     */
+    public IndvdlInfoPolicy selectRepresentIndvdlInfoPolicy() {
+        return (IndvdlInfoPolicy)selectOne("IndvdlInfoPolicy.selectRepresentIndvdlInfoPolicy");
+    }
+
+    /**
      * 개인정보보호정책를(을) 등록한다.
      * @param qindvdlInfoPolicy  개인정보보호정책 정보가 담김 VO
      * @throws Exception

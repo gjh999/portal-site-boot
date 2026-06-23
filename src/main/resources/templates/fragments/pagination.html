@@ -95,5 +95,34 @@
         (<span th:text="${paginationInfo.currentPageNo}">1</span>/<span th:text="${paginationInfo.totalPageCount}">1</span> 페이지)
     </p>
 </nav>
+
+<!--
+  통합 약관 목록 전용 — termsType(유형필터) + searchKeyword 유지.
+  사용법: th:replace="~{fragments/pagination :: paginationTerms(paginationInfo=${paginationInfo}, baseUrl='/uss/sam/terms/list.do', termsType=${termsType}, searchKeyword=${searchKeyword})}"
+-->
+<nav th:fragment="paginationTerms(paginationInfo, baseUrl, termsType, searchKeyword)" aria-label="페이지 네비게이션"
+     th:if="${paginationInfo != null and paginationInfo.totalRecordCount > 0}">
+    <div class="krds-pagination">
+        <span th:if="${paginationInfo.firstPageNoOnPageList == 1}" class="page-navi prev disabled">이전</span>
+        <a th:unless="${paginationInfo.firstPageNoOnPageList == 1}" class="page-navi prev"
+           th:href="@{${baseUrl}(pageIndex=${paginationInfo.firstPageNoOnPageList - 1}, termsType=${termsType}, searchKeyword=${searchKeyword})}">이전</a>
+        <div class="page-links">
+            <th:block th:each="pageNo : ${#numbers.sequence(paginationInfo.firstPageNoOnPageList, paginationInfo.lastPageNoOnPageList)}">
+                <a class="page-link" th:classappend="${pageNo == paginationInfo.currentPageNo} ? 'active' : ''"
+                   th:href="@{${baseUrl}(pageIndex=${pageNo}, termsType=${termsType}, searchKeyword=${searchKeyword})}">
+                    <span th:if="${pageNo == paginationInfo.currentPageNo}" class="sr-only">현재페이지 </span>
+                    <span th:text="${pageNo}">1</span>
+                </a>
+            </th:block>
+        </div>
+        <span th:if="${paginationInfo.lastPageNoOnPageList == paginationInfo.totalPageCount}" class="page-navi next disabled">다음</span>
+        <a th:unless="${paginationInfo.lastPageNoOnPageList == paginationInfo.totalPageCount}" class="page-navi next"
+           th:href="@{${baseUrl}(pageIndex=${paginationInfo.lastPageNoOnPageList + 1}, termsType=${termsType}, searchKeyword=${searchKeyword})}">다음</a>
+    </div>
+    <p class="text-center text-muted small" style="margin-top:.5rem;">
+        전체 <strong th:text="${paginationInfo.totalRecordCount}">0</strong>건
+        (<span th:text="${paginationInfo.currentPageNo}">1</span>/<span th:text="${paginationInfo.totalPageCount}">1</span> 페이지)
+    </p>
+</nav>
 </body>
 </html>

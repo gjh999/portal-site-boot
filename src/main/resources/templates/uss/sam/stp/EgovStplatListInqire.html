@@ -46,7 +46,7 @@
         <!-- 목록 헤더: 전체 건수 + 등록 버튼(우측) -->
         <div class="d-flex justify-content-between align-items-center mb-2 mt-3">
             <span class="text-muted">전체 <strong th:text="${paginationInfo != null ? paginationInfo.totalRecordCount : 0}">0</strong>건</span>
-            <a class="krds-btn primary small" sec:authorize="hasRole('ADMIN')" th:href="@{/uss/sam/stp/StplatCnRegistView.do}">
+            <a class="krds-btn primary small" sec:authorize="hasRole('ADMIN')" th:href="@{/uss/sam/terms/registView.do(termsType='stplat')}">
                 <i class="bi bi-plus-lg"></i> 약관 등록</a>
         </div>
 

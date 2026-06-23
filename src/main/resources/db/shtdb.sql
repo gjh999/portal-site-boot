@@ -245,13 +245,16 @@ CREATE TABLE TB_BANNER (
 
 CREATE TABLE TB_INDVDL_INFO_POLICY (
   INDVDL_INFO_POLICY_ID char(20) DEFAULT '' NOT NULL,
-  INDVDL_INFO_POLICY_CN varchar(2500) DEFAULT NULL,
+  INDVDL_INFO_POLICY_CN LONGVARCHAR,
   INDVDL_INFO_POLICY_AGRE_AT char(1) DEFAULT NULL,
   FRST_REGISTER_ID varchar(20) DEFAULT NULL,
   FRST_REGIST_PNTTM TIMESTAMP DEFAULT NULL,
   LAST_UPDUSR_ID varchar(20) DEFAULT NULL,
   LAST_UPDT_PNTTM TIMESTAMP DEFAULT NULL,
   INDVDL_INFO_POLICY_NM varchar(255) DEFAULT NULL,
+  VER varchar(20) DEFAULT NULL,
+  APLC_DE varchar(8) DEFAULT NULL,
+  REPRSNT_AT char(1) DEFAULT 'N',
   PRIMARY KEY (INDVDL_INFO_POLICY_ID)
 );
 
@@ -394,6 +397,9 @@ CREATE TABLE TB_STPLAT_INFO (
   FRST_REGISTER_ID varchar(20) DEFAULT NULL,
   LAST_UPDT_PNTTM TIMESTAMP DEFAULT NULL,
   LAST_UPDUSR_ID varchar(20) DEFAULT NULL,
+  VER varchar(20) DEFAULT NULL,
+  APLC_DE varchar(8) DEFAULT NULL,
+  REPRSNT_AT char(1) DEFAULT 'N',
   PRIMARY KEY (USE_STPLAT_ID)
 );
 
@@ -457,8 +463,70 @@ INSERT INTO TB_BANNER(BANNER_ID,BANNER_NM,LINK_URL,BANNER_IMAGE,BANNER_DC,REFLCT
 INSERT INTO TB_BANNER(BANNER_ID,BANNER_NM,LINK_URL,BANNER_IMAGE,BANNER_DC,REFLCT_AT,FRST_REGISTER_ID,FRST_REGIST_PNTTM,BANNER_IMAGE_FILE,SORT_ORDR,BANNER_TY,POPUP_WIDTH,POPUP_GROUP_AT) VALUES ('BANNER_0000000000005','팝업 공지 2',NULL,'banner02.png','페이지 진입 팝업 배너 (묶음 슬라이드 2, 링크 없음)','Y','admin','2024-07-31 00:00:00','banner02.png',2,'POPUP',440,'Y');
 INSERT INTO TB_BANNER(BANNER_ID,BANNER_NM,LINK_URL,BANNER_IMAGE,BANNER_DC,REFLCT_AT,FRST_REGISTER_ID,FRST_REGIST_PNTTM,BANNER_IMAGE_FILE,SORT_ORDR,BANNER_TY) VALUES ('BANNER_0000000000004','푸터 배너','https://www.egovframe.go.kr','banner02.png','푸터 슬라이드 배너','Y','admin','2024-07-31 00:00:00','banner02.png',1,'FOOTER');
 INSERT INTO TB_BANNER(BANNER_ID,BANNER_NM,LINK_URL,BANNER_IMAGE,BANNER_DC,REFLCT_AT,FRST_REGISTER_ID,FRST_REGIST_PNTTM,BANNER_IMAGE_FILE,SORT_ORDR,BANNER_TY) VALUES ('BANNER_0000000000006','푸터 배너 2','https://www.egovframe.go.kr/home/sub.do?menuNo=41','banner01.png','푸터 슬라이드 배너 2','Y','admin','2024-07-31 00:00:00','banner01.png',2,'FOOTER');
-INSERT INTO TB_STPLAT_INFO(USE_STPLAT_ID,USE_STPLAT_NM,USE_STPLAT_CN,INFO_PROVD_AGRE_CN,FRST_REGIST_PNTTM,FRST_REGISTER_ID) VALUES ('STPLAT_0000000000001','서비스 이용약관','본 약관은 전자정부 표준프레임워크 포털 서비스 이용에 관한 사항을 규정합니다.','개인정보 제공에 동의합니다.','2024-07-31 00:00:00','admin');
-INSERT INTO TB_INDVDL_INFO_POLICY(INDVDL_INFO_POLICY_ID,INDVDL_INFO_POLICY_CN,INDVDL_INFO_POLICY_AGRE_AT,FRST_REGISTER_ID,FRST_REGIST_PNTTM,INDVDL_INFO_POLICY_NM) VALUES ('INDVDL_INFO_00000001','본 방침은 이용자의 개인정보 보호에 관한 사항을 규정합니다.','Y','admin','2024-07-31 00:00:00','개인정보처리방침');
+-- 이용약관: 대표(현행) 버전 + 구버전 데모 (REPRSNT_AT='Y'가 대표)
+INSERT INTO TB_STPLAT_INFO(USE_STPLAT_ID,USE_STPLAT_NM,USE_STPLAT_CN,INFO_PROVD_AGRE_CN,FRST_REGIST_PNTTM,FRST_REGISTER_ID,VER,APLC_DE,REPRSNT_AT) VALUES ('STPLAT_0000000000001','서비스 이용약관','제1조(목적)
+이 약관은 전자정부 표준프레임워크 포털(이하 "포털")이 제공하는 인터넷 서비스(이하 "서비스")의 이용과 관련하여 포털과 이용자의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.
+
+제2조(정의)
+1. "이용자"란 이 약관에 따라 포털이 제공하는 서비스를 이용하는 회원 및 비회원을 말합니다.
+2. "회원"이란 포털에 개인정보를 제공하여 회원등록을 한 자로서, 포털의 정보를 지속적으로 제공받으며 서비스를 이용할 수 있는 자를 말합니다.
+3. "아이디(ID)"란 회원의 식별과 서비스 이용을 위하여 회원이 정하고 포털이 승인하는 문자와 숫자의 조합을 말합니다.
+
+제3조(약관의 효력 및 변경)
+1. 이 약관은 서비스 화면에 게시하거나 기타의 방법으로 이용자에게 공지함으로써 효력이 발생합니다.
+2. 포털은 관련 법령을 위배하지 않는 범위에서 이 약관을 개정할 수 있으며, 개정 시 적용일자 및 개정사유를 명시하여 현행 약관과 함께 적용일자 7일 전부터 공지합니다.
+3. 이용자가 개정약관에 동의하지 않는 경우 이용계약을 해지할 수 있습니다.
+
+제4조(서비스의 제공 및 변경)
+1. 포털은 게시판, 민원, 설문, 자료실 등 공공 서비스를 제공합니다.
+2. 포털은 운영상·기술상 필요에 따라 제공하는 서비스의 내용을 변경할 수 있습니다.
+
+제5조(서비스 이용시간)
+서비스는 연중무휴 1일 24시간 제공함을 원칙으로 하나, 시스템 점검 등 필요한 경우 일시 중단될 수 있습니다.
+
+제6조(이용자의 의무)
+이용자는 관계 법령, 이 약관의 규정, 이용안내 및 서비스상에 공지한 주의사항을 준수하여야 하며, 타인의 권리를 침해하거나 업무를 방해하는 행위를 하여서는 안 됩니다.
+
+제7조(책임의 한계)
+포털은 천재지변 또는 이에 준하는 불가항력으로 인하여 서비스를 제공할 수 없는 경우 서비스 제공에 관한 책임이 면제됩니다.
+
+부칙
+이 약관은 2024년 7월 31일부터 시행합니다.','개인정보 제공에 동의합니다.','2024-07-31 00:00:00','admin','2.0','20240731','Y');
+-- 이용약관: 구버전(대표 아님) — 버전관리 데모
+INSERT INTO TB_STPLAT_INFO(USE_STPLAT_ID,USE_STPLAT_NM,USE_STPLAT_CN,INFO_PROVD_AGRE_CN,FRST_REGIST_PNTTM,FRST_REGISTER_ID,VER,APLC_DE,REPRSNT_AT) VALUES ('STPLAT_0000000000002','서비스 이용약관(구버전)','제1조(목적) 이 약관은 전자정부 표준프레임워크 포털 서비스 이용에 관한 사항을 규정합니다. (2022년 제정 초판)','개인정보 제공에 동의합니다.','2022-01-01 00:00:00','admin','1.0','20220101','N');
+
+-- 개인정보처리방침: 대표(현행) 버전 + 구버전 데모 (REPRSNT_AT='Y'가 대표)
+INSERT INTO TB_INDVDL_INFO_POLICY(INDVDL_INFO_POLICY_ID,INDVDL_INFO_POLICY_CN,INDVDL_INFO_POLICY_AGRE_AT,FRST_REGISTER_ID,FRST_REGIST_PNTTM,INDVDL_INFO_POLICY_NM,VER,APLC_DE,REPRSNT_AT) VALUES ('INDVDL_INFO_00000001','전자정부 표준프레임워크 포털(이하 "포털")은 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 다음과 같이 개인정보 처리방침을 수립·공개합니다.
+
+제1조(개인정보의 처리목적)
+포털은 회원 가입 및 관리, 서비스 제공, 민원사무 처리, 고충처리 목적으로 개인정보를 처리하며, 처리한 개인정보는 명시한 목적 이외의 용도로는 이용하지 않습니다.
+
+제2조(수집하는 개인정보 항목)
+1. 필수항목: 아이디, 비밀번호, 성명, 이메일
+2. 선택항목: 연락처, 주소
+3. 자동수집항목: 접속 IP, 쿠키, 서비스 이용기록
+
+제3조(개인정보의 처리 및 보유기간)
+1. 회원 가입 및 관리: 회원 탈퇴 시까지
+2. 관계 법령에 따른 보존이 필요한 경우 해당 기간까지 보유합니다.
+
+제4조(개인정보의 제3자 제공)
+포털은 정보주체의 개인정보를 제1조에서 명시한 범위 내에서만 처리하며, 정보주체의 동의, 법률의 특별한 규정 등 「개인정보 보호법」 제17조 및 제18조에 해당하는 경우에만 제3자에게 제공합니다.
+
+제5조(정보주체의 권리·의무 및 행사방법)
+정보주체는 언제든지 개인정보 열람·정정·삭제·처리정지를 요구할 수 있으며, 포털은 지체 없이 조치합니다.
+
+제6조(개인정보의 파기)
+포털은 개인정보 보유기간의 경과, 처리목적 달성 등 개인정보가 불필요하게 되었을 때에는 지체 없이 해당 개인정보를 파기합니다.
+
+제7조(개인정보 보호책임자)
+포털은 개인정보 처리에 관한 업무를 총괄하여 책임지고, 정보주체의 불만처리 및 피해구제 등을 위하여 개인정보 보호책임자를 지정하고 있습니다.
+- 개인정보 보호책임자: 포털 운영부서장 (전화: 000-0000-0000, 이메일: privacy@example.go.kr)
+
+부칙
+이 방침은 2024년 7월 31일부터 적용됩니다.','Y','admin','2024-07-31 00:00:00','개인정보처리방침','2.0','20240731','Y');
+-- 개인정보처리방침: 구버전(대표 아님) — 버전관리 데모
+INSERT INTO TB_INDVDL_INFO_POLICY(INDVDL_INFO_POLICY_ID,INDVDL_INFO_POLICY_CN,INDVDL_INFO_POLICY_AGRE_AT,FRST_REGISTER_ID,FRST_REGIST_PNTTM,INDVDL_INFO_POLICY_NM,VER,APLC_DE,REPRSNT_AT) VALUES ('INDVDL_INFO_00000002','본 방침은 이용자의 개인정보 보호에 관한 사항을 규정합니다. (2022년 제정 초판)','Y','admin','2022-01-01 00:00:00','개인정보처리방침(구버전)','1.0','20220101','N');
 -- 성별 공통코드(COM014) — 설문 응답 '성별' 드롭다운
 INSERT INTO TB_CMMN_CODE VALUES ('COM014', '성별', '성별 구분 코드', 'Y', 'LET', '2024-07-31 00:00:00.000000000', 'SYSTEM', '2024-07-31 00:00:00.000000000', 'SYSTEM');
 INSERT INTO TB_CMMN_DETAIL_CODE VALUES ('COM014', 'M', '남자', '남자', 'Y', '2024-07-31 00:00:00.000000000', 'SYSTEM', '2024-07-31 00:00:00.000000000', 'SYSTEM');

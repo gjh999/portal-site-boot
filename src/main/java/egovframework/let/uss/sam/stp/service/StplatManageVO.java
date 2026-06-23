@@ -66,6 +66,39 @@ public class StplatManageVO extends StplatManageDefaultVO {
     /** 최종수정자ID */
     private String lastUpdusrId;
 
+    /** 버전 (예: '1.0') */
+    private String ver;
+
+    /** 적용일자 (YYYYMMDD) */
+    private String aplcDe;
+
+    /** 대표여부 ('Y'/'N') */
+    private String reprsntAt;
+
+    public String getVer() {
+        return ver;
+    }
+
+    public void setVer(String ver) {
+        this.ver = ver;
+    }
+
+    public String getAplcDe() {
+        return aplcDe;
+    }
+
+    public void setAplcDe(String aplcDe) {
+        this.aplcDe = aplcDe;
+    }
+
+    public String getReprsntAt() {
+        return reprsntAt;
+    }
+
+    public void setReprsntAt(String reprsntAt) {
+        this.reprsntAt = reprsntAt;
+    }
+
 	/**
 	 * useStplatId attribute 를 리턴한다.
 	 * @return the String

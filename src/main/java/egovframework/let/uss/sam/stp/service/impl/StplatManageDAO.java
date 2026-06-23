@@ -45,6 +45,14 @@ public class StplatManageDAO extends EgovAbstractMapper {
     }
 
     /**
+     * 대표(현행) 이용약관 1건을 조회한다. (모달 표출용)
+     * @return 대표 이용약관 (없으면 null)
+     */
+    public StplatManageVO selectRepresentStplat() {
+        return (StplatManageVO) selectOne("StplatManageDAO.selectRepresentStplat");
+    }
+
+    /**
 	 * 약관정보 글 목록을 조회한다.
 	 * @param searchVO
 	 * @return 글 목록

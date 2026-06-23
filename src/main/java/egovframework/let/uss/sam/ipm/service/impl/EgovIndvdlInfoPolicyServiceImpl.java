@@ -71,6 +71,14 @@ public class EgovIndvdlInfoPolicyServiceImpl extends EgovAbstractServiceImpl
     }
 
     /**
+     * 대표(현행) 개인정보처리방침 1건을 조회한다. (모달 표출용)
+     */
+    @Override
+	public IndvdlInfoPolicy selectRepresentIndvdlInfoPolicy() {
+        return dao.selectRepresentIndvdlInfoPolicy();
+    }
+
+    /**
      * 개인정보보호정책를(을) 등록한다.
      * @param indvdlInfoPolicy 개인정보보호정책 정보가 담긴 VO
      * @throws Exception

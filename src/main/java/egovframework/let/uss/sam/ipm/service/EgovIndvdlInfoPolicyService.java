@@ -48,6 +48,12 @@ public interface EgovIndvdlInfoPolicyService {
 	 */
 	public IndvdlInfoPolicy selectIndvdlInfoPolicyDetail(IndvdlInfoPolicy indvdlInfoPolicy) throws Exception;
 
+	/**
+	 * 대표(현행) 개인정보처리방침 1건을 조회한다. (모달 표출용)
+	 * @return 대표 개인정보처리방침 (없으면 null)
+	 */
+	public IndvdlInfoPolicy selectRepresentIndvdlInfoPolicy();
+
         /**
 	 * 개인정보보호정책를(을) 등록한다.
 	 * @param indvdlInfoPolicy  개인정보보호정책 정보 담김 VO

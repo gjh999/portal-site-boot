@@ -61,7 +61,40 @@ public class IndvdlInfoPolicy implements Serializable {
     /** 컨트롤 명령어 */
     private String cmd;
 
-    
+    /** 버전 (예: '1.0') */
+    private String ver;
+
+    /** 적용일자 (YYYYMMDD) */
+    private String aplcDe;
+
+    /** 대표여부 ('Y'/'N') */
+    private String reprsntAt;
+
+    public String getVer() {
+        return ver;
+    }
+
+    public void setVer(String ver) {
+        this.ver = ver;
+    }
+
+    public String getAplcDe() {
+        return aplcDe;
+    }
+
+    public void setAplcDe(String aplcDe) {
+        this.aplcDe = aplcDe;
+    }
+
+    public String getReprsntAt() {
+        return reprsntAt;
+    }
+
+    public void setReprsntAt(String reprsntAt) {
+        this.reprsntAt = reprsntAt;
+    }
+
+
     /**
      * indvdlInfoId 리턴
      *
