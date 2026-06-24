@@ -116,13 +116,27 @@ public class EgovMberManageServiceImpl extends EgovAbstractServiceImpl implement
 		for (int i=0; i<delId.length ; i++){
 			String [] id = delId[i].split(":");
 			if (id[0].equals("USR03")){
-		        //업무사용자(직원)삭제
+		        //업무사용자(직원)삭제 — 미지원(업무사용자는 관리자 직접 관리)
 			}else if(id[0].equals("USR01")){
 				//일반회원삭제
 				mberManageDAO.deleteMber(id[1]);
 			}else if(id[0].equals("USR02")){
-				//기업회원삭제
+				//기업회원삭제 — 별도 모듈 관리(미지원)
 			}
+		}
+	}
+
+	/**
+	 * 회원 승인(A→P). "userTy:uniqId" 콤마 구분 문자열을 받아 유형별 상태컬럼을 'P'로 갱신.
+	 */
+	@Override
+	public void approveMber(String checkedIdForApprove) {
+		if (checkedIdForApprove == null || checkedIdForApprove.isEmpty()) return;
+		String [] apprId = checkedIdForApprove.split(",");
+		for (int i=0; i<apprId.length ; i++){
+			String [] id = apprId[i].split(":");
+			if (id.length < 2) continue;
+			mberManageDAO.approveMber(id[1], id[0]);
 		}
 	}
 

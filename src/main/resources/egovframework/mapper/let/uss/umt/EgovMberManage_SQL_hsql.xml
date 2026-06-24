@@ -11,28 +11,49 @@
         <result property="infoProvdAgeCn" column="INFO_PROVD_AGRE_CN"/>
     </resultMap>
     
- <select id="selectMberList" parameterType="egovframework.let.uss.umt.service.UserDefaultVO" resultType="egovMap">
-SELECT 
-    uniqId, userTy, userId , userNm, emailAdres, areaNo, middleTelno, endTelno, moblphonNo, groupId, sttus, sbscrbDe
-FROM(
-    SELECT 
+ <!-- 전 유형 회원(일반/기업/업무사용자) 통합 조회 (회원구분 userTy: USR01=일반, USR02=기업, USR03=업무사용자) -->
+ <sql id="mberUnionAll">
+    SELECT
         ESNTL_ID               uniqId,
-        'USR01'               userTy,
-        MBER_ID               userId,
-        MBER_NM               userNm,
-        MBER_EMAIL_ADRES      emailAdres,
-        AREA_NO               areaNo,
-        MIDDLE_TELNO          middleTelno,
-        END_TELNO             endTelno,
-        MBTLNUM           moblphonNo,
-        GROUP_ID              groupId,
-        MBER_STTUS            sttus,
-        TO_CHAR(SBSCRB_DE,'YYYY-MM-DD') sbscrbDe
+        'USR01'                userTy,
+        MBER_ID                userId,
+        MBER_NM                userNm,
+        MBER_EMAIL_ADRES       emailAdres,
+        GROUP_ID               groupId,
+        MBER_STTUS             sttus,
+        SBSCRB_DE              sbscrbDe
     FROM    TB_GNRL_MBER
-    ) A
+    UNION ALL
+    SELECT
+        ESNTL_ID               uniqId,
+        'USR02'                userTy,
+        ENTRPRS_MBER_ID        userId,
+        CMPNY_NM               userNm,
+        APPLCNT_EMAIL_ADRES    emailAdres,
+        GROUP_ID               groupId,
+        ENTRPRS_MBER_STTUS     sttus,
+        SBSCRB_DE              sbscrbDe
+    FROM    TB_ENTRPRS_MBER
+    UNION ALL
+    SELECT
+        ESNTL_ID               uniqId,
+        'USR03'                userTy,
+        EMPLYR_ID              userId,
+        USER_NM                userNm,
+        EMAIL_ADRES            emailAdres,
+        GROUP_ID               groupId,
+        EMPLYR_STTUS_CODE      sttus,
+        SBSCRB_DE              sbscrbDe
+    FROM    TB_EMPLYR_INFO
+ </sql>
+
+ <sql id="mberListWhere">
         WHERE 1=1
         <if test='sbscrbSttus != "0"'>
             AND sttus LIKE  #{sbscrbSttus}
+        </if>
+        <if test='userTy != null and userTy != "" and userTy != "0"'>
+            AND userTy = #{userTy}
         </if>
         <if test='searchCondition == "0"'>
             AND userId LIKE #{searchKeyword}
@@ -40,39 +61,27 @@ FROM(
         <if test='searchCondition == "1"'>
             AND userNm LIKE '%' || #{searchKeyword} || '%'
         </if>
+ </sql>
+
+ <select id="selectMberList" parameterType="egovframework.let.uss.umt.service.UserDefaultVO" resultType="egovMap">
+    SELECT
+        uniqId, userTy, userId, userNm, emailAdres, groupId, sttus,
+        TO_CHAR(sbscrbDe,'YYYY-MM-DD') sbscrbDe
+    FROM(
+        <include refid="mberUnionAll"/>
+    ) A
+        <include refid="mberListWhere"/>
         ORDER BY sbscrbDe DESC
         LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
     </select>
-    
-    
+
+
         <select id="selectMberListTotCnt" parameterType="egovframework.let.uss.umt.service.UserDefaultVO" resultType="int">
             SELECT COUNT(1) totcnt
             FROM(
-            SELECT 
-                ESNTL_ID               uniqId,
-                'USR01'               userTy,
-                MBER_ID               userId,
-                MBER_NM               userNm,
-                MBER_EMAIL_ADRES      emailAdres,
-                AREA_NO               areaNo,
-                MIDDLE_TELNO          middleTelno,
-                END_TELNO             endTelno,
-                MBTLNUM           moblphonNo,
-                GROUP_ID              groupId,
-                MBER_STTUS            sttus,
-                SBSCRB_DE             sbscrbDe
-            FROM    TB_GNRL_MBER
+                <include refid="mberUnionAll"/>
             ) A
-        WHERE 1=1
-            <if test='sbscrbSttus != "0"'>
-                AND sttus LIKE  #{sbscrbSttus}
-            </if>
-            <if test='searchCondition == "0"'>
-                AND userId LIKE #{searchKeyword}
-            </if>
-            <if test='searchCondition == "1"'>
-                AND userNm LIKE '%' || #{searchKeyword} || '%'
-            </if>
+            <include refid="mberListWhere"/>
     </select>
     
     <insert id="insertMber_S">
@@ -128,11 +137,22 @@ FROM(
     </insert>
     
     <delete id="deleteMber_S">
-        
-            DELETE FROM TB_GNRL_MBER 
+
+            DELETE FROM TB_GNRL_MBER
             WHERE ESNTL_ID=#{delId}
-        
+
     </delete>
+
+    <!-- 회원 승인(A→P) - 유형별 상태컬럼 정합 -->
+    <update id="approveGnrlMber_S">
+        UPDATE TB_GNRL_MBER SET MBER_STTUS = 'P' WHERE ESNTL_ID = #{uniqId}
+    </update>
+    <update id="approveEntrprsMber_S">
+        UPDATE TB_ENTRPRS_MBER SET ENTRPRS_MBER_STTUS = 'P' WHERE ESNTL_ID = #{uniqId}
+    </update>
+    <update id="approveEmplyr_S">
+        UPDATE TB_EMPLYR_INFO SET EMPLYR_STTUS_CODE = 'P' WHERE ESNTL_ID = #{uniqId}
+    </update>
     
     <select id="selectMber_S" resultType="egovframework.let.uss.umt.service.MberManageVO">
         

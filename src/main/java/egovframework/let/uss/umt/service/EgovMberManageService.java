@@ -69,6 +69,13 @@ public interface EgovMberManageService {
 	public void deleteMber(String checkedIdForDel) throws Exception;
 
 	/**
+	 * 회원 승인(A→P). 일반/기업/업무사용자 회원구분에 따라 해당 테이블 상태를 'P'로 갱신한다.
+	 * @param checkedIdForApprove 승인대상 "userTy:uniqId" 콤마 구분 문자열
+	 * @throws Exception
+	 */
+	public void approveMber(String checkedIdForApprove) throws Exception;
+
+	/**
 	 * 일반회원 약관확인
 	 * @param stplatId 일반회원약관아이디
 	 * @return 일반회원약관정보(List)

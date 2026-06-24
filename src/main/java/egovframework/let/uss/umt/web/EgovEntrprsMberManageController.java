@@ -62,7 +62,7 @@ public class EgovEntrprsMberManageController {
 	public String entrprsMberSbscrbView(@ModelAttribute("entrprsMberManageVO") EntrprsMberManageVO vo, Model model) throws Exception {
 		// @Valid 통과용 기본값(컨트롤러가 제출 시 재설정)
 		vo.setGroupId("GROUP_00000000000001");
-		vo.setEntrprsMberSttus("P");
+		vo.setEntrprsMberSttus("A");
 		return "cmm/uss/umt/EgovEntrprsMberSbscrb";
 	}
 
@@ -75,12 +75,12 @@ public class EgovEntrprsMberManageController {
 
 		if (bindingResult.hasErrors()) {
 			vo.setGroupId("GROUP_00000000000001");
-			vo.setEntrprsMberSttus("P");
+			vo.setEntrprsMberSttus("A");
 			return "cmm/uss/umt/EgovEntrprsMberSbscrb";
 		}
 
-		// 상태 'P'(승인), 일반사용자 그룹 고정 (상태코드/데이터는 변경하지 않음)
-		vo.setEntrprsMberSttus("P");
+		// 상태 'A'(승인대기): 셀프 가입은 일반회원과 동일하게 관리자 승인 후에만 로그인 가능
+		vo.setEntrprsMberSttus("A");
 		vo.setGroupId("GROUP_00000000000001");
 		entrprsMberManageService.insertEntrprsMber(vo);
 		// 가입 신청 완료 안내 화면으로 이동(관리자 승인 후 로그인 안내)
