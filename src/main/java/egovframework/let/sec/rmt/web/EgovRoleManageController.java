@@ -73,9 +73,10 @@ public class EgovRoleManageController {
 	 * @exception Exception
 	 */
     @RequestMapping("/sec/rmt/EgovRoleListView.do")
-    public String selectRoleListView()
+    public String selectRoleListView(@ModelAttribute("roleManageVO") RoleManageVO roleManageVO, ModelMap model)
             throws Exception {
-        return "sec/rmt/EgovRoleManage";
+        // 진입 즉시 전체 목록 조회(검색어 없이 WHERE 1=1 전체) — 공지/우편번호 목록과 동일 패턴
+        return selectRoleList(roleManageVO, model);
     }
 
 	/**

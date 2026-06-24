@@ -61,10 +61,11 @@ public class EgovGroupManageController {
 	 * @exception Exception
 	 */
     @RequestMapping("/sec/gmt/EgovGroupListView.do")
-    public String selectGroupListView()
+    public String selectGroupListView(@ModelAttribute("groupManageVO") GroupManageVO groupManageVO, ModelMap model)
             throws Exception {
-        return "sec/gmt/EgovGroupManage";
-    }   
+        // 진입 즉시 전체 목록 조회(검색어 없이 WHERE 1=1 전체) — 공지/우편번호 목록과 동일 패턴
+        return selectGroupList(groupManageVO, model);
+    }
 
 	/**
 	 * 시스템사용 목적별 그룹 목록 조회

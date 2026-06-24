@@ -56,8 +56,9 @@ public class EgovAuthorManageController {
 	 * @exception Exception
 	 */
 	@RequestMapping("/sec/ram/EgovAuthorListView.do")
-	public String selectAuthorListView() throws Exception {
-		return "sec/ram/EgovAuthorManage";
+	public String selectAuthorListView(@ModelAttribute("authorManageVO") AuthorManageVO authorManageVO, ModelMap model) throws Exception {
+		// 진입 즉시 전체 목록 조회(검색어 없이 WHERE 1=1 전체) — 공지/우편번호 목록과 동일 패턴
+		return selectAuthorList(authorManageVO, model);
 	}
 
 	/**
