@@ -14,12 +14,33 @@
 		<result property="frstRegisterPnttm" column="FRST_REGIST_PNTTM"/>
 		<result property="frstRegisterId" column="FRST_REGISTER_ID"/>
 		<result property="lastUpdusrPnttm" column="LAST_UPDT_PNTTM"/>
-		<result property="lastUpdusrId" column="LAST_UPDUSR_ID"/> 			
-	</resultMap> 
-	
+		<result property="lastUpdusrId" column="LAST_UPDUSR_ID"/>
+		<result property="ver" column="VER"/>
+		<result property="aplcDe" column="APLC_DE"/>
+		<result property="reprsntAt" column="REPRSNT_AT"/>
+	</resultMap>
+
+	<!-- 대표(현행) 개인정보처리방침 1건 조회 (모달용) -->
+	<select id="selectRepresentIndvdlInfoPolicy" resultMap="IndvdlInfoPolicyVO">
+		SELECT
+			A.INDVDL_INFO_POLICY_ID,
+			A.INDVDL_INFO_POLICY_NM,
+			A.INDVDL_INFO_POLICY_CN,
+			A.INDVDL_INFO_POLICY_AGRE_AT,
+			DATE_FORMAT(A.FRST_REGIST_PNTTM,'%Y-%m-%d') as FRST_REGIST_PNTTM,
+			A.FRST_REGISTER_ID,
+			DATE_FORMAT(A.LAST_UPDT_PNTTM,'%Y-%m-%d') as LAST_UPDT_PNTTM,
+			A.LAST_UPDUSR_ID,
+			A.VER, A.APLC_DE, A.REPRSNT_AT
+		FROM TB_INDVDL_INFO_POLICY A
+		WHERE A.REPRSNT_AT = 'Y'
+		ORDER BY A.APLC_DE DESC, A.INDVDL_INFO_POLICY_ID DESC
+		LIMIT 1
+	</select>
+
 	<!-- 개인정보보호정책확인::목록조회 게시물정보 -->
 	<select id="selectIndvdlInfoPolicy" parameterType="comDefaultVO" resultType="egovMap">
-	 
+
 		SELECT
 		A.INDVDL_INFO_POLICY_ID indvdlInfoId,
 		A.INDVDL_INFO_POLICY_NM indvdlInfoNm,
@@ -27,7 +48,10 @@
 		A.INDVDL_INFO_POLICY_AGRE_AT indvdlInfoYn,
 		A.FRST_REGISTER_ID frstRegisterId,
 		DATE_FORMAT(A.FRST_REGIST_PNTTM,'%Y-%m-%d') frstRegistPnttm,
-		(SELECT MBER_NM FROM TB_GNRL_MBER WHERE ESNTL_ID = A.FRST_REGISTER_ID) frstRegisterNm 
+		A.VER ver,
+		A.APLC_DE aplcDe,
+		A.REPRSNT_AT reprsntAt,
+		(SELECT MBER_NM FROM TB_GNRL_MBER WHERE ESNTL_ID = A.FRST_REGISTER_ID) frstRegisterNm
 		FROM TB_INDVDL_INFO_POLICY A
 		WHERE 1=1
 	 
@@ -83,9 +107,12 @@
 	SET
 	INDVDL_INFO_POLICY_NM = #{indvdlInfoNm},
 	INDVDL_INFO_POLICY_CN = #{indvdlInfoDc},
-	INDVDL_INFO_POLICY_AGRE_AT = #{indvdlInfoYn},  
+	INDVDL_INFO_POLICY_AGRE_AT = #{indvdlInfoYn},
 	LAST_UPDT_PNTTM = sysdate(),
-	LAST_UPDUSR_ID = #{lastUpdusrId}
+	LAST_UPDUSR_ID = #{lastUpdusrId},
+	VER = #{ver},
+	APLC_DE = #{aplcDe},
+	REPRSNT_AT = #{reprsntAt}
 	WHERE INDVDL_INFO_POLICY_ID=#{indvdlInfoId}
 	 
 	</update>
@@ -100,7 +127,8 @@
 		DATE_FORMAT(A.FRST_REGIST_PNTTM, '%Y-%m-%d') as FRST_REGIST_PNTTM,
 		A.FRST_REGISTER_ID,
 		DATE_FORMAT(A.LAST_UPDT_PNTTM,'%Y-%m-%d') as LAST_UPDT_PNTTM,
-		A.LAST_UPDUSR_ID  
+		A.LAST_UPDUSR_ID,
+		A.VER, A.APLC_DE, A.REPRSNT_AT
 		FROM TB_INDVDL_INFO_POLICY A
 		WHERE 1=1
 		AND A.INDVDL_INFO_POLICY_ID=#{indvdlInfoId}
@@ -118,8 +146,11 @@
 	FRST_REGIST_PNTTM,
 	FRST_REGISTER_ID,
 	LAST_UPDT_PNTTM,
-	LAST_UPDUSR_ID
-	)VALUES( 
+	LAST_UPDUSR_ID,
+	VER,
+	APLC_DE,
+	REPRSNT_AT
+	)VALUES(
 	#{indvdlInfoId},
 	#{indvdlInfoNm},
 	#{indvdlInfoDc},
@@ -127,7 +158,10 @@
 	sysdate(),
 	#{frstRegisterId},
 	sysdate(),
-	#{lastUpdusrId} 
+	#{lastUpdusrId},
+	#{ver},
+	#{aplcDe},
+	#{reprsntAt}
 	)
 	 
 	</insert>
