@@ -38,7 +38,7 @@ FROM(
             AND userId LIKE #{searchKeyword}
         </if>
         <if test='searchCondition == "1"'>
-            AND userNm LIKE '%' #{searchKeyword} '%'
+            AND userNm LIKE '%' || #{searchKeyword} || '%'
         </if>
         ORDER BY sbscrbDe DESC
         LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
@@ -71,7 +71,7 @@ FROM(
                 AND userId LIKE #{searchKeyword}
             </if>
             <if test='searchCondition == "1"'>
-                AND userNm LIKE '%' #{searchKeyword} '%'
+                AND userNm LIKE '%' || #{searchKeyword} || '%'
             </if>
     </select>
     

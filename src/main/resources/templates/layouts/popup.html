@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title layout:title-pattern="$CONTENT_TITLE">팝업</title>
+
+    <!-- KRDS 자원만 로드(헤더·GNB·푸터·배너 없는 팝업 전용 레이아웃) -->
+    <link rel="preload" th:href="@{/krds/resources/fonts/PretendardGOV-Regular.subset.woff2}" as="font" type="font/woff2" crossorigin/>
+    <link rel="preload" th:href="@{/krds/resources/fonts/PretendardGOV-Medium.subset.woff2}" as="font" type="font/woff2" crossorigin/>
+    <link rel="preload" th:href="@{/krds/resources/fonts/PretendardGOV-Bold.subset.woff2}" as="font" type="font/woff2" crossorigin/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-icons.min.css}">
+    <link rel="stylesheet" th:href="@{/krds/resources/cdn/krds.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/krds-compat.css}"/>
+    <link rel="stylesheet" th:href="@{/css/krds.css}"/>
+    <link rel="icon" type="image/svg+xml" th:href="@{/images/logo.svg}"/>
+
+    <th:block layout:fragment="head-css"></th:block>
+</head>
+<body class="egov-popup-body">
+<main id="content" class="egov-popup-content">
+    <th:block layout:fragment="content">
+        <!-- 팝업 콘텐츠가 여기에 삽입됩니다 -->
+    </th:block>
+</main>
+
+<script th:src="@{/krds/resources/cdn/krds.min.js}"></script>
+<script th:src="@{/js/krds-compat.js}"></script>
+<script th:src="@{/js/krds.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<th:block layout:fragment="body-js"></th:block>
+</body>
+</html>

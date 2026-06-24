@@ -6,6 +6,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import egovframework.let.uss.sam.ipm.service.EgovIndvdlInfoPolicyService;
+import egovframework.let.uss.sam.ipm.service.IndvdlInfoPolicy;
 import egovframework.let.uss.umt.service.EgovEntrprsMberManageService;
 import egovframework.let.uss.umt.service.EntrprsMberManageVO;
 import jakarta.annotation.Resource;
@@ -26,6 +28,10 @@ public class EgovEntrprsMberManageController {
 	@Resource(name = "entrprsMberManageService")
 	private EgovEntrprsMberManageService entrprsMberManageService;
 
+	/** 개인정보처리방침 서비스 - 약관확인 화면의 '개인정보 제공 동의' 본문(대표 방침) 로딩용 */
+	@Resource(name = "egovIndvdlInfoPolicyService")
+	private EgovIndvdlInfoPolicyService indvdlInfoPolicyService;
+
 	/**
 	 * 회원가입 유형 선택 화면(일반회원 / 기업회원).
 	 */
@@ -43,6 +49,9 @@ public class EgovEntrprsMberManageController {
 		String stplatId = "STPLAT_0000000000001";
 		model.addAttribute("stplatList", entrprsMberManageService.selectStplat(stplatId));
 		model.addAttribute("sbscrbTy", "USR02"); // 기업회원
+		// 개인정보 제공 동의 = 통합 약관관리의 대표 개인정보처리방침 본문(REPRSNT_AT='Y')
+		IndvdlInfoPolicy reprPolicy = indvdlInfoPolicyService.selectRepresentIndvdlInfoPolicy();
+		model.addAttribute("indvdlInfoPolicy", reprPolicy);
 		return "cmm/uss/umt/EgovStplatCnfirmEntrprs";
 	}
 
@@ -70,10 +79,12 @@ public class EgovEntrprsMberManageController {
 			return "cmm/uss/umt/EgovEntrprsMberSbscrb";
 		}
 
-		// 가입 후 즉시 로그인 가능하도록 상태 'P'(승인), 일반사용자 그룹 고정
+		// 상태 'P'(승인), 일반사용자 그룹 고정 (상태코드/데이터는 변경하지 않음)
 		vo.setEntrprsMberSttus("P");
 		vo.setGroupId("GROUP_00000000000001");
 		entrprsMberManageService.insertEntrprsMber(vo);
-		return "redirect:/uat/uia/egovLoginUsr.do";
+		// 가입 신청 완료 안내 화면으로 이동(관리자 승인 후 로그인 안내)
+		model.addAttribute("sbscrbMberNm", vo.getApplcntNm());
+		return "cmm/uss/umt/EgovMberSbscrbCmplt";
 	}
 }

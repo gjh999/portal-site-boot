@@ -401,6 +401,25 @@ body { font-size: 1rem; line-height: 1.6; }
 /* 탭 */
 .krds-tab-area .tab .btn-tab,.krds-tab-area .btn-tab{
   height: auto !important; font-size: 1rem !important; padding: .7rem 1rem !important; }
+/* 탭 영역 불필요한 세로 스크롤 제거(마이페이지 등): height 강제·overflow 정리 */
+.krds-tab-area{ height: auto !important; overflow: visible !important; }
+.krds-tab-area .tab-conts-wrap{ height: auto !important; overflow: visible !important; }
+.krds-tab-area .tab-conts{ overflow: visible !important; }
+
+/* ── 팝업 전용 레이아웃(layouts/popup.html): 헤더·GNB·푸터 없는 깨끗한 팝업 ── */
+.egov-popup-body{ margin:0; padding:0; background:#fff; }
+.egov-popup-content{ display:block; padding:1.25rem 1.25rem 1.5rem; max-width:100%; box-sizing:border-box; }
+.egov-popup-content .popup-title{ font-size:1.15rem; font-weight:700; margin:0 0 1rem; display:flex; align-items:center; gap:.4rem; }
+/* 우편번호 검색 팝업 검색폼: 가로 스크롤 없이 정렬, 좁은 폭에서 줄바꿈 */
+.zip-search-form{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; margin-bottom:1rem; }
+.zip-search-form .krds-form-select{ width:auto; flex:0 0 auto; }
+.zip-search-form .krds-input{ flex:1 1 8rem; min-width:0; }
+.zip-search-form .krds-btn{ flex:0 0 auto; }
+.egov-popup-content .krds-table-wrap{ width:100%; overflow-x:hidden; }
+/* 팝업 내 표는 KRDS 기본 min-width(73.2rem)를 해제해 가로 스크롤 제거 */
+.egov-popup-content .krds-table-wrap .tbl{ min-width:0 !important; width:100%; table-layout:fixed; }
+.egov-popup-content .krds-table-wrap .tbl td,
+.egov-popup-content .krds-table-wrap .tbl th{ word-break:break-all; }
 
 /* 아코디언 — 제목/본문 글자 균형 + 본문 여백(상단 밀착 방지) */
 .krds-accordion .accordion-item .btn-accordion{ font-size: 1.1rem !important; padding: 1rem 1.25rem !important; }

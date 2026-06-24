@@ -13,7 +13,8 @@
         </ol></nav>
         <h1 class="h4 mb-3"><i class="bi bi-person-gear"></i> 회원정보 수정</h1>
         <form th:action="@{/uss/umt/mber/EgovMberSelectUpdt.do}" method="post" th:object="${mberManageVO}">
-            <div class="alert alert-danger py-2" th:if="${#fields.hasAnyErrors()}">
+            <!-- 검증오류 안내: POST 검증실패 시에만 표시(GET 렌더 시 BindingResult 부재로 인한 #fields 500 방지) -->
+            <div class="alert alert-danger py-2" th:if="${hasErrors}">
                 입력값을 확인하세요. (필수 항목 누락)
             </div>
             <input type="hidden" th:field="*{uniqId}"/>

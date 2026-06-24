@@ -15,75 +15,99 @@
             <!-- @EgovNullCheck 대상(groupId, mberSttus): 컨트롤러가 재설정하나 @Valid 통과용 hidden -->
             <input type="hidden" th:field="*{groupId}"/>
             <input type="hidden" th:field="*{mberSttus}"/>
-            <div class="row g-3">
-                <div class="col-md-6"><label class="form-label">아이디 <span class="text-danger">*</span></label>
-                    <div class="input-group">
-                        <input class="krds-input" type="text" th:field="*{mberId}" maxlength="20" required/>
-                        <button class="krds-btn tertiary" type="button" id="btnIdCheck"><i class="bi bi-search"></i> 중복확인</button>
-                    </div>
-                    <div class="form-text">중복 아이디 검색</div></div>
-                <div class="col-md-6"><label class="form-label">이름 <span class="text-danger">*</span></label>
-                    <input class="krds-input" type="text" th:field="*{mberNm}"
-                           th:value="${mberNm}" maxlength="50" required/></div>
-                <div class="col-md-6"><label class="form-label">비밀번호 <span class="text-danger">*</span></label>
-                    <input class="krds-input" type="password" th:field="*{password}" maxlength="20" required/></div>
-                <div class="col-md-6"><label class="form-label">비밀번호 확인 <span class="text-danger">*</span></label>
-                    <input class="krds-input" type="password" name="password2" id="password2" maxlength="20" required/></div>
-                <div class="col-md-6"><label class="form-label">비밀번호 힌트 <span class="text-danger">*</span></label>
-                    <select class="krds-form-select" th:field="*{passwordHint}" required>
-                        <option value="">선택하세요</option>
-                        <th:block th:if="${not #lists.isEmpty(passwordHint_result)}">
-                            <option th:each="c : ${passwordHint_result}" th:value="${c.code}" th:text="${c.codeNm}">힌트</option>
-                        </th:block>
-                        <th:block th:if="${#lists.isEmpty(passwordHint_result)}">
-                            <option value="P01">가장 기억에 남는 장소는?</option>
-                            <option value="P02">나의 좌우명은?</option>
-                            <option value="P03">나의 보물 제1호는?</option>
-                            <option value="P04">가장 기억에 남는 선생님 성함은?</option>
-                            <option value="P05">다른 사람은 모르는 나만의 신체비밀은?</option>
-                        </th:block>
-                    </select></div>
-                <div class="col-md-6"><label class="form-label">비밀번호 정답 <span class="text-danger">*</span></label>
-                    <input class="krds-input" type="text" th:field="*{passwordCnsr}" maxlength="100" required/></div>
-                <div class="col-md-6"><label class="form-label">성별</label>
-                    <select class="krds-form-select" th:field="*{sexdstnCode}">
-                        <option value="">선택하세요</option>
-                        <th:block th:if="${not #lists.isEmpty(sexdstnCode_result)}">
-                            <option th:each="c : ${sexdstnCode_result}" th:value="${c.code}" th:text="${c.codeNm}">성별</option>
-                        </th:block>
-                        <th:block th:if="${#lists.isEmpty(sexdstnCode_result)}">
-                            <option value="M">남자</option>
-                            <option value="F">여자</option>
-                        </th:block>
-                    </select></div>
-                <div class="col-md-6"><label class="form-label">직업유형 <span class="text-danger">*</span></label>
-                    <select class="krds-form-select" th:field="*{occpTy}" required>
-                        <option value="">선택하세요</option>
-                        <option th:each="c : ${occpTy_result}" th:if="${c.code != '00'}"
-                                th:value="${c.code}" th:text="${c.codeNm}">직업</option>
-                    </select>
-                    <div class="text-danger small" th:if="${#fields.hasErrors('occpTy')}" th:errors="*{occpTy}"></div></div>
-                <div class="col-md-6"><label class="form-label">휴대폰번호</label>
-                    <input class="krds-input" type="text" th:field="*{moblphonNo}" maxlength="13"
-                           data-phone-format="mobile" inputmode="numeric" placeholder="010-1234-5678"/></div>
-                <div class="col-md-6"><label class="form-label">전화번호</label>
-                    <input class="krds-input" type="text" th:field="*{telno}" maxlength="13"
-                           data-phone-format="tel" inputmode="numeric" placeholder="02-123-4567"/></div>
-                <div class="col-md-6"><label class="form-label">팩스번호</label>
-                    <input class="krds-input" type="text" th:field="*{mberFxnum}" maxlength="15"/></div>
-                <div class="col-md-6"><label class="form-label">이메일주소</label>
-                    <input class="krds-input" type="email" th:field="*{mberEmailAdres}" maxlength="50"/></div>
-                <div class="col-md-4"><label class="form-label">우편번호</label>
-                    <div class="input-group">
-                        <input class="krds-input" type="text" th:field="*{zip}" maxlength="8"/>
-                        <button class="krds-btn tertiary" type="button" id="btnZipSearch">
-                            <i class="bi bi-search"></i> 찾기</button>
-                    </div></div>
-                <div class="col-md-8"><label class="form-label">주소</label>
-                    <input class="krds-input" type="text" th:field="*{adres}" maxlength="100"/></div>
-                <div class="col-12"><label class="form-label">상세주소</label>
-                    <input class="krds-input" type="text" th:field="*{detailAdres}" maxlength="100"/></div>
+
+            <div class="alert alert-danger py-2" th:if="${#fields.hasAnyErrors()}">
+                입력값을 확인하세요. (필수 항목 누락)
             </div>
+
+            <!-- ── 계정 정보 ── -->
+            <fieldset class="krds-form-section">
+                <legend class="krds-form-section-title">계정 정보</legend>
+                <div class="row g-3">
+                    <div class="col-md-6 form-group"><label class="form-label">아이디 <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <input class="krds-input" type="text" th:field="*{mberId}" maxlength="20" required/>
+                            <button class="krds-btn tertiary" type="button" id="btnIdCheck"><i class="bi bi-search"></i> 중복확인</button>
+                        </div>
+                        <div class="form-text">중복 아이디 검색</div></div>
+                    <div class="col-md-6 form-group"><label class="form-label">이름 <span class="text-danger">*</span></label>
+                        <input class="krds-input" type="text" th:field="*{mberNm}"
+                               th:value="${mberNm}" maxlength="50" required/></div>
+                    <div class="col-md-6 form-group"><label class="form-label">비밀번호 <span class="text-danger">*</span></label>
+                        <input class="krds-input" type="password" th:field="*{password}" maxlength="20" required/></div>
+                    <div class="col-md-6 form-group"><label class="form-label">비밀번호 확인 <span class="text-danger">*</span></label>
+                        <input class="krds-input" type="password" name="password2" id="password2" maxlength="20" required/></div>
+                    <div class="col-md-6 form-group"><label class="form-label">비밀번호 힌트 <span class="text-danger">*</span></label>
+                        <select class="krds-form-select" th:field="*{passwordHint}" required>
+                            <option value="">선택하세요</option>
+                            <th:block th:if="${not #lists.isEmpty(passwordHint_result)}">
+                                <option th:each="c : ${passwordHint_result}" th:value="${c.code}" th:text="${c.codeNm}">힌트</option>
+                            </th:block>
+                            <th:block th:if="${#lists.isEmpty(passwordHint_result)}">
+                                <option value="P01">가장 기억에 남는 장소는?</option>
+                                <option value="P02">나의 좌우명은?</option>
+                                <option value="P03">나의 보물 제1호는?</option>
+                                <option value="P04">가장 기억에 남는 선생님 성함은?</option>
+                                <option value="P05">다른 사람은 모르는 나만의 신체비밀은?</option>
+                            </th:block>
+                        </select></div>
+                    <div class="col-md-6 form-group"><label class="form-label">비밀번호 정답 <span class="text-danger">*</span></label>
+                        <input class="krds-input" type="text" th:field="*{passwordCnsr}" maxlength="100" required/></div>
+                </div>
+            </fieldset>
+
+            <!-- ── 기본 정보 ── -->
+            <fieldset class="krds-form-section">
+                <legend class="krds-form-section-title">기본 정보</legend>
+                <div class="row g-3">
+                    <div class="col-md-6 form-group"><label class="form-label">성별</label>
+                        <select class="krds-form-select" th:field="*{sexdstnCode}">
+                            <option value="">선택하세요</option>
+                            <th:block th:if="${not #lists.isEmpty(sexdstnCode_result)}">
+                                <option th:each="c : ${sexdstnCode_result}" th:value="${c.code}" th:text="${c.codeNm}">성별</option>
+                            </th:block>
+                            <th:block th:if="${#lists.isEmpty(sexdstnCode_result)}">
+                                <option value="M">남자</option>
+                                <option value="F">여자</option>
+                            </th:block>
+                        </select></div>
+                    <div class="col-md-6 form-group"><label class="form-label">직업유형 <span class="text-danger">*</span></label>
+                        <select class="krds-form-select" th:field="*{occpTy}" required>
+                            <option value="">선택하세요</option>
+                            <option th:each="c : ${occpTy_result}" th:if="${c.code != '00'}"
+                                    th:value="${c.code}" th:text="${c.codeNm}">직업</option>
+                        </select>
+                        <div class="text-danger small" th:if="${#fields.hasErrors('occpTy')}" th:errors="*{occpTy}"></div></div>
+                </div>
+            </fieldset>
+
+            <!-- ── 연락처·주소 ── -->
+            <fieldset class="krds-form-section">
+                <legend class="krds-form-section-title">연락처·주소</legend>
+                <div class="row g-3">
+                    <div class="col-md-6 form-group"><label class="form-label">휴대폰번호</label>
+                        <input class="krds-input" type="text" th:field="*{moblphonNo}" maxlength="13"
+                               data-phone-format="mobile" inputmode="numeric" placeholder="010-1234-5678"/></div>
+                    <div class="col-md-6 form-group"><label class="form-label">전화번호</label>
+                        <input class="krds-input" type="text" th:field="*{telno}" maxlength="13"
+                               data-phone-format="tel" inputmode="numeric" placeholder="02-123-4567"/></div>
+                    <div class="col-md-6 form-group"><label class="form-label">팩스번호</label>
+                        <input class="krds-input" type="text" th:field="*{mberFxnum}" maxlength="15"/></div>
+                    <div class="col-md-6 form-group"><label class="form-label">이메일주소</label>
+                        <input class="krds-input" type="email" th:field="*{mberEmailAdres}" maxlength="50"/></div>
+                    <div class="col-md-4 form-group"><label class="form-label">우편번호</label>
+                        <div class="input-group">
+                            <input class="krds-input" type="text" th:field="*{zip}" maxlength="8"/>
+                            <button class="krds-btn tertiary" type="button" id="btnZipSearch">
+                                <i class="bi bi-search"></i> 찾기</button>
+                        </div></div>
+                    <div class="col-md-8 form-group"><label class="form-label">주소</label>
+                        <input class="krds-input" type="text" th:field="*{adres}" maxlength="100"/></div>
+                    <div class="col-12 form-group"><label class="form-label">상세주소</label>
+                        <input class="krds-input" type="text" th:field="*{detailAdres}" maxlength="100"/></div>
+                </div>
+            </fieldset>
+
             <div class="d-flex justify-content-between mt-4">
                 <a class="krds-btn tertiary" th:href="@{/}">취소</a>
                 <button class="krds-btn primary" type="submit" id="btnSbscrb"><i class="bi bi-check-lg"></i> 가입신청</button>

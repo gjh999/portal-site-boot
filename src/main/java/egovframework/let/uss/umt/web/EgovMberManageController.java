@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import egovframework.com.cmm.ComDefaultCodeVO;
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.com.cmm.service.EgovCmmUseService;
+import egovframework.let.uss.sam.ipm.service.EgovIndvdlInfoPolicyService;
+import egovframework.let.uss.sam.ipm.service.IndvdlInfoPolicy;
 import egovframework.let.uss.umt.service.EgovMberManageService;
 import egovframework.let.uss.umt.service.MberManageVO;
 import egovframework.let.uss.umt.service.UserDefaultVO;
@@ -51,6 +53,10 @@ public class EgovMberManageController {
 	/** cmmUseService */
 	@Resource(name = "EgovCmmUseService")
 	private EgovCmmUseService cmmUseService;
+
+	/** 개인정보처리방침 서비스 - 약관확인 화면의 '개인정보 제공 동의' 본문(대표 방침) 로딩용 */
+	@Resource(name = "egovIndvdlInfoPolicyService")
+	private EgovIndvdlInfoPolicyService indvdlInfoPolicyService;
 
 	/** EgovMessageSource */
     @Resource(name="egovMessageSource")
@@ -286,6 +292,7 @@ public class EgovMberManageController {
 			//직업유형코드(COM034) 조회
 			vo.setCodeId("COM034");
 			model.addAttribute("occpTy_result", cmmUseService.selectCmmCodeDetail(vo));
+			model.addAttribute("hasErrors", true);
 			return "cmm/uss/umt/EgovMberSelectUpdt";
 		} else {
 			mberManageService.updateMber(mberManageVO);
@@ -374,15 +381,17 @@ public class EgovMberManageController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/uss/umt/cmm/EgovMberSbscrb.do")
-	public String sbscrbMber(@Valid @ModelAttribute("mberManageVO") MberManageVO mberManageVO, BindingResult bindingResult) throws Exception {
+	public String sbscrbMber(@Valid @ModelAttribute("mberManageVO") MberManageVO mberManageVO, BindingResult bindingResult, Model model) throws Exception {
 
-		//가입상태 초기화
+		//가입상태 초기화 (A=승인대기: 관리자 승인 후에만 로그인 가능)
 		mberManageVO.setMberSttus("A");
 		//그룹정보 초기화
 		mberManageVO.setGroupId("GROUP_00000000000000"); //기본그룹
 		//일반회원가입신청 등록시 일반회원등록기능을 사용하여 등록한다.
 		mberManageService.insertMber(mberManageVO);
-		return "forward:/uat/uia/egovLoginUsr.do";
+		//가입 신청 완료 안내 화면으로 이동(관리자 승인 후 로그인 안내)
+		model.addAttribute("sbscrbMberNm", mberManageVO.getMberNm());
+		return "cmm/uss/umt/EgovMberSbscrbCmplt";
 	}
 
 	/**
@@ -407,9 +416,12 @@ public class EgovMberManageController {
 		String stplatId = "STPLAT_0000000000001";
 		//회원가입유형 설정-일반회원
 		String sbscrbTy = "USR01";
-		//약관정보 조회
+		//약관정보 조회(대표 이용약관)
 		model.addAttribute("stplatList", mberManageService.selectStplat(stplatId));
 		model.addAttribute("sbscrbTy", sbscrbTy); //회원가입유형 포함
+		//개인정보 제공 동의 = 통합 약관관리의 대표 개인정보처리방침 본문(REPRSNT_AT='Y')
+		IndvdlInfoPolicy reprPolicy = indvdlInfoPolicyService.selectRepresentIndvdlInfoPolicy();
+		model.addAttribute("indvdlInfoPolicy", reprPolicy);
 
 		return "cmm/uss/umt/EgovStplatCnfirm";
 	}

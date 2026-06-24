@@ -25,12 +25,15 @@
                              th:text="${stplat.useStplatCn}">약관 내용</div>
                     </div>
                 </div>
-                <div class="krds-panel mb-3" th:if="${stplat.infoProvdAgeCn != null and !#strings.isEmpty(stplat.infoProvdAgeCn)}">
-                    <div class="krds-panel-head"><strong>개인정보 제공 동의</strong></div>
-                    <div class="krds-panel-body">
-                        <div class="border p-3" style="max-height:200px;overflow:auto;white-space:pre-wrap;"
-                             th:text="${stplat.infoProvdAgeCn}">개인정보 동의 내용</div>
-                    </div>
+            </div>
+            <!-- 개인정보 제공 동의: 통합 약관관리의 대표 개인정보처리방침 본문(REPRSNT_AT='Y') -->
+            <div class="krds-panel mb-3" th:if="${indvdlInfoPolicy != null and !#strings.isEmpty(indvdlInfoPolicy.indvdlInfoDc)}">
+                <div class="krds-panel-head"><strong>개인정보 제공 동의</strong>
+                    <span class="text-muted small" th:if="${indvdlInfoPolicy.indvdlInfoNm != null}"
+                          th:text="${indvdlInfoPolicy.indvdlInfoNm}">개인정보처리방침</span></div>
+                <div class="krds-panel-body">
+                    <div class="border p-3" style="max-height:240px;overflow:auto;white-space:pre-wrap;"
+                         th:text="${indvdlInfoPolicy.indvdlInfoDc}">개인정보 처리방침 내용</div>
                 </div>
             </div>
             <div class="form-check mb-3">
