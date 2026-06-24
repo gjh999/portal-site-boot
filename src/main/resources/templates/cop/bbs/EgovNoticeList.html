@@ -66,14 +66,25 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="item : ${resultList}">
-                <td class="text-center" th:text="${item.nttNo}">1</td>
+            <tr th:each="item, stat : ${resultList}">
+                <!-- 번호: 전체 건수 기준 내림차순 일련번호(페이지 오프셋 반영). 답글은 번호 대신 마커 표시 -->
+                <td class="text-center">
+                    <span th:if="${item.replyAt != 'Y'}"
+                          th:text="${(paginationInfo != null ? paginationInfo.totalRecordCount : #lists.size(resultList))
+                                     - (boardVO != null ? (boardVO.pageIndex - 1) * boardVO.recordCountPerPage : 0)
+                                     - stat.index}">1</span>
+                    <span th:if="${item.replyAt == 'Y'}" class="text-muted"><i class="bi bi-arrow-return-right"></i></span>
+                </td>
                 <td>
+                    <!-- 답글은 답장위치(ANSWER_LC) 깊이만큼 들여쓰기하여 스레드 표시 -->
+                    <span th:if="${item.replyAt == 'Y'}"
+                          th:style="'display:inline-block;width:' + ${(item.replyLc != null ? item.replyLc : '1')} + 'em;'"></span>
+                    <i th:if="${item.replyAt == 'Y'}" class="bi bi-reply text-muted me-1"></i>
                     <a class="text-decoration-none"
                        th:href="@{/cop/bbs/selectBoardArticle.do(bbsId=${item.bbsId},nttId=${item.nttId})}"
                        th:text="${item.nttSj}">제목</a>
                 </td>
-                <td class="text-center" th:text="${item.ntcrNm ?: '관리자'}">작성자</td>
+                <td class="text-center" th:text="${item.frstRegisterNm ?: (item.ntcrNm ?: '관리자')}">작성자</td>
                 <td class="text-center" th:text="${item.frstRegisterPnttm}">등록일</td>
                 <td class="text-center" th:text="${item.inqireCo ?: 0}">0</td>
             </tr>
@@ -86,7 +97,8 @@
 
         <div th:replace="~{fragments/pagination :: paginationBbs(paginationInfo=${paginationInfo}, baseUrl='/cop/bbs/selectBoardList.do', bbsId=${boardVO != null ? boardVO.bbsId : (brdMstrVO != null ? brdMstrVO.bbsId : '')}, searchCnd=${boardVO != null ? boardVO.searchCnd : ''}, searchWrd=${boardVO != null ? boardVO.searchWrd : ''})}"></div>
 
-        <div class="text-end" sec:authorize="isAuthenticated()">
+        <!-- 공지/갤러리/자료실은 관리자 게시 콘텐츠 → 글쓰기는 관리자(ROLE_ADMIN)만 노출 -->
+        <div class="text-end" sec:authorize="hasRole('ADMIN')">
             <a class="krds-btn primary small"
                th:href="@{/cop/bbs/addBoardArticle.do(bbsId=${boardVO != null ? boardVO.bbsId : ''})}">
                 <i class="bi bi-pencil-square"></i> 글쓰기

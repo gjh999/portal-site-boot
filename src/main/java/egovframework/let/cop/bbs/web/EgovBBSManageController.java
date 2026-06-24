@@ -78,6 +78,23 @@ public class EgovBBSManageController {
 	EgovMessageSource egovMessageSource;
 
 	/**
+	 * 현재 로그인 사용자가 관리자(ROLE_ADMIN)인지 여부를 반환한다.
+	 *
+	 * <p>공지사항·갤러리·자료실은 관리자 게시 콘텐츠이므로 작성/수정/삭제/답글은
+	 * 관리자만 허용한다. 화면의 sec:authorize 버튼 숨김과 별개로, 직접 URL 접근을
+	 * 막기 위한 서버측 권한 가드로 사용한다.</p>
+	 *
+	 * @return 인증된 사용자의 권한에 ROLE_ADMIN 이 포함되면 true
+	 */
+	protected boolean isAdmin() {
+		if (!Boolean.TRUE.equals(EgovUserDetailsHelper.isAuthenticated())) {
+			return false;
+		}
+		List<String> authorities = EgovUserDetailsHelper.getAuthorities();
+		return authorities != null && authorities.contains("ROLE_ADMIN");
+	}
+
+	/**
 	 * XSS 방지 처리.
 	 *
 	 * @param data
@@ -301,6 +318,11 @@ public class EgovBBSManageController {
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
 			return "uat/uia/EgovLoginUsr";
 		}
+		// 관리자(ROLE_ADMIN)만 작성 가능 — 직접 URL 접근 차단
+		if (!isAdmin()) {
+			model.addAttribute("message", egovMessageSource.getMessage("cop.bbs.adminOnly.msg"));
+			return "uat/uia/EgovLoginUsr";
+		}
 		LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
 		BoardMasterVO bdMstr = new BoardMasterVO();
 
@@ -345,6 +367,12 @@ public class EgovBBSManageController {
 
 		LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
 		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+
+		// 관리자(ROLE_ADMIN)만 작성 가능 — 직접 URL 접근 차단
+		if (!isAdmin()) {
+			model.addAttribute("message", egovMessageSource.getMessage("cop.bbs.adminOnly.msg"));
+			return "uat/uia/EgovLoginUsr";
+		}
 
 		if (bindingResult.hasErrors()) {
 
@@ -416,6 +444,11 @@ public class EgovBBSManageController {
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
 			return "uat/uia/EgovLoginUsr";
 		}
+		// 관리자(ROLE_ADMIN)만 답글 가능 — 직접 URL 접근 차단
+		if (!isAdmin()) {
+			model.addAttribute("message", egovMessageSource.getMessage("cop.bbs.adminOnly.msg"));
+			return "uat/uia/EgovLoginUsr";
+		}
 		LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
 
 		BoardMasterVO master = new BoardMasterVO();
@@ -461,6 +494,12 @@ public class EgovBBSManageController {
 
 		LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
 		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+
+		// 관리자(ROLE_ADMIN)만 답글 가능 — 직접 URL 접근 차단
+		if (!isAdmin()) {
+			model.addAttribute("message", egovMessageSource.getMessage("cop.bbs.adminOnly.msg"));
+			return "uat/uia/EgovLoginUsr";
+		}
 
 		if (bindingResult.hasErrors()) {
 			BoardMasterVO master = new BoardMasterVO();
@@ -534,6 +573,12 @@ public class EgovBBSManageController {
 	public String selectBoardArticleForUpdt(@ModelAttribute("searchVO") BoardVO boardVO,
 			@ModelAttribute("board") BoardVO vo, ModelMap model) throws Exception {
 
+		// 관리자(ROLE_ADMIN)만 수정 가능 — 직접 URL 접근 차단
+		if (!isAdmin()) {
+			model.addAttribute("message", egovMessageSource.getMessage("cop.bbs.adminOnly.msg"));
+			return "uat/uia/EgovLoginUsr";
+		}
+
 		LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
 		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 
@@ -602,6 +647,12 @@ public class EgovBBSManageController {
 
 		LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
 		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+
+		// 관리자(ROLE_ADMIN)만 수정 가능 — 직접 URL 접근 차단
+		if (!isAdmin()) {
+			model.addAttribute("message", egovMessageSource.getMessage("cop.bbs.adminOnly.msg"));
+			return "uat/uia/EgovLoginUsr";
+		}
 
 		// 기존 게시글의 첨부파일 ID를 조회
 		BoardVO existingBoard = bbsMngService.selectBoardArticle(boardVO);
@@ -689,6 +740,12 @@ public class EgovBBSManageController {
 
 		LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
 		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+
+		// 관리자(ROLE_ADMIN)만 삭제 가능 — 직접 URL 접근 차단
+		if (!isAdmin()) {
+			model.addAttribute("message", egovMessageSource.getMessage("cop.bbs.adminOnly.msg"));
+			return "uat/uia/EgovLoginUsr";
+		}
 
 		if (isAuthenticated) {
 			board.setLastUpdusrId(user.getUniqId());

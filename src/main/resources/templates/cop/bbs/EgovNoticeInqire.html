@@ -48,9 +48,10 @@
                th:href="@{/cop/bbs/selectBoardList.do(bbsId=${result.bbsId})}">
                 <i class="bi bi-list"></i> 목록
             </a>
-            <span sec:authorize="isAuthenticated()" class="d-flex gap-2">
+            <!-- 공지/갤러리/자료실은 관리자 게시 콘텐츠 → 답글/수정/삭제는 관리자(ROLE_ADMIN)만 노출 -->
+            <span sec:authorize="hasRole('ADMIN')" class="d-flex gap-2">
                 <a class="krds-btn tertiary small"
-                   th:if="${brdMstrVO == null or brdMstrVO.replyPosblAt == 'Y'}"
+                   th:if="${brdMstrVO != null and brdMstrVO.replyPosblAt == 'Y'}"
                    th:href="@{/cop/bbs/addReplyBoardArticle.do(bbsId=${result.bbsId},nttId=${result.nttId},sortOrdr=${result.sortOrdr},replyLc=${result.replyLc})}">
                     <i class="bi bi-reply"></i> 답글
                 </a>
