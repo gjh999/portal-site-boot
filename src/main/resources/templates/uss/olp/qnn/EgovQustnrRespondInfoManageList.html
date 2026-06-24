@@ -79,9 +79,11 @@
                 <td class="text-center" th:text="${st.count}">1</td>
                 <td><a th:href="@{/uss/olp/qnn/EgovQustnrRespondInfoManageRegist.do(qestnrId=${item['qestnrid']},qestnrTmplatId=${item['qestnrtmplatid']})}" th:text="${item['qestnrsj']}">설문제목</a></td>
                 <td th:text="${item['qestnrpurps']}">목적</td>
-                <td class="text-center">
-                    <span th:if="${item['qestnrtrget'] == null or item['qestnrtrget'] == '' or item['qestnrtrget'] == '00'}">전체</span>
-                    <span th:each="c : ${comCode034}" th:if="${c.code == item['qestnrtrget']}" th:text="${c.codeNm}"></span>
+                <td class="text-center" th:with="trget=${item['qestnrtrget']}">
+                    <th:block th:if="${trget == null or trget == '' or trget == '00'}"><span th:text="#{survey.target.all}">전체</span></th:block>
+                    <th:block th:unless="${trget == null or trget == '' or trget == '00'}">
+                        <span th:each="c : ${comCode034}" th:if="${c.code == trget}" th:text="${c.codeNm}"></span>
+                    </th:block>
                 </td>
                 <td class="text-center" style="white-space:nowrap;"><span th:text="${item['qestnrbeginde']}">시작</span> ~ <span th:text="${item['qestnrendde']}">종료</span></td>
                 <td class="text-center">

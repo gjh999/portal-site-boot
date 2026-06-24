@@ -20,7 +20,12 @@
             <tr><th scope="row">설문목적</th><td style="white-space:pre-line;" th:text="${r['qestnrpurps']}"></td></tr>
             <tr><th scope="row">설문작성 안내내용</th><td style="white-space:pre-line;" th:text="${r['qestnrwritngguidancecn']}"></td></tr>
             <tr><th scope="row">설문대상</th>
-                <td><span th:each="c : ${comCode034}" th:if="${c.code == r['qestnrtrget']}" th:text="${c.codeNm}"></span></td></tr>
+                <td th:with="trget=${r['qestnrtrget']}">
+                    <th:block th:if="${trget == null or trget == '' or trget == '00'}"><span th:text="#{survey.target.all}">전체</span></th:block>
+                    <th:block th:unless="${trget == null or trget == '' or trget == '00'}">
+                        <span th:each="c : ${comCode034}" th:if="${c.code == trget}" th:text="${c.codeNm}"></span>
+                    </th:block>
+                </td></tr>
             <tr><th scope="row">설문기간</th><td><span th:text="${r['qestnrBeginDe']}"></span> ~ <span th:text="${r['qestnrEndDe']}"></span></td></tr>
             <tr><th scope="row">템플릿 유형</th>
                 <td>
@@ -32,7 +37,17 @@
             </tbody>
         </table></div>
         <div class="d-flex justify-content-between mt-3" th:if="${r != null}">
-            <a class="krds-btn tertiary" th:href="@{/uss/olp/qmc/EgovQustnrManageList.do}">목록</a>
+            <div style="display:flex;gap:8px;">
+                <a class="krds-btn tertiary" th:href="@{/uss/olp/qmc/EgovQustnrManageList.do}" th:text="#{survey.btn.list}">목록</a>
+                <a class="krds-btn secondary"
+                   th:href="@{/uss/olp/qnn/EgovQustnrRespondInfoManageStatistics.do(qestnrId=${r['qestnrId']},qestnrTmplatId=${r['qestnrtmplatid']})}">
+                    <i class="bi bi-bar-chart-line"></i> <span th:text="#{survey.btn.viewStats}">결과·집계 보기</span>
+                </a>
+                <a class="krds-btn secondary"
+                   th:href="@{/uss/olp/qrm/EgovQustnrRespondManageList.do(searchMode='Y',qestnrId=${r['qestnrId']})}">
+                    <i class="bi bi-people"></i> <span th:text="#{survey.btn.respondentList}">응답자 목록</span>
+                </a>
+            </div>
             <div sec:authorize="isAuthenticated()">
                 <form class="d-inline" th:action="@{/uss/olp/qmc/EgovQustnrManageModify.do}" method="post">
                     <input type="hidden" name="qestnrId" th:value="${r['qestnrId']}"/>
