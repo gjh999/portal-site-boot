@@ -35,7 +35,7 @@
                                             th:selected="${ss == c.code}">상태</option>
                                 </th:block>
                                 <th:block th:if="${#lists.isEmpty(sttusList)}">
-                                    <option value="A" th:selected="${ss == 'A'}">가입신청</option>
+                                    <option value="A" th:selected="${ss == 'A'}">신청중</option>
                                     <option value="P" th:selected="${ss == 'P'}">가입승인</option>
                                     <option value="D" th:selected="${ss == 'D'}">가입삭제</option>
                                 </th:block>
@@ -107,7 +107,7 @@
                     <td class="text-center">
                         <span class="krds-badge"
                               th:classappend="${item.sttus == 'P'} ? 'bg-success' : (${item.sttus == 'D'} ? 'bg-danger' : 'bg-gray')"
-                              th:text="${item.sttus == 'A'} ? '신청' : (${item.sttus == 'P'} ? '승인' : (${item.sttus == 'D'} ? '삭제' : ${item.sttus}))">상태</span>
+                              th:text="${item.sttus == 'A'} ? '신청중' : (${item.sttus == 'P'} ? '승인' : (${item.sttus == 'D'} ? '삭제' : ${item.sttus}))">상태</span>
                     </td>
                     <td class="text-center" th:text="${item.sbscrbde}">가입일</td>
                 </tr>

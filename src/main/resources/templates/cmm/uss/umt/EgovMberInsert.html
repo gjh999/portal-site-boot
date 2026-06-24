@@ -76,14 +76,23 @@
                                 <option th:each="c : ${mberSttus_result}" th:value="${c.code}" th:text="${c.codeNm}">상태</option>
                             </th:block>
                             <th:block th:if="${#lists.isEmpty(mberSttus_result)}">
-                                <option value="A">가입신청</option>
-                                <option value="P">가입승인</option>
+                                <option value="A">신청중</option>
+                                <option value="P">승인</option>
                                 <option value="D">가입삭제</option>
                             </th:block>
                         </select></div>
                     <div class="col-md-6 form-group"><label class="form-label">소속그룹 <span class="text-danger">*</span></label>
+                        <!-- 일반회원(USR01) 등록: ROLE_ADMIN(GROUP_00000000000000) 선택 불가. 업무사용자만 ROLE_ADMIN 선택 가능 -->
                         <select class="krds-form-select" th:field="*{groupId}">
-                            <option th:each="c : ${groupId_result}" th:value="${c.code}" th:text="${c.codeNm}">그룹</option>
+                            <th:block th:if="${not #lists.isEmpty(groupId_result)}">
+                                <option th:each="c : ${groupId_result}"
+                                        th:if="${(userTyForGroup == 'USR') or (c.code != 'GROUP_00000000000000')}"
+                                        th:value="${c.code}" th:text="${c.codeNm}">그룹</option>
+                            </th:block>
+                            <th:block th:if="${#lists.isEmpty(groupId_result)}">
+                                <option value="GROUP_00000000000001">ROLE_USER</option>
+                                <option th:if="${userTyForGroup == 'USR'}" value="GROUP_00000000000000">ROLE_ADMIN</option>
+                            </th:block>
                         </select></div>
                 </div>
             </fieldset>

@@ -67,25 +67,25 @@ public class EgovCcmZipManageController {
  	public String selectZipSearchPopup (@ModelAttribute("searchVO") ZipVO searchVO
  			, ModelMap model
  			) throws Exception {
-		if (searchVO.getSearchKeyword() != null && !searchVO.getSearchKeyword().equals("")) {
-			searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
-			searchVO.setPageSize(propertiesService.getInt("pageSize"));
+		// 검색어가 없어도(초기 진입) 전체 목록을 노출한다. (WHERE 1=1 전체조회 + 페이지네이션)
+		searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
+		searchVO.setPageSize(propertiesService.getInt("pageSize"));
 
-			PaginationInfo paginationInfo = new PaginationInfo();
-			paginationInfo.setCurrentPageNo(searchVO.getPageIndex());
-			paginationInfo.setRecordCountPerPage(searchVO.getPageUnit());
-			paginationInfo.setPageSize(searchVO.getPageSize());
+		PaginationInfo paginationInfo = new PaginationInfo();
+		paginationInfo.setCurrentPageNo(searchVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(searchVO.getPageUnit());
+		paginationInfo.setPageSize(searchVO.getPageSize());
 
-			searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-			searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
-			searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
+		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 
-			model.addAttribute("resultList", zipManageService.selectZipList(searchVO));
+		model.addAttribute("resultList", zipManageService.selectZipList(searchVO));
 
-			int totCnt = zipManageService.selectZipListTotCnt(searchVO);
-			paginationInfo.setTotalRecordCount(totCnt);
-			model.addAttribute("paginationInfo", paginationInfo);
-		}
+		int totCnt = zipManageService.selectZipListTotCnt(searchVO);
+		paginationInfo.setTotalRecordCount(totCnt);
+		model.addAttribute("paginationInfo", paginationInfo);
+
 		return "cmm/sym/zip/EgovCcmZipSearchPopup";
 	}
     
