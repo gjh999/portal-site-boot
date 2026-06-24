@@ -32,6 +32,48 @@ cd "/c/eGovFrame/workspace-egov/portal-site-boot"
 | 일반회원 | 일반회원(GNR) | `user1` | `1` | ROLE_USER |
 
 > 비밀번호 = `Base64(SHA-256(id + 평문비밀번호))` (`EgovFileScrty.encryptPassword(pw, id)`)
+> 위 3계정은 모두 상태 `P`(승인) 시드라 즉시 로그인. **셀프 가입 신규 계정은 `A`(승인대기)** 라 관리자 승인 전 로그인 불가(아래 사용자·회원 모델).
+
+## 사용자·회원 모델 (구분·가입·승인·권한) — 신규/변경 시 **반드시 준수** (2026-06-24 통일)
+
+### 사용자 구분 (USER_SE) — 3유형, ESNTL_ID 통합
+| 구분 | USER_SE | 테이블 | 상태컬럼 | 가입경로 |
+|------|---------|--------|----------|----------|
+| 업무사용자 | `USR` | `TB_EMPLYR_INFO` | `EMPLYR_STTUS_CODE` | 관리자 직접 등록 |
+| 일반회원 | `GNR` | `TB_GNRL_MBER` | `MBER_STTUS` | 셀프 가입 |
+| 기업회원 | `ENT` | `TB_ENTRPRS_MBER` | `ENTRPRS_MBER_STTUS` | 셀프 가입 |
+
+- **통합 뷰**: `VW_USER_MASTER`가 위 3테이블을 `UNION ALL`(컬럼: ESNTL_ID·USER_ID·PASSWORD·USER_NM·USER_ZIP·USER_ADRES·USER_EMAIL·GROUP_ID·USER_SE·ORGNZT_ID·USER_OCCP). GNR/ENT는 GROUP_ID·ORGNZT_ID를 공백(`' '`)으로, USER_SE는 각각 리터럴(`'GNR'`/`'USR'`/`'ENT'`)로 둔다. 고유식별은 `ESNTL_ID`로 통일.
+- ⚠️ **두 가지 코드 체계 구분**: 뷰·로그인·마이페이지는 **USER_SE(GNR/USR/ENT)**, 회원관리 화면 내부(목록 컬럼/검색 필터/승인 액션 키)는 **userTy(USR01=일반·USR02=기업·USR03=업무사용자)**. 혼동 금지.
+
+### 가입 경로
+- 일반·기업 = 셀프 가입. 진입점 `EgovMberSbscrbSelect`(`cmm/uss/umt`)에서 유형 선택 → 일반(`EgovMberSbscrb`)/기업(`EgovEntrprsMberSbscrb`) 폼.
+- 업무사용자 = 셀프 경로 없음, 관리자가 회원관리에서 등록.
+
+### 승인 정책 (가입→승인→로그인) — 이번 세션 통일
+- **셀프 가입(일반·기업)은 상태 `A`(가입신청=승인대기)로 저장.** GNR: `EgovMberManageController` 가입 핸들러 `setMberSttus("A")`. ENT: `EgovEntrprsMberManageController` `setEntrprsMberSttus("A")`(과거 `P` 즉시로그인 → `A`로 통일).
+- **로그인은 상태 `P`(승인)만 허용.** 로그인 매퍼 `EgovLoginUsr_SQL_{db}.xml`가 3유형 모두 상태컬럼 `= 'P'` 조건 강제 → `A`는 자동 차단(별도 분기 불필요).
+- **관리자 승인(A→P)**: 회원관리 목록에서 신청중(`A`) 선택 → 승인. `MberManageDAO.approveMber(uniqId, userTy)`가 userTy(USR01/02/03)별로 해당 테이블 상태컬럼을 `'P'`로 갱신. 승인 대상 파라미터는 `"userTy:uniqId"` 콤마 구분 문자열.
+- 업무사용자는 관리자 등록 시 `P`.
+- 상태 라벨: `A`='신청중', `P`='승인', `D`='삭제'.
+- ⚠️ test 계정이 "가입됐는데 로그인 안 됨"은 승인대기(`A`) **정상 동작**.
+
+### 권한그룹(groupId) — 권한상승 방지
+- `GROUP_00000000000000`=ROLE_ADMIN, `GROUP_00000000000001`=ROLE_USER.
+- **일반회원 셀프가입은 ROLE_USER 고정**: 가입 핸들러가 `setGroupId("GROUP_00000000000001")`·`setUserTy("USR01")`. (과거 ROLE_ADMIN 부여 버그 제거.)
+- **업무사용자(USR)만 ROLE_ADMIN 지정 가능**: 등록/수정 폼(`EgovMberInsert`/`EgovMberSelectUpdt`)의 소속그룹 select가 `userTyForGroup`(`USR`이면 노출) 모델값으로 ROLE_ADMIN 옵션(`GROUP_00000000000000`) 노출 제어. 일반회원관리 모듈은 ROLE_ADMIN 비노출.
+
+### 회원구분 확인 위치
+1. 마이페이지(`EgovMberMypage`) '회원구분'(USER_SE).
+2. `/cmm/user-types`(`EgovUserTypesController` → `cmm/EgovUserTypes`): 현재 로그인 사용자 구분 배지 + 3유형 안내(공개 URL, SecurityConfig permitAll).
+3. 회원관리 목록(`EgovMberManage`) '회원구분' 컬럼: 3테이블 UNION 통합조회로 일반/기업/업무사용자 전 유형 표시(`userTy` 유형 필터·승인 액션).
+4. DB `VW_USER_MASTER.USER_SE`.
+
+### 롤 타입 코드 (COM029)
+- 롤관리(sec/rmt) 등록/수정의 '롤 타입' 드롭다운 = 공통코드 **COM029**(`url`/`method`/`pointcut`). 컨트롤러 채번 규약: url→web, method→mtd, pointcut→pct. hsql(shtdb.sql)·postgresql 정본 시드, 5종 DBMS 보강(파리티).
+
+### DBMS 파리티 (이 모델 관련)
+- 회원관리 통합조회·승인, 로그인 상태 'P' 필터, COM029 시드: 7종 매퍼/DATA 반영. hsql·postgresql은 런타임+파일 검증, mysql/oracle/tibero/cubrid/altibase는 파일 정합·XML well-formed 검증.
 
 ## 아키텍처 (JSP → Boot 전환 핵심)
 
