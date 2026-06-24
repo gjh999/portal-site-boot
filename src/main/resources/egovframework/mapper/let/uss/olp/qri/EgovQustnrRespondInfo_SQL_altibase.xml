@@ -391,4 +391,15 @@
 	</insert>
 
 
+{SNIP}	<!-- 설문조사(통계):: 설문지 총 응답자 수(응답자 등록정보 기준) -->
+	<select id="selectQustnrRespondInfoManageRespondentCnt" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*)
+		FROM TB_QUSTNR_RESPOND_INFO
+		WHERE 1=1
+		AND TRIM(QESTNR_ID) = TRIM(#{qestnrId})
+		<if test="qestnrTmplatId != null and qestnrTmplatId != ''">
+			AND TRIM(QUSTNR_TMPLAT_ID) = TRIM(#{qestnrTmplatId})
+		</if>
+	</select>
+
 </mapper>

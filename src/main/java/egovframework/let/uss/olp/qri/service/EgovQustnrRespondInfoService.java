@@ -47,6 +47,14 @@ public interface EgovQustnrRespondInfoService {
 	 */
 	public List<?> selectQustnrRespondInfoManageStatistics2(Map<?, ?> map) throws Exception;
     /**
+	 * 설문지 총 응답자 수를 조회한다.
+	 * @param map - qestnrId(필수)/qestnrTmplatId(선택)가 담긴 map
+	 * @return int 총 응답자 수
+	 * @throws Exception
+	 */
+	public int selectQustnrRespondInfoManageRespondentCnt(Map<?, ?> map) throws Exception;
+
+    /**
 	 * 회원정보를 조회한다.
 	 * @param map - 조회할 정보가 담긴 map
 	 * @return List

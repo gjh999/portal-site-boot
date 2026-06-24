@@ -12,14 +12,25 @@
         </ol></nav>
         <h1 class="h4 mb-3"><i class="bi bi-clipboard-check"></i> 설문관리</h1>
         <div class="krds-table-wrap"><table class="tbl">
-            <thead><tr><th scope="col" style="width:60px;">번호</th><th scope="col">설문제목</th><th scope="col" style="width:140px;">등록일</th></tr></thead>
+            <thead><tr>
+                <th scope="col" style="width:60px;">번호</th>
+                <th scope="col">설문제목</th>
+                <th scope="col" style="width:140px;">등록일</th>
+                <th scope="col" style="width:170px;" th:text="#{survey.stats.title}">결과·집계</th>
+            </tr></thead>
             <tbody>
             <tr th:each="item, st : ${resultList}">
                 <td class="text-center" th:text="${st.count}">1</td>
                 <td><a th:href="@{/uss/olp/qmc/EgovQustnrManageDetail.do(qestnrId=${item.qestnrid})}" th:text="${item.qestnrsj}">설문제목</a></td>
                 <td class="text-center" th:text="${item.frstRegistPnttm}">등록일</td>
+                <td class="text-center">
+                    <a class="krds-btn tertiary small"
+                       th:href="@{/uss/olp/qnn/EgovQustnrRespondInfoManageStatistics.do(qestnrId=${item.qestnrid},qestnrTmplatId=${item.qestnrtmplatid})}">
+                        <i class="bi bi-bar-chart-line"></i> <span th:text="#{survey.btn.viewStats}">집계 보기</span>
+                    </a>
+                </td>
             </tr>
-            <tr th:if="${#lists.isEmpty(resultList)}"><td colspan="3" class="text-center text-muted py-4">등록된 설문이 없습니다.</td></tr>
+            <tr th:if="${#lists.isEmpty(resultList)}"><td colspan="4" class="text-center text-muted py-4">등록된 설문이 없습니다.</td></tr>
             </tbody>
         </table></div>
         <div class="text-end"><a class="krds-btn primary small" th:href="@{/uss/olp/qmc/EgovQustnrManageRegist.do}"><i class="bi bi-plus-lg"></i> 설문 등록</a></div>

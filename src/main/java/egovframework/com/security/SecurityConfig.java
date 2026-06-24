@@ -70,7 +70,9 @@ public class SecurityConfig {
 			"/uss/ion/bnr/**",          // 배너 관리
 			// 설문: 관리(템플릿/설문/문항/항목/응답결과)는 관리자, 참여(qnn/qri)는 로그인 사용자
 			"/uss/olp/qtm/**", "/uss/olp/qmc/**", "/uss/olp/qqm/**",
-			"/uss/olp/qim/**", "/uss/olp/qrm/**",
+			"/uss/olp/qim/**", "/uss/olp/qrm/**", "/uss/olp/qri/**",
+			// 설문 결과·집계(통계) 화면은 관리자 전용 (참여 목록/등록은 로그인 사용자 유지)
+			"/uss/olp/qnn/EgovQustnrRespondInfoManageStatistics.do",
 			"/sym/**"                   // 시스템(일정/우편번호/메뉴) 관리
 	};
 

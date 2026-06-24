@@ -2,43 +2,96 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}" lang="ko">
-<head><title>설문조사 통계</title></head>
+<head><title th:text="#{survey.stats.title}">설문조사 결과·집계</title></head>
 <body>
 <main layout:fragment="content">
     <div class="container" style="max-width:900px;"
-         th:with="info=${Comtnqestnrinfo != null and !#lists.isEmpty(Comtnqestnrinfo)} ? ${Comtnqestnrinfo[0]} : null">
+         th:with="info=${Comtnqestnrinfo != null and !#lists.isEmpty(Comtnqestnrinfo)} ? ${Comtnqestnrinfo[0]} : null,
+                  hasQuestions=${Comtnqustnrqesitm != null and !#lists.isEmpty(Comtnqustnrqesitm)},
+                  totRespondent=${respondentCnt != null ? respondentCnt : 0}">
         <nav aria-label="breadcrumb"><ol class="breadcrumb">
             <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
-            <li class="breadcrumb-item"><a th:href="@{/uss/olp/qnn/EgovQustnrRespondInfoManageList.do}">설문조사</a></li>
-            <li class="breadcrumb-item active">통계</li>
+            <li class="breadcrumb-item"><a th:href="@{/uss/olp/qmc/EgovQustnrManageList.do}" th:text="#{survey.manage.title}">설문관리</a></li>
+            <li class="breadcrumb-item active" th:text="#{survey.stats.title}">결과·집계</li>
         </ol></nav>
-        <h1 class="h4 mb-3"><i class="bi bi-bar-chart-line"></i> 설문조사 통계</h1>
+        <h1 class="h4 mb-3"><i class="bi bi-bar-chart-line"></i> <span th:text="#{survey.stats.title}">설문조사 결과·집계</span></h1>
+
+        <!-- 설문 요약 + 총 응답자 수 -->
         <div class="krds-panel mb-3" th:if="${info != null}"><div class="krds-panel-body">
             <h2 class="h5 mb-1" th:text="${info.qestnrsj}">설문제목</h2>
             <p class="mb-1 text-muted" th:text="${info.qestnrpurps}">설문목적</p>
-            <p class="mb-0 small text-muted"><span th:text="${info.qestnrBeginDe}"></span> ~ <span th:text="${info.qestnrEndDe}"></span></p>
+            <p class="mb-2 small text-muted"><span th:text="${info.qestnrBeginDe}"></span> ~ <span th:text="${info.qestnrEndDe}"></span></p>
+            <span class="krds-badge" style="background:#1f5fa6;color:#fff;font-size:14px;">
+                <i class="bi bi-people"></i>
+                <span th:text="#{survey.stats.totalRespondent}">총 응답자 수</span>:
+                <strong th:text="${totRespondent}">0</strong><span th:text="#{survey.stats.unit.person}">명</span>
+            </span>
         </div></div>
 
-        <h3 class="h6 mt-4">문항별 응답 통계</h3>
-        <div th:each="q : ${Comtnqustnrqesitm}" class="mb-4">
-            <p class="fw-bold mb-2"><span th:text="${q.qestnSn}"></span>. <span th:text="${q.qestnCn}"></span></p>
-            <div class="krds-table-wrap"><table class="tbl">
-                <thead><tr><th scope="col">항목/응답</th><th scope="col" style="width:90px;">응답수</th><th scope="col" style="width:110px;">비율(%)</th></tr></thead>
+        <!-- 응답 없음 안내 -->
+        <div class="krds-panel mb-3" th:if="${totRespondent == 0}"><div class="krds-panel-body text-center text-muted py-4">
+            <i class="bi bi-inbox" style="font-size:1.6rem;"></i>
+            <p class="mb-0 mt-2" th:text="#{survey.stats.noResponse}">아직 도착한 응답이 없습니다.</p>
+        </div></div>
+
+        <h3 class="h6 mt-4" th:text="#{survey.stats.byQuestion}">문항별 응답 집계</h3>
+        <div th:each="q : ${Comtnqustnrqesitm}" class="mb-4"
+             th:with="isText=${q.qestnTyCode != null and #strings.trim(q.qestnTyCode) == '2'},
+                      qid=${q.qestnrqesitmid != null ? #strings.trim(q.qestnrqesitmid) : ''},
+                      rows1=${stat1ByQ.containsKey(qid)} ? ${stat1ByQ.get(qid)} : null,
+                      rows2=${stat2ByQ.containsKey(qid)} ? ${stat2ByQ.get(qid)} : null">
+            <p class="fw-bold mb-2">
+                <span th:text="${q.qestnSn}"></span>. <span th:text="${q.qestnCn}"></span>
+                <span class="krds-badge bg-gray ms-1" th:text="${isText} ? #{survey.qtype.text} : #{survey.qtype.choice}">유형</span>
+            </p>
+
+            <!-- 객관식: 항목별 응답수/비율 + 진행바 -->
+            <div th:unless="${isText}" class="krds-table-wrap"><table class="tbl">
+                <thead><tr>
+                    <th scope="col" th:text="#{survey.stats.col.item}">항목</th>
+                    <th scope="col" style="width:90px;" th:text="#{survey.stats.col.count}">응답수</th>
+                    <th scope="col" style="width:220px;" th:text="#{survey.stats.col.ratio}">비율</th>
+                </tr></thead>
                 <tbody>
-                <tr th:each="s : ${qestnrStatistic1}" th:if="${s.qestnrqesitmid == q.qestnrqesitmid}">
+                <tr th:if="${rows1 != null}" th:each="s : ${rows1}">
                     <td th:text="${s.iemCn}">항목</td>
                     <td class="text-center" th:text="${s.qustnrIemIdCnt}">0</td>
-                    <td class="text-center" th:text="${s.qustnrPercent}">0</td>
+                    <td th:with="pct=${s.qustnrPercent != null ? s.qustnrPercent : 0}">
+                        <div class="d-flex align-items-center" style="gap:8px;">
+                            <div style="flex:1;background:#e9ecef;border-radius:4px;height:14px;overflow:hidden;">
+                                <div th:style="'width:' + ${pct} + '%;background:#1f5fa6;height:14px;'"></div>
+                            </div>
+                            <span class="small" style="width:42px;text-align:right;" th:text="${pct} + '%'">0%</span>
+                        </div>
+                    </td>
                 </tr>
-                <tr th:each="s : ${qestnrStatistic2}" th:if="${s.qestnrqesitmid == q.qestnrqesitmid}">
-                    <td colspan="3"><span class="krds-badge bg-gray">주관식</span><span th:text="${s.respondAnswerCn}"></span></td>
+                <tr th:if="${rows1 == null or #lists.isEmpty(rows1)}">
+                    <td colspan="3" class="text-center text-muted" th:text="#{survey.stats.noResponse.item}">응답 없음</td>
                 </tr>
                 </tbody>
             </table></div>
-        </div>
-        <p class="text-muted" th:if="${Comtnqustnrqesitm == null or #lists.isEmpty(Comtnqustnrqesitm)}">문항 정보가 없습니다.</p>
 
-        <div class="mt-3"><a class="krds-btn tertiary" th:href="@{/uss/olp/qnn/EgovQustnrRespondInfoManageList.do}">목록</a></div>
+            <!-- 주관식: 응답 목록 -->
+            <div th:if="${isText}">
+                <ul class="list-group">
+                    <li class="list-group-item" th:if="${rows2 != null}" th:each="s : ${rows2}">
+                        <span th:text="${s.respondAnswerCn}">답변</span>
+                    </li>
+                    <li class="list-group-item text-center text-muted"
+                        th:if="${rows2 == null or #lists.isEmpty(rows2)}"
+                        th:text="#{survey.stats.noResponse.item}">응답 없음</li>
+                </ul>
+            </div>
+        </div>
+        <p class="text-muted" th:unless="${hasQuestions}" th:text="#{survey.stats.noQuestion}">등록된 문항이 없습니다.</p>
+
+        <div class="d-flex mt-3" style="gap:8px;">
+            <a class="krds-btn tertiary" th:href="@{/uss/olp/qmc/EgovQustnrManageList.do}" th:text="#{survey.btn.list}">목록</a>
+            <a class="krds-btn secondary" th:if="${info != null}"
+               th:href="@{/uss/olp/qrm/EgovQustnrRespondManageList.do(searchMode='Y',qestnrId=${info.qestnrId})}">
+                <i class="bi bi-people"></i> <span th:text="#{survey.btn.respondentList}">응답자 목록</span>
+            </a>
+        </div>
     </div>
 </main>
 </body>

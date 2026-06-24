@@ -137,7 +137,24 @@ public class EgovQustnrRespondInfoController {
 	public String EgovQustnrRespondInfoManageStatistics(@ModelAttribute("searchVO") ComDefaultVO searchVO,
 			HttpServletRequest request, @RequestParam Map<String, Object> commandMap, ModelMap model) throws Exception {
 
+		// 결과·집계 조회는 관리자(ROLE_ADMIN)만 허용
+		List<String> authorities = EgovUserDetailsHelper.getAuthorities();
+		boolean isAdmin = authorities != null && authorities.contains("ROLE_ADMIN");
+		if (!isAdmin) {
+			model.addAttribute("message", "관리자만 접근할 수 있는 화면입니다.");
+			return "uat/uia/EgovLoginUsr";
+		}
+
 		String sLocationUrl = "uss/olp/qnn/EgovQustnrRespondInfoManageStatistics";
+
+		// 총 응답자 수(응답자 등록정보 기준)
+		model.addAttribute("respondentCnt",
+				egovQustnrRespondInfoService.selectQustnrRespondInfoManageRespondentCnt(commandMap));
+
+		// 설문대상 표시용 직업유형 공통코드(COM034)
+		ComDefaultCodeVO voComCode = new ComDefaultCodeVO();
+		voComCode.setCodeId("COM034");
+		model.addAttribute("comCode034", cmmUseService.selectCmmCodeDetail(voComCode));
 
 		// 설문정보
 		model.addAttribute("Comtnqestnrinfo",
@@ -155,17 +172,44 @@ public class EgovQustnrRespondInfoController {
 		model.addAttribute("qestnrId", commandMap.get("qestnrId") == null ? "" : (String) commandMap.get("qestnrId"));
 
 		// 객관식통계 답안
-		model.addAttribute("qestnrStatistic1",
-				egovQustnrRespondInfoService.selectQustnrRespondInfoManageStatistics1(commandMap));
+		List<?> statistic1 = egovQustnrRespondInfoService.selectQustnrRespondInfoManageStatistics1(commandMap);
+		model.addAttribute("qestnrStatistic1", statistic1);
 
 		// 주관식통계 답안
-		model.addAttribute("qestnrStatistic2",
-				egovQustnrRespondInfoService.selectQustnrRespondInfoManageStatistics2(commandMap));
+		List<?> statistic2 = egovQustnrRespondInfoService.selectQustnrRespondInfoManageStatistics2(commandMap);
+		model.addAttribute("qestnrStatistic2", statistic2);
+
+		// 문항(qestnrQesitmId)별 통계 그룹핑 — 템플릿에서 안전하게 문항별 집계 표시(SpEL 선택식 회피)
+		model.addAttribute("stat1ByQ", groupByQesitmId(statistic1));
+		model.addAttribute("stat2ByQ", groupByQesitmId(statistic2));
 
 		// 이전 주소
 		model.addAttribute("returnUrl", request.getHeader("REFERER"));
 
 		return sLocationUrl;
+	}
+
+	/**
+	 * 통계 결과 목록을 문항ID(qestnrqesitmid, CHAR 패딩 TRIM)별로 그룹핑한다.
+	 *
+	 * @param list egovMap(=Map) 리스트
+	 * @return 문항ID → 통계행 리스트
+	 */
+	@SuppressWarnings("unchecked")
+	private Map<String, List<Object>> groupByQesitmId(List<?> list) {
+		Map<String, List<Object>> grouped = new java.util.LinkedHashMap<>();
+		if (list == null) {
+			return grouped;
+		}
+		for (Object row : list) {
+			if (!(row instanceof Map)) {
+				continue;
+			}
+			Object id = ((Map<String, Object>) row).get("qestnrqesitmid");
+			String key = id == null ? "" : String.valueOf(id).trim();
+			grouped.computeIfAbsent(key, k -> new java.util.ArrayList<>()).add(row);
+		}
+		return grouped;
 	}
 
 	/**

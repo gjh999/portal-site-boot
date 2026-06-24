@@ -70,6 +70,17 @@ public class EgovQustnrRespondInfoServiceImpl extends EgovAbstractServiceImpl im
 	}
 
     /**
+	 * 설문지 총 응답자 수를 조회한다.
+	 * @param map - qestnrId/qestnrTmplatId 가 담긴 map
+	 * @return int
+	 * @throws Exception
+	 */
+	@Override
+	public int selectQustnrRespondInfoManageRespondentCnt(Map<?, ?> map) throws Exception{
+		return dao.selectQustnrRespondInfoManageRespondentCnt(map);
+	}
+
+    /**
 	 * 회원정보를 조회한다.
 	 * @param map - 조회할 정보가 담긴 map
 	 * @return List

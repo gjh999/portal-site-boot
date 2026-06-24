@@ -101,6 +101,9 @@
                 <if test="searchCondition == &quot;BRTH&quot;">
                     AND BRTHDY LIKE '%' || #{searchKeyword} || '%'
                 </if>
+                <if test="searchCondition == &quot;QESTNR_ID&quot;">
+                    AND TRIM(QESTNR_ID) = TRIM(#{searchKeyword})
+                </if>
 	 		
 	 	
 	 </if>
@@ -128,6 +131,9 @@
                 </if>
                 <if test="searchCondition == &quot;BRTH&quot;">
                     AND BRTHDY LIKE '%' || #{searchKeyword} || '%'
+                </if>
+                <if test="searchCondition == &quot;QESTNR_ID&quot;">
+                    AND TRIM(QESTNR_ID) = TRIM(#{searchKeyword})
                 </if>
 	 		
 	 	
