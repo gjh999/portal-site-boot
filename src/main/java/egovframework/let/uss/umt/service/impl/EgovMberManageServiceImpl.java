@@ -112,18 +112,30 @@ public class EgovMberManageServiceImpl extends EgovAbstractServiceImpl implement
 	 */
 	@Override
 	public void deleteMber(String checkedIdForDel)  {
+		if (checkedIdForDel == null || checkedIdForDel.isEmpty()) return;
 		String [] delId = checkedIdForDel.split(",");
 		for (int i=0; i<delId.length ; i++){
 			String [] id = delId[i].split(":");
-			if (id[0].equals("USR03")){
-		        //업무사용자(직원)삭제 — 미지원(업무사용자는 관리자 직접 관리)
-			}else if(id[0].equals("USR01")){
-				//일반회원삭제
-				mberManageDAO.deleteMber(id[1]);
-			}else if(id[0].equals("USR02")){
-				//기업회원삭제 — 별도 모듈 관리(미지원)
-			}
+			if (id.length < 2) continue;
+			// 회원구분(userTy)별 삭제: USR01 물리삭제, USR02/USR03 상태 'D'(가입삭제)
+			mberManageDAO.deleteMberByType(id[1], id[0]);
 		}
+	}
+
+	/**
+	 * 업무사용자(USR03) 상세조회
+	 */
+	@Override
+	public MberManageVO selectEmplyr(String uniqId) {
+		return mberManageDAO.selectEmplyr(uniqId);
+	}
+
+	/**
+	 * 업무사용자(USR03) 정보수정
+	 */
+	@Override
+	public void updateEmplyr(MberManageVO mberManageVO) throws Exception {
+		mberManageDAO.updateEmplyr(mberManageVO);
 	}
 
 	/**

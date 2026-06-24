@@ -21,6 +21,20 @@ public interface EgovEntrprsMberManageService {
 	int insertEntrprsMber(EntrprsMberManageVO vo) throws Exception;
 
 	/**
+	 * 기업회원 상세정보를 조회한다.
+	 * @param uniqId 기업회원 고유아이디(ESNTL_ID)
+	 * @return 기업회원 상세정보
+	 */
+	EntrprsMberManageVO selectEntrprsMber(String uniqId);
+
+	/**
+	 * 기업회원 정보를 수정한다.
+	 * @param vo 기업회원 수정정보
+	 * @throws Exception
+	 */
+	void updateEntrprsMber(EntrprsMberManageVO vo) throws Exception;
+
+	/**
 	 * 기업회원 약관확인
 	 * @param stplatId 기업회원약관아이디
 	 * @return 약관정보 목록

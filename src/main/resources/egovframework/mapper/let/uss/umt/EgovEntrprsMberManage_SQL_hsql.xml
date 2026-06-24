@@ -67,6 +67,55 @@
             )
     </insert>
 
+    <select id="selectEntrprsMber_S" resultType="egovframework.let.uss.umt.service.EntrprsMberManageVO">
+        SELECT
+            ESNTL_ID                   uniqId,
+            ENTRPRS_MBER_ID            entrprsMberId,
+            ENTRPRS_MBER_PASSWORD_HINT entrprsMberPasswordHint,
+            ENTRPRS_MBER_PASSWORD_CNSR entrprsMberPasswordCnsr,
+            ENTRPRS_SE_CODE            entrprsSeCode,
+            BIZRNO                     bizrno,
+            JURIRNO                    jurirno,
+            CMPNY_NM                   cmpnyNm,
+            CXFC                       cxfc,
+            INDUTY_CODE                indutyCode,
+            APPLCNT_NM                 applcntNm,
+            APPLCNT_IHIDNUM            applcntIhidnum,
+            APPLCNT_EMAIL_ADRES        applcntEmailAdres,
+            ENTRPRS_MBER_STTUS         entrprsMberSttus,
+            TELNO                      telno,
+            FXNUM                      fxnum,
+            ZIP                        zip,
+            ADRES                      adres,
+            DETAIL_ADRES               detailAdres,
+            GROUP_ID                   groupId,
+            TO_CHAR(SBSCRB_DE,'YYYY-MM-DD') sbscrbDe
+        FROM TB_ENTRPRS_MBER
+        WHERE ESNTL_ID = #{uniqId}
+    </select>
+
+    <update id="updateEntrprsMber_S" parameterType="egovframework.let.uss.umt.service.EntrprsMberManageVO">
+        UPDATE TB_ENTRPRS_MBER
+        SET ENTRPRS_MBER_PASSWORD_HINT = #{entrprsMberPasswordHint},
+            ENTRPRS_MBER_PASSWORD_CNSR = #{entrprsMberPasswordCnsr},
+            ENTRPRS_SE_CODE            = #{entrprsSeCode},
+            BIZRNO                     = #{bizrno},
+            JURIRNO                    = #{jurirno},
+            CMPNY_NM                   = #{cmpnyNm},
+            CXFC                       = #{cxfc},
+            INDUTY_CODE                = #{indutyCode},
+            APPLCNT_NM                 = #{applcntNm},
+            APPLCNT_EMAIL_ADRES        = #{applcntEmailAdres},
+            ENTRPRS_MBER_STTUS         = #{entrprsMberSttus},
+            TELNO                      = #{telno},
+            FXNUM                      = #{fxnum},
+            ZIP                        = #{zip},
+            ADRES                      = #{adres},
+            DETAIL_ADRES               = #{detailAdres},
+            GROUP_ID                   = #{groupId}
+        WHERE ESNTL_ID = #{uniqId}
+    </update>
+
     <select id="selectStplat_S" resultMap="stplatMap">
         SELECT
             USE_STPLAT_ID,

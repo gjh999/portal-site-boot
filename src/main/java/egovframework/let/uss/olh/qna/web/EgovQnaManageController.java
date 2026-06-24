@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 import egovframework.com.cmm.ComDefaultCodeVO;
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.com.cmm.LoginVO;
@@ -58,6 +60,54 @@ public class EgovQnaManageController {
 	/** EgovMessageSource */
 	@Resource(name = "egovMessageSource")
 	EgovMessageSource egovMessageSource;
+
+	/**
+	 * 현재 로그인 사용자가 관리자(ROLE_ADMIN)인지 여부.
+	 *
+	 * @return 관리자이면 true
+	 */
+	private boolean isAdmin() {
+		List<String> authorities = EgovUserDetailsHelper.getAuthorities();
+		return authorities != null && authorities.contains("ROLE_ADMIN");
+	}
+
+	/**
+	 * 현재 로그인 사용자의 고유아이디(ESNTL_ID)를 반환한다. 비로그인 시 null.
+	 *
+	 * @return 로그인 사용자 uniqId 또는 null
+	 */
+	private String currentUniqId() {
+		if (!Boolean.TRUE.equals(EgovUserDetailsHelper.isAuthenticated())) {
+			return null;
+		}
+		Object user = EgovUserDetailsHelper.getAuthenticatedUser();
+		if (user instanceof LoginVO) {
+			return ((LoginVO) user).getUniqId();
+		}
+		return null;
+	}
+
+	/**
+	 * 해당 Q&A 글의 소유자(작성자) 또는 관리자인지 검사한다.
+	 * 글 등록자(FRST_REGISTER_ID) == 현재 로그인 uniqId 또는 ROLE_ADMIN 이면 true.
+	 *
+	 * @param qaId 대상 Q&A 아이디
+	 * @return 수정/삭제 권한 보유 여부
+	 * @throws Exception 조회 예외
+	 */
+	private boolean isOwnerOrAdmin(String qaId) throws Exception {
+		if (isAdmin()) {
+			return true;
+		}
+		String uniqId = currentUniqId();
+		if (uniqId == null || qaId == null) {
+			return false;
+		}
+		QnaManageVO key = new QnaManageVO();
+		key.setQaId(qaId);
+		QnaManageVO target = qnaManageService.selectQnaListDetail(key);
+		return target != null && uniqId.equals(target.getFrstRegisterId());
+	}
 
 	/**
 	 * 개별 배포시 메인메뉴를 조회한다.
@@ -157,6 +207,13 @@ public class EgovQnaManageController {
 		vo.setWritngPassword(EgovFileScrty.decode(writngPassword));
 
 		model.addAttribute("result", vo);
+
+		// 버튼 노출 제어용: 작성자 본인(FRST_REGISTER_ID == 로그인 uniqId) 또는 관리자만 수정/삭제 가능
+		String uniqId = currentUniqId();
+		boolean owner = uniqId != null && uniqId.equals(vo.getFrstRegisterId());
+		model.addAttribute("isOwner", owner);
+		model.addAttribute("isAdmin", isAdmin());
+		model.addAttribute("canModify", owner || isAdmin());
 
 		return "uss/olh/qna/EgovQnaDetailInqire";
 	}
@@ -287,6 +344,12 @@ public class EgovQnaManageController {
 	public String selectPasswordConfirmView(QnaManageVO qnaManageVO,
 			@ModelAttribute("searchVO") QnaManageDefaultVO searchVO, Model model) throws Exception {
 
+		// 로그인 회원은 소유권(작성자 본인) 또는 관리자면 비밀번호 확인 없이 바로 수정 화면으로 이동
+		if (Boolean.TRUE.equals(EgovUserDetailsHelper.isAuthenticated())
+				&& isOwnerOrAdmin(qnaManageVO.getQaId())) {
+			return "forward:/uss/olh/qna/QnaCnUpdtView.do";
+		}
+
 		model.addAttribute("QnaManageVO", new QnaManageVO());
 
 		return "uss/olh/qna/EgovQnaPasswordConfirm";
@@ -351,6 +414,13 @@ public class EgovQnaManageController {
 	public String updateQnaCnView(QnaManageVO qnaManageVO, @ModelAttribute("searchVO") QnaManageDefaultVO searchVO,
 			ModelMap model) throws Exception {
 
+		// 서버측 가드: 로그인 회원은 작성자 본인 또는 관리자만 수정 화면 접근 가능(직접 URL 차단)
+		if (Boolean.TRUE.equals(EgovUserDetailsHelper.isAuthenticated())
+				&& !isOwnerOrAdmin(qnaManageVO.getQaId())) {
+			model.addAttribute("message", egovMessageSource.getMessage("qna.ownerOnly.msg"));
+			return "uat/uia/EgovLoginUsr";
+		}
+
 		QnaManageVO vo = qnaManageService.selectQnaListDetail(qnaManageVO);
 
 		// 작성 비밀번호를 얻는다.
@@ -379,11 +449,18 @@ public class EgovQnaManageController {
 	 */
 	@RequestMapping("/uss/olh/qna/QnaCnUpdt.do")
 	public String updateQnaCn(@ModelAttribute("searchVO") QnaManageDefaultVO searchVO,
-			@Valid @ModelAttribute("qnaManageVO") QnaManageVO qnaManageVO, BindingResult bindingResult)
+			@Valid @ModelAttribute("qnaManageVO") QnaManageVO qnaManageVO, BindingResult bindingResult, Model model)
 			throws Exception {
 
 		if (bindingResult.hasErrors()) {
 			return "uss/olh/qna/EgovQnaCnUpdt";
+		}
+
+		// 서버측 가드: 로그인 회원은 작성자 본인 또는 관리자만 수정 처리 가능(직접 POST 차단)
+		if (Boolean.TRUE.equals(EgovUserDetailsHelper.isAuthenticated())
+				&& !isOwnerOrAdmin(qnaManageVO.getQaId())) {
+			model.addAttribute("message", egovMessageSource.getMessage("qna.ownerOnly.msg"));
+			return "uat/uia/EgovLoginUsr";
 		}
 
 		// 로그인VO에서 사용자 정보 가져오기
@@ -425,6 +502,13 @@ public class EgovQnaManageController {
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
 			return "uat/uia/EgovLoginUsr";
 		}
+
+		// 서버측 가드: 작성자 본인 또는 관리자만 삭제 가능(직접 URL 차단)
+		if (!isOwnerOrAdmin(qnaManageVO.getQaId())) {
+			model.addAttribute("message", egovMessageSource.getMessage("qna.ownerOnly.msg"));
+			return "uat/uia/EgovLoginUsr";
+		}
+
 		qnaManageService.deleteQnaCn(qnaManageVO);
 
 		return "forward:/uss/olh/qna/QnaListInqire.do";
@@ -498,6 +582,12 @@ public class EgovQnaManageController {
 	public String updateQnaCnAnswerView(QnaManageVO qnaManageVO,
 			@ModelAttribute("searchVO") QnaManageDefaultVO searchVO, ModelMap model) throws Exception {
 
+		// 서버측 가드: 답변 등록/수정은 관리자(ROLE_ADMIN)만 가능(직접 URL 차단)
+		if (!isAdmin()) {
+			model.addAttribute("message", egovMessageSource.getMessage("qna.answerAdminOnly.msg"));
+			return "uat/uia/EgovLoginUsr";
+		}
+
 		// 공통코드를 가져오기 위한 Vo
 		ComDefaultCodeVO vo = new ComDefaultCodeVO();
 		vo.setCodeId("COM028");
@@ -522,6 +612,12 @@ public class EgovQnaManageController {
 	public String updateQnaCnAnswer(@Valid @ModelAttribute("qnaManageVO") QnaManageVO qnaManageVO,
 			BindingResult bindingResult, @ModelAttribute("searchVO") QnaManageDefaultVO searchVO, ModelMap model)
 			throws Exception {
+
+		// 서버측 가드: 답변 등록/수정은 관리자(ROLE_ADMIN)만 가능(직접 POST 차단)
+		if (!isAdmin()) {
+			model.addAttribute("message", egovMessageSource.getMessage("qna.answerAdminOnly.msg"));
+			return "uat/uia/EgovLoginUsr";
+		}
 
 		if (bindingResult.hasErrors()) {
 			ComDefaultCodeVO vo = new ComDefaultCodeVO();

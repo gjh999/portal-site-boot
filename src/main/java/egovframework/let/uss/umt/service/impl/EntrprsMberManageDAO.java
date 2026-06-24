@@ -25,6 +25,16 @@ public class EntrprsMberManageDAO extends EgovAbstractMapper {
 		return insert("entrprsMberManageDAO.insertEntrprsMber_S", vo);
 	}
 
+	/** 기업회원 상세조회 */
+	public EntrprsMberManageVO selectEntrprsMber(String uniqId) {
+		return (EntrprsMberManageVO) selectOne("entrprsMberManageDAO.selectEntrprsMber_S", uniqId);
+	}
+
+	/** 기업회원 수정 */
+	public void updateEntrprsMber(EntrprsMberManageVO vo) {
+		update("entrprsMberManageDAO.updateEntrprsMber_S", vo);
+	}
+
 	/** 기업회원 약관확인 */
 	public List<?> selectStplat(String stplatId) {
 		return selectList("entrprsMberManageDAO.selectStplat_S", stplatId);

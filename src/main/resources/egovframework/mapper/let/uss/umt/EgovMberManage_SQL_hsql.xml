@@ -211,6 +211,58 @@
         
     </update>
     
+    <!-- 업무사용자(USR03) 상세조회/수정 -->
+    <select id="selectEmplyr_S" resultType="egovframework.let.uss.umt.service.MberManageVO">
+        SELECT
+            ESNTL_ID          uniqId,
+            'USR03'           userTy,
+            EMPLYR_ID         mberId,
+            USER_NM           mberNm,
+            PASSWORD_HINT     passwordHint,
+            PASSWORD_CNSR     passwordCnsr,
+            IHIDNUM           ihidnum,
+            SEXDSTN_CODE      sexdstnCode,
+            ZIP               zip,
+            HOUSE_ADRES       adres,
+            AREA_NO           areaNo,
+            EMPLYR_STTUS_CODE mberSttus,
+            DETAIL_ADRES      detailAdres,
+            HOUSE_END_TELNO   endTelno,
+            MBTLNUM           moblphonNo,
+            GROUP_ID          groupId,
+            FXNUM             mberFxnum,
+            EMAIL_ADRES       mberEmailAdres,
+            HOUSE_MIDDLE_TELNO middleTelno,
+            OFFM_TELNO        telno,
+            OCCP_TY           occpTy,
+            TO_CHAR(SBSCRB_DE,'YYYY-MM-DD') sbscrbDe
+        FROM TB_EMPLYR_INFO
+        WHERE ESNTL_ID = #{uniqId}
+    </select>
+
+    <update id="updateEmplyr_S" parameterType="egovframework.let.uss.umt.service.MberManageVO">
+        UPDATE TB_EMPLYR_INFO
+        SET USER_NM           = #{mberNm},
+            EMAIL_ADRES       = #{mberEmailAdres},
+            EMPLYR_STTUS_CODE = #{mberSttus},
+            OFFM_TELNO        = #{telno},
+            MBTLNUM           = #{moblphonNo},
+            ZIP               = #{zip},
+            HOUSE_ADRES       = #{adres},
+            DETAIL_ADRES      = #{detailAdres},
+            FXNUM             = #{mberFxnum},
+            LAST_UPDT_PNTTM   = sysdate()
+        WHERE ESNTL_ID = #{uniqId}
+    </update>
+
+    <!-- 유형별 가입삭제(상태 D) - 기업/업무사용자 소프트 삭제 -->
+    <update id="deleteEntrprsMber_S">
+        UPDATE TB_ENTRPRS_MBER SET ENTRPRS_MBER_STTUS = 'D' WHERE ESNTL_ID = #{uniqId}
+    </update>
+    <update id="deleteEmplyr_S">
+        UPDATE TB_EMPLYR_INFO SET EMPLYR_STTUS_CODE = 'D' WHERE ESNTL_ID = #{uniqId}
+    </update>
+
     <select id="selectStplat_S" resultMap="stplatMap">
         
             SELECT

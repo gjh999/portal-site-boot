@@ -33,7 +33,8 @@
         </div>
         <div class="d-flex justify-content-between mt-3">
             <a class="krds-btn tertiary small" th:href="@{/uss/olh/qna/QnaListInqire.do}"><i class="bi bi-list"></i> 목록</a>
-            <div sec:authorize="isAuthenticated()">
+            <!-- 작성자 본인(소유권) 또는 관리자만 수정·삭제 버튼 노출 -->
+            <div th:if="${canModify}">
                 <a class="krds-btn secondary small"
                    th:href="@{/uss/olh/qna/QnaPasswordConfirmView.do(qaId=${result.qaId})}"><i class="bi bi-pencil"></i> 수정</a>
                 <a class="krds-btn danger small"

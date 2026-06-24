@@ -361,6 +361,59 @@ public class EgovMberManageController {
 	}
 
 	/**
+	 * 업무사용자(USR03) 정보 수정화면으로 이동한다. (회원관리 목록에서 업무사용자 아이디 클릭)
+	 * @param uniqId 업무사용자 고유아이디(ESNTL_ID)
+	 * @param userSearchVO 검색조건
+	 * @param model 화면모델
+	 * @return cmm/uss/umt/EgovEmplyrSelectUpdt
+	 * @throws Exception
+	 */
+	@RequestMapping("/uss/umt/mber/EgovEmplyrSelectUpdtView.do")
+	public String updateEmplyrView(@RequestParam("selectedId") String uniqId,
+			@ModelAttribute("searchVO") UserDefaultVO userSearchVO, Model model) throws Exception {
+
+		// 미인증 사용자에 대한 보안처리
+		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+		if(!isAuthenticated) {
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+			return "uat/uia/EgovLoginUsr";
+		}
+
+		//사용자상태코드를 코드정보로부터 조회
+		ComDefaultCodeVO vo = new ComDefaultCodeVO();
+		vo.setCodeId("COM013");
+		model.addAttribute("mberSttus_result", cmmUseService.selectCmmCodeDetail(vo));
+
+		MberManageVO mberManageVO = mberManageService.selectEmplyr(uniqId);
+		model.addAttribute("mberManageVO", mberManageVO);
+		model.addAttribute("userSearchVO", userSearchVO);
+
+		return "cmm/uss/umt/EgovEmplyrSelectUpdt";
+	}
+
+	/**
+	 * 업무사용자(USR03) 정보 수정처리 후 목록화면으로 이동한다.
+	 * @param mberManageVO 업무사용자 수정정보
+	 * @param model 화면모델
+	 * @return forward:/uss/umt/mber/EgovMberManage.do
+	 * @throws Exception
+	 */
+	@RequestMapping("/uss/umt/mber/EgovEmplyrSelectUpdt.do")
+	public String updateEmplyr(@ModelAttribute("mberManageVO") MberManageVO mberManageVO, Model model) throws Exception {
+
+		// 미인증 사용자에 대한 보안처리
+		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+		if(!isAuthenticated) {
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+			return "uat/uia/EgovLoginUsr";
+		}
+
+		mberManageService.updateEmplyr(mberManageVO);
+		model.addAttribute("resultMsg", "success.common.update");
+		return "forward:/uss/umt/mber/EgovMberManage.do";
+	}
+
+	/**
 	 * 일반회원가입신청 등록화면으로 이동한다.
 	 * @param userSearchVO 검색조건
 	 * @param mberManageVO 일반회원가입신청정보

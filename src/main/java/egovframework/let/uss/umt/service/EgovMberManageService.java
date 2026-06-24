@@ -76,6 +76,20 @@ public interface EgovMberManageService {
 	public void approveMber(String checkedIdForApprove) throws Exception;
 
 	/**
+	 * 업무사용자(USR03) 상세정보를 조회한다.
+	 * @param uniqId 업무사용자 고유아이디(ESNTL_ID)
+	 * @return 업무사용자 상세정보
+	 */
+	public MberManageVO selectEmplyr(String uniqId);
+
+	/**
+	 * 업무사용자(USR03) 정보를 수정한다.
+	 * @param mberManageVO 업무사용자 수정정보
+	 * @throws Exception
+	 */
+	public void updateEmplyr(MberManageVO mberManageVO) throws Exception;
+
+	/**
 	 * 일반회원 약관확인
 	 * @param stplatId 일반회원약관아이디
 	 * @return 일반회원약관정보(List)

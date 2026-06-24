@@ -56,6 +56,41 @@ public class MberManageDAO extends EgovAbstractMapper{
     }
 
     /**
+     * 회원 삭제(가입삭제) - 회원구분(userTy)에 따라 처리
+     * USR01=일반회원 물리삭제, USR02=기업회원 상태 'D', USR03=업무사용자 상태 'D'
+     * @param uniqId 삭제대상 회원 고유ID(ESNTL_ID)
+     * @param userTy 회원구분(USR01/USR02/USR03)
+     */
+    public void deleteMberByType(String uniqId, String userTy){
+        java.util.Map<String, String> param = new java.util.HashMap<>();
+        param.put("uniqId", uniqId);
+        if ("USR02".equals(userTy)) {
+            update("mberManageDAO.deleteEntrprsMber_S", param);
+        } else if ("USR03".equals(userTy)) {
+            update("mberManageDAO.deleteEmplyr_S", param);
+        } else {
+            delete("mberManageDAO.deleteMber_S", uniqId);
+        }
+    }
+
+    /**
+     * 업무사용자(USR03) 상세조회
+     * @param uniqId 업무사용자 고유ID(ESNTL_ID)
+     * @return MberManageVO 업무사용자 상세정보
+     */
+    public MberManageVO selectEmplyr(String uniqId){
+        return (MberManageVO) selectOne("mberManageDAO.selectEmplyr_S", uniqId);
+    }
+
+    /**
+     * 업무사용자(USR03) 정보수정
+     * @param mberManageVO 업무사용자 수정정보
+     */
+    public void updateEmplyr(MberManageVO mberManageVO){
+        update("mberManageDAO.updateEmplyr_S", mberManageVO);
+    }
+
+    /**
      * 회원 승인(A→P) - 회원구분(userTy)에 따라 해당 테이블의 상태컬럼을 'P'로 갱신
      * @param uniqId 승인대상 회원 고유ID(ESNTL_ID)
      * @param userTy 회원구분(USR01=일반, USR02=기업, USR03=업무사용자)

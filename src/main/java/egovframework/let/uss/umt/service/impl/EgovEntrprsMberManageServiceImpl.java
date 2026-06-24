@@ -44,6 +44,16 @@ public class EgovEntrprsMberManageServiceImpl extends EgovAbstractServiceImpl im
 	}
 
 	@Override
+	public EntrprsMberManageVO selectEntrprsMber(String uniqId) {
+		return entrprsMberManageDAO.selectEntrprsMber(uniqId);
+	}
+
+	@Override
+	public void updateEntrprsMber(EntrprsMberManageVO vo) throws Exception {
+		entrprsMberManageDAO.updateEntrprsMber(vo);
+	}
+
+	@Override
 	public List<?> selectStplat(String stplatId) {
 		return entrprsMberManageDAO.selectStplat(stplatId);
 	}

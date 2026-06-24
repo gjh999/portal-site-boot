@@ -110,10 +110,17 @@
                         <span th:text="${item.userty == 'USR01'} ? '일반회원' : (${item.userty == 'USR02'} ? '기업회원' : (${item.userty == 'USR03'} ? '업무사용자' : ${item.userty}))">회원구분</span>
                     </td>
                     <td>
+                        <!-- 회원구분(userTy)별 알맞은 수정 화면으로 라우팅 -->
                         <a th:if="${item.userty == 'USR01'}" class="text-decoration-none"
                            th:href="@{/uss/umt/mber/EgovMberSelectUpdtView.do(selectedId=${item.uniqid},pageIndex=${userSearchVO.pageIndex})}"
                            th:text="${item.userid}">아이디</a>
-                        <span th:unless="${item.userty == 'USR01'}" th:text="${item.userid}">아이디</span>
+                        <a th:if="${item.userty == 'USR02'}" class="text-decoration-none"
+                           th:href="@{/uss/umt/mber/EgovEntrprsMberSelectUpdtView.do(selectedId=${item.uniqid},pageIndex=${userSearchVO.pageIndex})}"
+                           th:text="${item.userid}">아이디</a>
+                        <a th:if="${item.userty == 'USR03'}" class="text-decoration-none"
+                           th:href="@{/uss/umt/mber/EgovEmplyrSelectUpdtView.do(selectedId=${item.uniqid},pageIndex=${userSearchVO.pageIndex})}"
+                           th:text="${item.userid}">아이디</a>
+                        <span th:unless="${item.userty == 'USR01' or item.userty == 'USR02' or item.userty == 'USR03'}" th:text="${item.userid}">아이디</span>
                     </td>
                     <td th:text="${item.usernm}">이름</td>
                     <td th:text="${item.emailadres}">이메일</td>

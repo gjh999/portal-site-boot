@@ -1,11 +1,14 @@
 package egovframework.let.uss.umt.web;
 
+import org.egovframe.rte.fdl.security.userdetails.util.EgovUserDetailsHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import egovframework.com.cmm.EgovMessageSource;
 import egovframework.let.uss.sam.ipm.service.EgovIndvdlInfoPolicyService;
 import egovframework.let.uss.sam.ipm.service.IndvdlInfoPolicy;
 import egovframework.let.uss.umt.service.EgovEntrprsMberManageService;
@@ -31,6 +34,10 @@ public class EgovEntrprsMberManageController {
 	/** 개인정보처리방침 서비스 - 약관확인 화면의 '개인정보 제공 동의' 본문(대표 방침) 로딩용 */
 	@Resource(name = "egovIndvdlInfoPolicyService")
 	private EgovIndvdlInfoPolicyService indvdlInfoPolicyService;
+
+	/** EgovMessageSource */
+	@Resource(name = "egovMessageSource")
+	EgovMessageSource egovMessageSource;
 
 	/**
 	 * 회원가입 유형 선택 화면(일반회원 / 기업회원).
@@ -86,5 +93,40 @@ public class EgovEntrprsMberManageController {
 		// 가입 신청 완료 안내 화면으로 이동(관리자 승인 후 로그인 안내)
 		model.addAttribute("sbscrbMberNm", vo.getApplcntNm());
 		return "cmm/uss/umt/EgovMberSbscrbCmplt";
+	}
+
+	/**
+	 * 기업회원 정보 수정 화면(회원관리 목록에서 기업회원 아이디 클릭 시 진입).
+	 */
+	@RequestMapping("/uss/umt/mber/EgovEntrprsMberSelectUpdtView.do")
+	public String entrprsMberSelectUpdtView(@RequestParam("selectedId") String uniqId, Model model) throws Exception {
+
+		// 미인증 사용자에 대한 보안처리
+		if (!Boolean.TRUE.equals(EgovUserDetailsHelper.isAuthenticated())) {
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+			return "uat/uia/EgovLoginUsr";
+		}
+
+		EntrprsMberManageVO vo = entrprsMberManageService.selectEntrprsMber(uniqId);
+		model.addAttribute("entrprsMberManageVO", vo);
+		return "cmm/uss/umt/EgovEntrprsMberSelectUpdt";
+	}
+
+	/**
+	 * 기업회원 정보 수정처리 후 회원관리 목록으로 이동한다.
+	 */
+	@RequestMapping("/uss/umt/mber/EgovEntrprsMberSelectUpdt.do")
+	public String entrprsMberSelectUpdt(@ModelAttribute("entrprsMberManageVO") EntrprsMberManageVO vo,
+			BindingResult bindingResult, Model model) throws Exception {
+
+		// 미인증 사용자에 대한 보안처리
+		if (!Boolean.TRUE.equals(EgovUserDetailsHelper.isAuthenticated())) {
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+			return "uat/uia/EgovLoginUsr";
+		}
+
+		entrprsMberManageService.updateEntrprsMber(vo);
+		model.addAttribute("resultMsg", "success.common.update");
+		return "forward:/uss/umt/mber/EgovMberManage.do";
 	}
 }
