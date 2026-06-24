@@ -75,6 +75,17 @@ public class StplatManageVO extends StplatManageDefaultVO {
     /** 대표여부 ('Y'/'N') */
     private String reprsntAt;
 
+    /** 사용여부 ('Y'=노출/'N'=미사용) */
+    private String useAt;
+
+    public String getUseAt() {
+        return useAt;
+    }
+
+    public void setUseAt(String useAt) {
+        this.useAt = useAt;
+    }
+
     public String getVer() {
         return ver;
     }

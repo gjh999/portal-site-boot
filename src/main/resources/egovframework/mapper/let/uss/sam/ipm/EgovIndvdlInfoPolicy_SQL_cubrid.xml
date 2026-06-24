@@ -18,6 +18,7 @@
 		<result property="ver" column="VER"/>
 		<result property="aplcDe" column="APLC_DE"/>
 		<result property="reprsntAt" column="REPRSNT_AT"/>
+		<result property="useAt" column="USE_AT"/>
 	</resultMap>
 
 	<!-- 대표(현행) 개인정보처리방침 1건 조회 (모달용) -->
@@ -32,9 +33,9 @@
 				A.FRST_REGISTER_ID,
 				TO_CHAR(A.LAST_UPDT_PNTTM,'YYYY-MM-DD') AS LAST_UPDT_PNTTM,
 				A.LAST_UPDUSR_ID,
-				A.VER, A.APLC_DE, A.REPRSNT_AT
+				A.VER, A.APLC_DE, A.REPRSNT_AT, A.USE_AT
 			FROM TB_INDVDL_INFO_POLICY A
-			WHERE A.REPRSNT_AT = 'Y'
+			WHERE A.REPRSNT_AT = 'Y' AND COALESCE(A.USE_AT, 'Y') = 'Y'
 			ORDER BY A.APLC_DE DESC, A.INDVDL_INFO_POLICY_ID DESC
 		) Z
 		WHERE ROWNUM &lt;= 1
@@ -135,7 +136,7 @@ WHERE INDVDL_INFO_POLICY_ID=#{indvdlInfoId}
 		A.FRST_REGISTER_ID,
 		A.LAST_UPDT_PNTTM,
 		A.LAST_UPDUSR_ID,
-		A.VER, A.APLC_DE, A.REPRSNT_AT
+		A.VER, A.APLC_DE, A.REPRSNT_AT, A.USE_AT
 		FROM TB_INDVDL_INFO_POLICY A
 		WHERE 1=1
 		AND A.INDVDL_INFO_POLICY_ID=#{indvdlInfoId}
@@ -156,7 +157,8 @@ WHERE INDVDL_INFO_POLICY_ID=#{indvdlInfoId}
 	LAST_UPDUSR_ID,
 	VER,
 	APLC_DE,
-	REPRSNT_AT
+	REPRSNT_AT,
+	USE_AT
 	)VALUES(
 	#{indvdlInfoId},
 	#{indvdlInfoNm},
@@ -168,11 +170,32 @@ WHERE INDVDL_INFO_POLICY_ID=#{indvdlInfoId}
 	#{lastUpdusrId},
 	#{ver},
 	#{aplcDe},
-	#{reprsntAt}
+	#{reprsntAt},
+	COALESCE(#{useAt}, 'Y')
 	)
 	 
 	</insert>
 	
 
+
+	<update id="clearRepresentIndvdlInfoPolicy">
+		UPDATE TB_INDVDL_INFO_POLICY SET REPRSNT_AT = 'N' WHERE REPRSNT_AT = 'Y'
+	</update>
+
+	<update id="setRepresentIndvdlInfoPolicy" parameterType="string">
+		UPDATE TB_INDVDL_INFO_POLICY SET REPRSNT_AT = 'Y' WHERE INDVDL_INFO_POLICY_ID = #{indvdlInfoId}
+	</update>
+
+	<update id="updateUseAtIndvdlInfoPolicy" parameterType="map">
+		UPDATE TB_INDVDL_INFO_POLICY SET
+			USE_AT = #{useAt},
+			REPRSNT_AT = CASE WHEN #{useAt} = 'N' THEN 'N' ELSE REPRSNT_AT END,
+			LAST_UPDT_PNTTM = SYSDATETIME
+		WHERE INDVDL_INFO_POLICY_ID = #{indvdlInfoId}
+	</update>
+
+	<select id="selectActiveIndvdlInfoPolicyCnt" resultType="int">
+		SELECT COUNT(*) FROM TB_INDVDL_INFO_POLICY WHERE COALESCE(USE_AT, 'Y') = 'Y'
+	</select>
 
 </mapper>

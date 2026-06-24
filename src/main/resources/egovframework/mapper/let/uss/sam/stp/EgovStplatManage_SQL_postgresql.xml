@@ -17,6 +17,7 @@
 		<result property="ver" column="VER"/>
 		<result property="aplcDe" column="APLC_DE"/>
 		<result property="reprsntAt" column="REPRSNT_AT"/>
+		<result property="useAt" column="USE_AT"/>
 	</resultMap>
 
 	<select id="selectStplatDetail" resultMap="StplatManage">
@@ -24,7 +25,7 @@
 			SELECT 	USE_STPLAT_ID, USE_STPLAT_NM, USE_STPLAT_CN,  INFO_PROVD_AGRE_CN,
 					TO_CHAR(FRST_REGIST_PNTTM,'YYYY-MM-DD') FRST_REGIST_PNTTM   , FRST_REGISTER_ID,
 					TO_CHAR(LAST_UPDT_PNTTM,'YYYY-MM-DD')   LAST_UPDT_PNTTM	  , LAST_UPDUSR_ID,
-					VER, APLC_DE, REPRSNT_AT
+					VER, APLC_DE, REPRSNT_AT, USE_AT
 			FROM	TB_STPLAT_INFO
 			WHERE	USE_STPLAT_ID=#{useStplatId}
 
@@ -34,11 +35,31 @@
 			SELECT 	USE_STPLAT_ID, USE_STPLAT_NM, USE_STPLAT_CN, INFO_PROVD_AGRE_CN,
 					TO_CHAR(FRST_REGIST_PNTTM,'YYYY-MM-DD') FRST_REGIST_PNTTM, FRST_REGISTER_ID,
 					TO_CHAR(LAST_UPDT_PNTTM,'YYYY-MM-DD') LAST_UPDT_PNTTM, LAST_UPDUSR_ID,
-					VER, APLC_DE, REPRSNT_AT
+					VER, APLC_DE, REPRSNT_AT, USE_AT
 			FROM	TB_STPLAT_INFO
-			WHERE	REPRSNT_AT = 'Y'
+			WHERE	REPRSNT_AT = 'Y' AND COALESCE(USE_AT, 'Y') = 'Y'
 			ORDER BY APLC_DE DESC, USE_STPLAT_ID DESC
 			LIMIT 1
+	</select>
+
+	<update id="clearRepresentStplat">
+			UPDATE TB_STPLAT_INFO SET REPRSNT_AT = 'N' WHERE REPRSNT_AT = 'Y'
+	</update>
+
+	<update id="setRepresentStplat" parameterType="string">
+			UPDATE TB_STPLAT_INFO SET REPRSNT_AT = 'Y' WHERE USE_STPLAT_ID = #{useStplatId}
+	</update>
+
+	<update id="updateUseAtStplat" parameterType="map">
+			UPDATE TB_STPLAT_INFO SET
+				USE_AT = #{useAt},
+				REPRSNT_AT = CASE WHEN #{useAt} = 'N' THEN 'N' ELSE REPRSNT_AT END,
+				LAST_UPDT_PNTTM = now()
+			WHERE USE_STPLAT_ID = #{useStplatId}
+	</update>
+
+	<select id="selectActiveStplatCnt" resultType="int">
+			SELECT COUNT(*) FROM TB_STPLAT_INFO WHERE COALESCE(USE_AT, 'Y') = 'Y'
 	</select>
 
 	<select id="selectStplatList" parameterType="egovframework.let.uss.sam.stp.service.StplatManageDefaultVO" resultType="egovMap">
@@ -46,7 +67,7 @@
 			SELECT 	USE_STPLAT_ID, USE_STPLAT_NM, USE_STPLAT_CN,  INFO_PROVD_AGRE_CN,
 					TO_CHAR(FRST_REGIST_PNTTM,'YYYY-MM-DD') as FRST_REGIST_PNTTM	  , FRST_REGISTER_ID,
 					TO_CHAR(LAST_UPDT_PNTTM,'YYYY-MM-DD') as LAST_UPDT_PNTTM	  , LAST_UPDUSR_ID,
-					VER, APLC_DE, REPRSNT_AT
+					VER, APLC_DE, REPRSNT_AT, USE_AT
 			FROM	TB_STPLAT_INFO
 			WHERE	1=1
 							
@@ -55,9 +76,9 @@
 			</if>
 			<if test="searchCondition == &quot;useStplatCn&quot;">AND
 				USE_STPLAT_CN LIKE CONCAT('%', #{searchKeyword}, '%')
-			</if>			
-			ORDER BY USE_STPLAT_NM DESC			
-			LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}	
+			</if>
+			ORDER BY APLC_DE DESC, USE_STPLAT_ID DESC
+			LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}
 	</select>
 	
 	<select id="selectStplatListTotCnt" parameterType="egovframework.let.uss.sam.stp.service.StplatManageDefaultVO" resultType="int">
@@ -87,7 +108,8 @@
 				  , LAST_UPDUSR_ID
 				  , VER
 				  , APLC_DE
-				  , REPRSNT_AT)
+				  , REPRSNT_AT
+				  , USE_AT)
 			VALUES ( #{useStplatId}
 				  , #{useStplatNm}
 				  , #{useStplatCn}
@@ -98,7 +120,8 @@
 				  , #{lastUpdusrId}
 				  , #{ver}
 				  , #{aplcDe}
-				  , #{reprsntAt} )
+				  , #{reprsntAt}
+				  , COALESCE(#{useAt}, 'Y') )
 		
 	</insert>
 	

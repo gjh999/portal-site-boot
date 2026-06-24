@@ -67,6 +67,45 @@ public class EgovStplatManageServiceImpl extends EgovAbstractServiceImpl impleme
     }
 
     /**
+     * 지정 이용약관을 대표로 설정한다(전체 대표 해제 후 단건 지정).
+     * 미사용(USE_AT='N') 항목은 대표 지정 불가 — 무시한다.
+     */
+    @Override
+    public void setRepresentStplat(String useStplatId) {
+        StplatManageVO vo = new StplatManageVO();
+        vo.setUseStplatId(useStplatId);
+        StplatManageVO cur;
+        try {
+            cur = stplatManageDAO.selectStplatDetail(vo);
+        } catch (Exception e) {
+            return;
+        }
+        // 미사용 항목은 대표 지정 금지
+        if (cur == null || "N".equals(cur.getUseAt())) {
+            return;
+        }
+        stplatManageDAO.clearRepresentStplat();
+        stplatManageDAO.setRepresentStplat(useStplatId);
+    }
+
+    /**
+     * 사용여부(USE_AT)를 변경한다. 대표를 미사용 전환하면 대표도 함께 해제(데이터 정합).
+     */
+    @Override
+    public void updateUseAtStplat(String useStplatId, String useAt) {
+        java.util.Map<String, String> param = new java.util.HashMap<>();
+        param.put("useStplatId", useStplatId);
+        param.put("useAt", "N".equals(useAt) ? "N" : "Y");
+        // SQL 에서 USE_AT='N' 이면 REPRSNT_AT='N' 으로 함께 내려 대표 정합을 보장한다.
+        stplatManageDAO.updateUseAtStplat(param);
+    }
+
+    @Override
+    public int selectActiveStplatCnt() {
+        return stplatManageDAO.selectActiveStplatCnt();
+    }
+
+    /**
 	 * 약관정보 글 목록을 조회한다.
 	 * @param searchVO
 	 * @return 글 목록

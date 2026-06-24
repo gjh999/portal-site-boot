@@ -15,6 +15,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import egovframework.com.cmm.ComDefaultVO;
 import egovframework.com.cmm.EgovMessageSource;
@@ -285,6 +286,53 @@ public class EgovTermsController {
 		return "redirect:/uss/sam/terms/list.do?termsType=" + termsType;
 	}
 
+	/**
+	 * 대표(현행) 지정 토글. 유형별 1건만 대표가 되도록 전체 해제 후 단건 지정.
+	 * 미사용(USE_AT='N') 항목은 서비스단에서 무시(대표 지정 불가).
+	 */
+	@RequestMapping(value = "/uss/sam/terms/setRepresent.do")
+	public String setRepresent(
+			@RequestParam("termsType") String termsType,
+			@RequestParam("id") String id,
+			@RequestParam(value = "returnType", required = false, defaultValue = "") String returnType,
+			RedirectAttributes ra, ModelMap model) throws Exception {
+
+		if (!isAdmin()) {
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+			return "uat/uia/EgovLoginUsr";
+		}
+		if ("ipm".equals(termsType)) {
+			egovIndvdlInfoPolicyService.setRepresentIndvdlInfoPolicy(id);
+		} else {
+			stplatManageService.setRepresentStplat(id);
+		}
+		return "redirect:/uss/sam/terms/list.do?termsType=" + returnType;
+	}
+
+	/**
+	 * 사용여부(노출/미사용) 토글. 대표 항목을 미사용 전환하면 서비스/SQL 에서 대표도 함께 해제된다(항목9).
+	 */
+	@RequestMapping(value = "/uss/sam/terms/toggleUse.do")
+	public String toggleUse(
+			@RequestParam("termsType") String termsType,
+			@RequestParam("id") String id,
+			@RequestParam("useAt") String useAt,
+			@RequestParam(value = "returnType", required = false, defaultValue = "") String returnType,
+			ModelMap model) throws Exception {
+
+		if (!isAdmin()) {
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+			return "uat/uia/EgovLoginUsr";
+		}
+		String next = "N".equals(useAt) ? "N" : "Y";
+		if ("ipm".equals(termsType)) {
+			egovIndvdlInfoPolicyService.updateUseAtIndvdlInfoPolicy(id, next);
+		} else {
+			stplatManageService.updateUseAtStplat(id, next);
+		}
+		return "redirect:/uss/sam/terms/list.do?termsType=" + returnType;
+	}
+
 	// ===== 내부 유틸 =====
 
 	private Map<String, Object> normalizeStp(Map<String, Object> r) {
@@ -297,6 +345,7 @@ public class EgovTermsController {
 		row.put("ver", str(r, "ver"));
 		row.put("aplcDe", str(r, "aplcDe"));
 		row.put("reprsntAt", str(r, "reprsntAt"));
+		row.put("useAt", defaultUseAt(str(r, "useAt")));
 		row.put("regDe", str(r, "frstRegistPnttm"));
 		return row;
 	}
@@ -311,8 +360,14 @@ public class EgovTermsController {
 		row.put("ver", str(r, "ver"));
 		row.put("aplcDe", str(r, "aplcDe"));
 		row.put("reprsntAt", str(r, "reprsntAt"));
+		row.put("useAt", defaultUseAt(str(r, "useAt")));
 		row.put("regDe", str(r, "frstRegistPnttm"));
 		return row;
+	}
+
+	/** USE_AT 빈값/NULL 은 사용중('Y')으로 간주. */
+	private String defaultUseAt(String s) {
+		return (s == null || s.trim().isEmpty()) ? "Y" : s.trim();
 	}
 
 	/** egovMap 키 케이싱 대응(소문자/카멜 모두 시도). */
@@ -342,13 +397,25 @@ public class EgovTermsController {
 		return false;
 	}
 
+	/**
+	 * 최신순 정렬키. 적용일자(없으면 등록일) 8자리 + ID 를 결합해
+	 * 동일 일자에서도 ID(채번 역순=최신) 기준으로 안정 정렬되게 한다.
+	 */
 	private String sortKey(Map<String, Object> r) {
 		String de = (String) r.get("aplcDe");
+		String base;
 		if (de == null || de.trim().isEmpty()) {
 			String reg = (String) r.get("regDe");
-			return reg == null ? "" : reg.replace("-", "");
+			base = reg == null ? "00000000" : reg.replace("-", "");
+		} else {
+			base = de.trim();
 		}
-		return de;
+		// 8자리로 패딩(짧으면 뒤를 0으로) 후 ID 결합
+		while (base.length() < 8) {
+			base = base + "0";
+		}
+		String id = (String) r.get("id");
+		return base + "|" + (id == null ? "" : id);
 	}
 
 	private String nvl(String s) {

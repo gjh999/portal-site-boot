@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.egovframe.rte.fdl.property.EgovPropertyService;
 import org.egovframe.rte.fdl.security.userdetails.util.EgovUserDetailsHelper;
-import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -105,28 +104,8 @@ public class EgovStplatManageController {
 	@RequestMapping(value = "/uss/sam/stp/StplatListInqire.do")
 	public String selectStplatList(@ModelAttribute("searchVO") StplatManageDefaultVO searchVO, ModelMap model)
 			throws Exception {
-
-		/** EgovPropertyService.SiteList */
-		searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
-		searchVO.setPageSize(propertiesService.getInt("pageSize"));
-
-		/** pageing */
-		PaginationInfo paginationInfo = new PaginationInfo();
-		paginationInfo.setCurrentPageNo(searchVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(searchVO.getPageUnit());
-		paginationInfo.setPageSize(searchVO.getPageSize());
-
-		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
-		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-
-		model.addAttribute("resultList", stplatManageService.selectStplatList(searchVO));
-
-		int totCnt = stplatManageService.selectStplatListTotCnt(searchVO);
-		paginationInfo.setTotalRecordCount(totCnt);
-		model.addAttribute("paginationInfo", paginationInfo);
-
-		return "uss/sam/stp/EgovStplatListInqire";
+		// 약관/개인정보 통합 목록으로 일원화(항목7) — 옛 분리 목록 진입점은 통합 목록(유형=이용약관)으로 리다이렉트.
+		return "redirect:/uss/sam/terms/list.do?termsType=stplat";
 	}
 
 	/**
@@ -160,17 +139,8 @@ public class EgovStplatManageController {
 	@RequestMapping("/uss/sam/stp/StplatCnRegistView.do")
 	public String insertStplatCnView(@ModelAttribute("searchVO") StplatManageDefaultVO searchVO, Model model)
 			throws Exception {
-
-		// 등록은 관리자(ROLE_ADMIN)만 가능
-		if (!isAdmin()) {
-			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-			return "uat/uia/EgovLoginUsr";
-		}
-
-		model.addAttribute("stplatManageVO", new StplatManageVO());
-
-		return "uss/sam/stp/EgovStplatCnRegist";
-
+		// 통합 등록(항목7)으로 일원화 — 옛 분리 등록 진입점은 통합 등록(유형=이용약관)으로 리다이렉트.
+		return "redirect:/uss/sam/terms/registView.do?termsType=stplat";
 	}
 
 	/**
@@ -232,7 +202,7 @@ public class EgovStplatManageController {
 
 		stplatManageService.insertStplatCn(stplatManageVO);
 
-		return "forward:/uss/sam/stp/StplatListInqire.do";
+		return "redirect:/uss/sam/terms/list.do?termsType=stplat";
 	}
 
 	/** 문자열 공백 여부 */
@@ -309,7 +279,7 @@ public class EgovStplatManageController {
 
 		stplatManageService.updateStplatCn(stplatManageVO);
 
-		return "forward:/uss/sam/stp/StplatListInqire.do";
+		return "redirect:/uss/sam/terms/list.do?termsType=stplat";
 	}
 
 	/**
@@ -332,7 +302,7 @@ public class EgovStplatManageController {
 
 		stplatManageService.deleteStplatCn(stplatManageVO);
 
-		return "forward:/uss/sam/stp/StplatListInqire.do";
+		return "redirect:/uss/sam/terms/list.do?termsType=stplat";
 	}
 
 }

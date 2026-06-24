@@ -56,20 +56,23 @@
             <caption class="visually-hidden" th:text="#{terms.list.title}">약관 목록</caption>
             <thead>
             <tr>
-                <th scope="col" style="width:64px;" class="text-center" th:text="#{list.seq}">순번</th>
+                <th scope="col" style="width:60px;" class="text-center" th:text="#{list.seq}">순번</th>
                 <th scope="col" style="width:130px;" class="text-center" th:text="#{terms.type}">유형</th>
                 <th scope="col" th:text="#{terms.name}">명칭</th>
-                <th scope="col" style="width:80px;" class="text-center" th:text="#{terms.version}">버전</th>
-                <th scope="col" style="width:120px;" class="text-center" th:text="#{terms.aplcDe}">적용일자</th>
-                <th scope="col" style="width:90px;" class="text-center" th:text="#{terms.represent}">대표</th>
+                <th scope="col" style="width:72px;" class="text-center" th:text="#{terms.version}">버전</th>
+                <th scope="col" style="width:110px;" class="text-center" th:text="#{terms.aplcDe}">적용일자</th>
+                <th scope="col" style="width:84px;" class="text-center" th:text="#{terms.useAt}">사용여부</th>
+                <th scope="col" style="width:84px;" class="text-center" th:text="#{terms.represent}">대표</th>
+                <th scope="col" style="width:150px;" class="text-center" sec:authorize="hasRole('ADMIN')" th:text="#{terms.manage}">관리</th>
             </tr>
             </thead>
             <tbody>
+            <!-- 순번 역순(항목10): 최신이 맨 위, 전체 건수에서 페이지 오프셋·행번호를 빼서 내림차순 표기 -->
             <tr th:each="item, st : ${resultList}">
-                <td class="text-center" th:text="${paginationInfo.firstRecordIndex + st.count}">1</td>
+                <td class="text-center" th:text="${paginationInfo.totalRecordCount - paginationInfo.firstRecordIndex - st.index}">1</td>
                 <td class="text-center">
                     <span class="krds-badge"
-                          th:classappend="${item.termsType == 'ipm'} ? ' bg-info' : ' bg-primary'"
+                          th:classappend="${item.termsType == 'ipm'} ? ' bg-success' : ' bg-primary'"
                           th:text="${item.termsTypeNm}">유형</span>
                 </td>
                 <td>
@@ -82,12 +85,39 @@
                 <td class="text-center" th:text="${item.ver != null and item.ver != '' ? item.ver : '-'}">1.0</td>
                 <td class="text-center" th:text="${item.aplcDe != null and item.aplcDe != '' ? item.aplcDe : item.regDe}">일자</td>
                 <td class="text-center">
+                    <span th:if="${item.useAt != 'N'}" class="krds-badge bg-info" th:text="#{terms.use.yes}">노출</span>
+                    <span th:if="${item.useAt == 'N'}" class="krds-badge bg-secondary" th:text="#{terms.use.no}">미사용</span>
+                </td>
+                <td class="text-center">
                     <span th:if="${item.reprsntAt == 'Y'}" class="krds-badge bg-success" th:text="#{terms.represent.yes}">대표</span>
                     <span th:unless="${item.reprsntAt == 'Y'}" class="text-muted">-</span>
                 </td>
+                <td class="text-center" sec:authorize="hasRole('ADMIN')">
+                    <div style="display:inline-flex; gap:4px; flex-wrap:wrap; justify-content:center;">
+                        <!-- 대표 지정(미사용/이미 대표면 비활성) -->
+                        <form th:if="${item.reprsntAt != 'Y' and item.useAt != 'N'}"
+                              th:action="@{/uss/sam/terms/setRepresent.do}" method="post" style="display:inline;">
+                            <input type="hidden" name="termsType" th:value="${item.termsType}"/>
+                            <input type="hidden" name="id" th:value="${item.id}"/>
+                            <input type="hidden" name="returnType" th:value="${termsType}"/>
+                            <button type="submit" class="krds-btn tertiary xsmall" th:text="#{terms.represent.set.short}">대표지정</button>
+                        </form>
+                        <!-- 사용/미사용 토글 -->
+                        <form th:action="@{/uss/sam/terms/toggleUse.do}" method="post" style="display:inline;"
+                              th:attr="onsubmit=${item.reprsntAt == 'Y' and item.useAt != 'N'} ? 'return confirm(this.dataset.warn);' : null"
+                              th:data-warn="#{terms.represent.unuse.confirm}">
+                            <input type="hidden" name="termsType" th:value="${item.termsType}"/>
+                            <input type="hidden" name="id" th:value="${item.id}"/>
+                            <input type="hidden" name="returnType" th:value="${termsType}"/>
+                            <input type="hidden" name="useAt" th:value="${item.useAt == 'N' ? 'Y' : 'N'}"/>
+                            <button type="submit" class="krds-btn secondary xsmall"
+                                    th:text="${item.useAt == 'N'} ? #{terms.use.on} : #{terms.use.off}">미사용</button>
+                        </form>
+                    </div>
+                </td>
             </tr>
             <tr th:if="${#lists.isEmpty(resultList)}">
-                <td colspan="6" class="text-center text-muted py-4" th:text="#{terms.empty}">등록된 약관이 없습니다.</td>
+                <td colspan="8" class="text-center text-muted py-4" th:text="#{terms.empty}">등록된 약관이 없습니다.</td>
             </tr>
             </tbody>
         </table>

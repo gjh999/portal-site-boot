@@ -52,6 +52,26 @@ public class StplatManageDAO extends EgovAbstractMapper {
         return (StplatManageVO) selectOne("StplatManageDAO.selectRepresentStplat");
     }
 
+    /** 전체 대표 해제(REPRSNT_AT='N'). */
+    public void clearRepresentStplat() {
+        update("StplatManageDAO.clearRepresentStplat", null);
+    }
+
+    /** 단건 대표 지정(REPRSNT_AT='Y'). */
+    public void setRepresentStplat(String useStplatId) {
+        update("StplatManageDAO.setRepresentStplat", useStplatId);
+    }
+
+    /** 사용여부(USE_AT) 변경. */
+    public void updateUseAtStplat(java.util.Map<String, String> param) {
+        update("StplatManageDAO.updateUseAtStplat", param);
+    }
+
+    /** 사용중(USE_AT='Y') 건수. */
+    public int selectActiveStplatCnt() {
+        return (Integer) selectOne("StplatManageDAO.selectActiveStplatCnt");
+    }
+
     /**
 	 * 약관정보 글 목록을 조회한다.
 	 * @param searchVO

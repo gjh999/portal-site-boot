@@ -49,10 +49,28 @@ public interface EgovIndvdlInfoPolicyService {
 	public IndvdlInfoPolicy selectIndvdlInfoPolicyDetail(IndvdlInfoPolicy indvdlInfoPolicy) throws Exception;
 
 	/**
-	 * 대표(현행) 개인정보처리방침 1건을 조회한다. (모달 표출용)
+	 * 대표(현행) 개인정보처리방침 1건을 조회한다. (모달 표출용 — 사용중 USE_AT='Y' + REPRSNT_AT='Y')
 	 * @return 대표 개인정보처리방침 (없으면 null)
 	 */
 	public IndvdlInfoPolicy selectRepresentIndvdlInfoPolicy();
+
+	/**
+	 * 지정 개인정보처리방침을 대표로 설정한다(전체 대표 해제 후 단건 지정). 미사용은 대표 불가.
+	 * @param indvdlInfoId 대표로 지정할 ID
+	 */
+	void setRepresentIndvdlInfoPolicy(String indvdlInfoId);
+
+	/**
+	 * 개인정보처리방침 사용여부(USE_AT)를 변경한다. 대표를 미사용 전환하면 대표도 함께 해제된다.
+	 * @param indvdlInfoId 대상 ID
+	 * @param useAt 'Y'/'N'
+	 */
+	void updateUseAtIndvdlInfoPolicy(String indvdlInfoId, String useAt);
+
+	/**
+	 * 사용중(USE_AT='Y')인 개인정보처리방침 건수.
+	 */
+	int selectActiveIndvdlInfoPolicyCnt();
 
         /**
 	 * 개인정보보호정책를(을) 등록한다.

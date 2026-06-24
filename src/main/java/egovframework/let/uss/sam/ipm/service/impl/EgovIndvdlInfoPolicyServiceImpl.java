@@ -79,6 +79,42 @@ public class EgovIndvdlInfoPolicyServiceImpl extends EgovAbstractServiceImpl
     }
 
     /**
+     * 지정 개인정보처리방침을 대표로 설정한다(전체 대표 해제 후 단건 지정). 미사용은 대표 불가.
+     */
+    @Override
+    public void setRepresentIndvdlInfoPolicy(String indvdlInfoId) {
+        IndvdlInfoPolicy q = new IndvdlInfoPolicy();
+        q.setIndvdlInfoId(indvdlInfoId);
+        IndvdlInfoPolicy cur;
+        try {
+            cur = dao.selectIndvdlInfoPolicyDetail(q);
+        } catch (Exception e) {
+            return;
+        }
+        if (cur == null || "N".equals(cur.getUseAt())) {
+            return;
+        }
+        dao.clearRepresentIndvdlInfoPolicy();
+        dao.setRepresentIndvdlInfoPolicy(indvdlInfoId);
+    }
+
+    /**
+     * 사용여부(USE_AT)를 변경한다. 대표를 미사용 전환하면 SQL 에서 대표도 함께 해제된다.
+     */
+    @Override
+    public void updateUseAtIndvdlInfoPolicy(String indvdlInfoId, String useAt) {
+        java.util.Map<String, String> param = new java.util.HashMap<>();
+        param.put("indvdlInfoId", indvdlInfoId);
+        param.put("useAt", "N".equals(useAt) ? "N" : "Y");
+        dao.updateUseAtIndvdlInfoPolicy(param);
+    }
+
+    @Override
+    public int selectActiveIndvdlInfoPolicyCnt() {
+        return dao.selectActiveIndvdlInfoPolicyCnt();
+    }
+
+    /**
      * 개인정보보호정책를(을) 등록한다.
      * @param indvdlInfoPolicy 개인정보보호정책 정보가 담긴 VO
      * @throws Exception

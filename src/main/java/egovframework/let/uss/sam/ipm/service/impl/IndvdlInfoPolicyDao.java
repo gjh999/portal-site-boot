@@ -65,6 +65,26 @@ public class IndvdlInfoPolicyDao extends EgovAbstractMapper {
         return (IndvdlInfoPolicy)selectOne("IndvdlInfoPolicy.selectRepresentIndvdlInfoPolicy");
     }
 
+    /** 전체 대표 해제(REPRSNT_AT='N'). */
+    public void clearRepresentIndvdlInfoPolicy() {
+        update("IndvdlInfoPolicy.clearRepresentIndvdlInfoPolicy", null);
+    }
+
+    /** 단건 대표 지정(REPRSNT_AT='Y'). */
+    public void setRepresentIndvdlInfoPolicy(String indvdlInfoId) {
+        update("IndvdlInfoPolicy.setRepresentIndvdlInfoPolicy", indvdlInfoId);
+    }
+
+    /** 사용여부(USE_AT) 변경. */
+    public void updateUseAtIndvdlInfoPolicy(java.util.Map<String, String> param) {
+        update("IndvdlInfoPolicy.updateUseAtIndvdlInfoPolicy", param);
+    }
+
+    /** 사용중(USE_AT='Y') 건수. */
+    public int selectActiveIndvdlInfoPolicyCnt() {
+        return (Integer)selectOne("IndvdlInfoPolicy.selectActiveIndvdlInfoPolicyCnt");
+    }
+
     /**
      * 개인정보보호정책를(을) 등록한다.
      * @param qindvdlInfoPolicy  개인정보보호정책 정보가 담김 VO

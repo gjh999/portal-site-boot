@@ -66,7 +66,10 @@
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title" id="termsModalTitle">약관</h2>
+                    <h2 class="modal-title" id="termsModalTitle">
+                        <span class="krds-badge" id="termsModalTypeBadge"></span>
+                        <span id="termsModalTitleText">약관</span>
+                    </h2>
                     <button type="button" class="btn-close" data-terms-close
                             th:title="#{button.close}" aria-label="닫기">
                         <i class="bi bi-x-lg"></i>
@@ -84,7 +87,8 @@
     (function () {
         var modal = document.getElementById('termsModal');
         if (!modal) { return; }
-        var titleEl = document.getElementById('termsModalTitle');
+        var titleEl = document.getElementById('termsModalTitleText');
+        var badgeEl = document.getElementById('termsModalTypeBadge');
         var metaEl = document.getElementById('termsModalMeta');
         var bodyEl = document.getElementById('termsModalBody');
         var ctx = /*[[@{/}]]*/ '/';
@@ -128,7 +132,13 @@
             if (lastFocus && lastFocus.focus) { lastFocus.focus(); }
         }
 
+        function setTypeBadge(type) {
+            // 유형 색상 구분(항목3): 이용약관=primary, 개인정보처리방침=success
+            badgeEl.className = 'krds-badge ' + (type === 'ipm' ? 'bg-success' : 'bg-primary');
+            badgeEl.textContent = (type === 'ipm') ? I18N.ipm : I18N.stplat;
+        }
         function load(type) {
+            setTypeBadge(type);
             titleEl.textContent = (type === 'ipm') ? I18N.ipm : I18N.stplat;
             metaEl.innerHTML = '';
             bodyEl.innerHTML = '<p class="text-center text-muted py-4">' + esc(I18N.loading) + '</p>';

@@ -650,21 +650,44 @@ input.form-check-input[type=checkbox]{
 #termsModal.in{ z-index:2100; }
 #termsModal .modal-back, #termsModal .modal-back.in{ z-index:2090; }
 #termsModal .modal-dialog{ z-index:2110; }
-#termsModal .modal-dialog .modal-content{ max-height:82vh; padding:24px 28px 22px; align-items:stretch; }
-#termsModal .modal-header{ display:flex; align-items:flex-start; justify-content:space-between;
-  width:100%; gap:12px; padding-bottom:8px; }
-#termsModal .modal-title{ font-size:1.25rem; font-weight:700; margin:0; line-height:1.35;
+#termsModal .modal-dialog .modal-content{ max-height:82vh; padding:14px 28px 22px; align-items:stretch; }
+#termsModal .modal-header{ display:flex; align-items:center; justify-content:space-between;
+  width:100%; gap:12px; padding:0 0 6px; margin:0; }
+#termsModal .modal-title{ display:flex; align-items:center; flex-wrap:wrap; gap:8px;
+  font-size:1.2rem; font-weight:700; margin:0; line-height:1.3;
   color:var(--krds-gray-90,#1E2124); }
-#termsModal .btn-close{ flex:0 0 auto; background:none; border:0; cursor:pointer;
+#termsModal .modal-title .krds-badge:empty{ display:none; }
+#termsModal .btn-close{ flex:0 0 auto; background:none; border:0; cursor:pointer; margin:0;
+  width:auto; height:auto; opacity:1;
   font-size:1.1rem; line-height:1; color:var(--krds-gray-60,#6D7882); padding:4px; border-radius:6px; }
+/* 닫기 X 중복 제거: krds-compat .btn-close::before(×) 를 끄고 본문의 bi-x-lg 아이콘만 노출 */
+#termsModal .btn-close::before{ content:none !important; }
 #termsModal .btn-close:hover{ color:var(--krds-gray-90,#1E2124); background:var(--krds-gray-5,#F4F5F6); }
-.terms-modal-meta{ display:flex; flex-wrap:wrap; gap:8px 16px; width:100%;
-  padding:8px 0 12px; margin:0; border-bottom:1px solid var(--krds-gray-20,#CDD1D5); }
+/* 버전·적용일자 메타: 제목 바로 아래 한 줄, 균형 간격(KRDS 톤) */
+.terms-modal-meta{ display:flex; flex-wrap:wrap; align-items:center; gap:6px 14px; width:100%;
+  padding:6px 0 10px; margin:0; border-bottom:1px solid var(--krds-gray-20,#CDD1D5); }
 .terms-modal-meta:empty{ display:none; }
-.terms-meta-item{ font-size:.875rem; color:var(--krds-gray-70,#464C53); }
+.terms-meta-item{ display:inline-flex; align-items:center; gap:4px; font-size:.85rem; color:var(--krds-gray-70,#464C53); }
 .terms-meta-item strong{ color:var(--krds-primary,#246BEB); font-weight:600; }
 .terms-modal-body{ width:100%; max-height:60vh; overflow-y:auto; padding:16px 4px 4px;
   font-size:.95rem; line-height:1.7; color:var(--krds-gray-80,#33363D); }
 .terms-modal-body .terms-content{ white-space:normal; word-break:break-word; }
 .terms-modal-body::-webkit-scrollbar{ width:8px; }
 .terms-modal-body::-webkit-scrollbar-thumb{ background:var(--krds-gray-30,#B1B8BE); border-radius:4px; }
+
+/* ── 통합 등록폼 유형 선택 카드(항목5) — 선택 상태 명확 가시화. terms-type-* 네임스페이스. ── */
+.terms-type-current{ margin-left:6px; vertical-align:middle; }
+.terms-type-choices{ display:flex; flex-wrap:wrap; gap:12px; margin-top:6px; }
+.terms-type-card{ position:relative; flex:1 1 220px; min-width:200px; margin:0; cursor:pointer;
+  border:2px solid var(--krds-gray-20,#CDD1D5); border-radius:10px; padding:14px 16px;
+  background:#fff; transition:border-color .12s ease, background .12s ease, box-shadow .12s ease; }
+.terms-type-card:hover{ border-color:var(--krds-gray-40,#8A8F94); }
+.terms-type-card input[type=radio]{ position:absolute; top:14px; right:14px; }
+.terms-type-card-body{ display:flex; align-items:center; gap:10px; font-size:1rem;
+  color:var(--krds-gray-70,#464C53); }
+.terms-type-card-body i{ font-size:1.3rem; color:var(--krds-gray-50,#6D7882); }
+.terms-type-card.selected{ border-color:var(--krds-primary,#246BEB);
+  background:var(--krds-primary-5,#EEF4FE); box-shadow:0 0 0 1px var(--krds-primary,#246BEB) inset; }
+.terms-type-card.selected .terms-type-card-body,
+.terms-type-card.selected .terms-type-card-body i{ color:var(--krds-primary,#246BEB); }
+.terms-type-card.selected strong{ font-weight:700; }
