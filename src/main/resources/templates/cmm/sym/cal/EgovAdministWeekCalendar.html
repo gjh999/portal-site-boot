@@ -2,26 +2,26 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}" lang="ko">
-<head><title>행정달력 주간</title></head>
+<head><title th:text="#{cal.administ.week}">행정달력 주간</title></head>
 <body>
 <main layout:fragment="content">
     <div class="container">
         <nav aria-label="breadcrumb"><ol class="breadcrumb">
-            <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
-            <li class="breadcrumb-item active">행정달력 주간</li>
+            <li class="breadcrumb-item"><a th:href="@{/}" th:text="#{common.home}">홈</a></li>
+            <li class="breadcrumb-item active" th:text="#{cal.administ.week}">행정달력 주간</li>
         </ol></nav>
-        <h1 class="h4 mb-3"><i class="bi bi-calendar-week"></i> 행정달력 주간</h1>
+        <h1 class="h4 mb-3"><i class="bi bi-calendar-week"></i> <span th:text="#{cal.administ.week}">행정달력 주간</span></h1>
 
         <table class="tbl align-middle">
             <thead class="text-center">
-            <tr><th scope="col" class="text-danger">일</th><th scope="col">월</th><th scope="col">화</th><th scope="col">수</th><th scope="col">목</th><th scope="col">금</th><th scope="col" class="text-primary">토</th></tr>
+            <tr><th scope="col" class="text-danger" th:text="#{cal.dow.sun}">일</th><th scope="col" th:text="#{cal.dow.mon}">월</th><th scope="col" th:text="#{cal.dow.tue}">화</th><th scope="col" th:text="#{cal.dow.wed}">수</th><th scope="col" th:text="#{cal.dow.thu}">목</th><th scope="col" th:text="#{cal.dow.fri}">금</th><th scope="col" class="text-primary" th:text="#{cal.dow.sat}">토</th></tr>
             </thead>
             <tbody>
             <tr style="height:160px; vertical-align:top;">
                 <td th:each="d : ${#numbers.sequence(1, 7)}"
                     th:with="list=${#ctx.getVariable('RestdeList_' + d)}">
                     <ul class="list-unstyled mb-0 small">
-                        <li th:each="rd : ${list}" class="text-danger" th:text="${rd.restdeNm}">휴일</li>
+                        <li th:each="rd : ${list}" class="text-danger" th:text="${rd.restdeNm}">[holiday]</li>
                     </ul>
                 </td>
             </tr>

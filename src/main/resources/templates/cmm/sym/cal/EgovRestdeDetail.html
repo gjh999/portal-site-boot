@@ -3,39 +3,39 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/default}" lang="ko">
-<head><title>휴일 상세</title></head>
+<head><title th:text="#{cal.restde.detail}">휴일 상세</title></head>
 <body>
 <main layout:fragment="content">
     <div class="container">
         <nav aria-label="breadcrumb"><ol class="breadcrumb">
-            <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
-            <li class="breadcrumb-item"><a th:href="@{/sym/cal/EgovRestdeList.do}">휴일 관리</a></li>
-            <li class="breadcrumb-item active">상세</li>
+            <li class="breadcrumb-item"><a th:href="@{/}" th:text="#{common.home}">홈</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/sym/cal/EgovRestdeList.do}" th:text="#{cal.restde.manage}">휴일 관리</a></li>
+            <li class="breadcrumb-item active" th:text="#{cal.restde.crumb.detail}">상세</li>
         </ol></nav>
-        <h1 class="h4 mb-3"><i class="bi bi-calendar-x"></i> 휴일 상세</h1>
+        <h1 class="h4 mb-3"><i class="bi bi-calendar-x"></i> <span th:text="#{cal.restde.detail}">휴일 상세</span></h1>
 
-        <div th:if="${result == null}" class="alert alert-warning">상세 데이터가 없습니다.</div>
+        <div th:if="${result == null}" class="alert alert-warning" th:text="#{cal.restde.empty.detail}">상세 데이터가 없습니다.</div>
 
         <div class="krds-table-wrap" th:if="${result != null}">
         <table class="tbl col align-middle">
-            <caption>휴일 상세</caption>
+            <caption th:text="#{cal.restde.detail}">휴일 상세</caption>
             <tbody>
-            <tr><th scope="row" style="width:160px;">휴일번호</th><td th:text="${result.restdeNo}">0</td></tr>
-            <tr><th scope="row">휴일일자</th><td th:text="${result.restdeDe}">일자</td></tr>
-            <tr><th scope="row">휴일명</th><td th:text="${result.restdeNm}">휴일명</td></tr>
-            <tr><th scope="row">휴일구분</th><td th:text="${result.restdeSe}">구분</td></tr>
-            <tr><th scope="row">휴일설명</th><td th:text="${result.restdeDc}">설명</td></tr>
+            <tr><th scope="row" style="width:160px;" th:text="#{cal.restde.label.no}">휴일번호</th><td th:text="${result.restdeNo}">0</td></tr>
+            <tr><th scope="row" th:text="#{cal.restde.label.de}">휴일일자</th><td th:text="${result.restdeDe}">일자</td></tr>
+            <tr><th scope="row" th:text="#{cal.restde.label.nm}">휴일명</th><td th:text="${result.restdeNm}">휴일명</td></tr>
+            <tr><th scope="row" th:text="#{cal.restde.label.se}">휴일구분</th><td th:text="${result.restdeSe}">구분</td></tr>
+            <tr><th scope="row" th:text="#{cal.restde.label.dc}">휴일설명</th><td th:text="${result.restdeDc}">설명</td></tr>
             </tbody>
         </table>
         </div>
 
         <div class="d-flex gap-2" th:if="${result != null}">
-            <a class="krds-btn tertiary" th:href="@{/sym/cal/EgovRestdeList.do}"><i class="bi bi-list"></i> 목록</a>
+            <a class="krds-btn tertiary" th:href="@{/sym/cal/EgovRestdeList.do}"><i class="bi bi-list"></i> <span th:text="#{button.list}">목록</span></a>
             <a sec:authorize="hasRole('ROLE_ADMIN')" class="krds-btn primary"
-               th:href="@{/sym/cal/EgovRestdeModify.do(restdeNo=${result.restdeNo})}"><i class="bi bi-pencil"></i> 수정</a>
+               th:href="@{/sym/cal/EgovRestdeModify.do(restdeNo=${result.restdeNo})}"><i class="bi bi-pencil"></i> <span th:text="#{button.modify}">수정</span></a>
             <a sec:authorize="hasRole('ROLE_ADMIN')" class="krds-btn danger"
                th:href="@{/sym/cal/EgovRestdeRemove.do(restdeNo=${result.restdeNo})}"
-               onclick="return confirm('삭제하시겠습니까?');"><i class="bi bi-trash"></i> 삭제</a>
+               th:onclick="|return confirm('#{cal.restde.confirm.delete}');|"><i class="bi bi-trash"></i> <span th:text="#{button.delete}">삭제</span></a>
         </div>
     </div>
 </main>
