@@ -7,7 +7,7 @@
 <main layout:fragment="content">
     <div class="container" style="max-width:820px;">
         <nav aria-label="breadcrumb"><ol class="breadcrumb">
-            <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/}" th:text="#{common.home}">홈</a></li>
             <li class="breadcrumb-item active" th:text="#{mber.sbscrb.select.title}">회원가입</li>
         </ol></nav>
         <h1 class="h4 mb-2"><i class="bi bi-person-plus"></i> <span th:text="#{mber.sbscrb.select.title}">회원가입</span></h1>

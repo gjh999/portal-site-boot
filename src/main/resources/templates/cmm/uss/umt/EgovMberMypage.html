@@ -9,7 +9,7 @@
     <div class="container" style="max-width:820px;"
          th:with="infoActive=${activeTab == null or activeTab == 'info'}, pwdActive=${activeTab == 'password'}">
         <nav aria-label="breadcrumb"><ol class="breadcrumb">
-            <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/}" th:text="#{common.home}">홈</a></li>
             <li class="breadcrumb-item active" th:text="#{mypage.title}">마이페이지</li>
         </ol></nav>
         <h1 class="h4 mb-3"><i class="bi bi-person-gear"></i> <span th:text="#{mypage.title}">마이페이지</span></h1>
@@ -26,11 +26,11 @@
                     <li id="tab_info" role="tab" th:attr="aria-selected=${infoActive}? 'true' : 'false'"
                         aria-controls="panel_info" th:classappend="${infoActive}? 'active'">
                         <button type="button" class="btn-tab"><span th:text="#{mypage.tab.info}">회원정보 수정</span>
-                            <i class="sr-only created" th:if="${infoActive}"> 선택됨</i></button></li>
+                            <i class="sr-only created" th:if="${infoActive}" th:text="#{mber.tab.selected}"> 선택됨</i></button></li>
                     <li id="tab_pwd" role="tab" th:attr="aria-selected=${pwdActive}? 'true' : 'false'"
                         aria-controls="panel_pwd" th:classappend="${pwdActive}? 'active'">
                         <button type="button" class="btn-tab"><span th:text="#{mypage.tab.password}">비밀번호 변경</span>
-                            <i class="sr-only created" th:if="${pwdActive}"> 선택됨</i></button></li>
+                            <i class="sr-only created" th:if="${pwdActive}" th:text="#{mber.tab.selected}"> 선택됨</i></button></li>
                 </ul>
             </div>
             <div class="tab-conts-wrap">
@@ -45,7 +45,7 @@
                             <div class="row g-3">
                                 <div class="col-md-6 form-group"><label class="form-label" th:text="#{mypage.userSe}">회원구분</label>
                                     <input class="krds-input" type="text" readonly
-                                           th:value="${myInfo.userSe == 'GNR'} ? '일반회원' : (${myInfo.userSe == 'USR'} ? '업무사용자' : (${myInfo.userSe == 'ENT'} ? '기업회원' : ${myInfo.userSe}))"/></div>
+                                           th:value="${myInfo.userSe == 'GNR'} ? #{mber.ty.gnr} : (${myInfo.userSe == 'USR'} ? #{mber.ty.usr} : (${myInfo.userSe == 'ENT'} ? #{mber.ty.ent} : ${myInfo.userSe}))"/></div>
                                 <div class="col-md-6 form-group"><label class="form-label">
                                     <span th:text="#{mypage.id}">아이디</span>
                                     <i class="bi bi-info-circle text-muted" th:title="#{mypage.id.tip}"></i></label>

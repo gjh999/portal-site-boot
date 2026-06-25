@@ -2,15 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}" lang="ko">
-<head><title>그룹관리</title></head>
+<head><title th:text="#{sec.group.title}">그룹관리</title></head>
 <body>
 <main layout:fragment="content">
     <div class="container">
         <nav aria-label="breadcrumb"><ol class="breadcrumb">
-            <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
-            <li class="breadcrumb-item active">그룹관리</li>
+            <li class="breadcrumb-item"><a th:href="@{/}" th:text="#{common.home}">홈</a></li>
+            <li class="breadcrumb-item active" th:text="#{sec.group.title}">그룹관리</li>
         </ol></nav>
-        <h1 class="h4 mb-3"><i class="bi bi-diagram-3"></i> 그룹관리</h1>
+        <h1 class="h4 mb-3"><i class="bi bi-diagram-3"></i> <span th:text="#{sec.group.title}">그룹관리</span></h1>
 
         <!-- 검색 영역 (게시판 목록 표준) — 그룹명 (searchCondition=1 고정) -->
         <form th:action="@{/sec/gmt/EgovGroupList.do}" method="get" class="search-bar krds-search mb-3">
@@ -18,29 +18,29 @@
             <div class="row g-2 align-items-end">
                 <div class="col-md-9">
                     <div class="form-group">
-                        <div class="form-tit"><label for="searchKeyword">그룹명</label></div>
+                        <div class="form-tit"><label for="searchKeyword" th:text="#{sec.group.name}">그룹명</label></div>
                         <div class="form-conts">
                             <input type="text" id="searchKeyword" name="searchKeyword" class="krds-input"
                                    th:value="${groupManageVO != null ? groupManageVO.searchKeyword : ''}"
-                                   placeholder="검색어를 입력하세요" maxlength="35"/>
+                                   th:placeholder="#{search.keyword.placeholder}" placeholder="검색어를 입력하세요" maxlength="35"/>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <button type="submit" class="krds-btn primary medium w-100"><i class="bi bi-search"></i> 검색</button>
+                    <button type="submit" class="krds-btn primary medium w-100"><i class="bi bi-search"></i> <span th:text="#{button.search}">검색</span></button>
                 </div>
             </div>
         </form>
 
         <!-- 목록 헤더: 전체 건수 + 등록 버튼(우측) -->
         <div class="d-flex justify-content-between align-items-center mb-2 mt-3">
-            <span class="text-muted">전체 <strong th:text="${paginationInfo != null ? paginationInfo.totalRecordCount : 0}">0</strong>건</span>
-            <a class="krds-btn primary small" th:href="@{/sec/gmt/EgovGroupInsertView.do}"><i class="bi bi-plus-lg"></i> 그룹 등록</a>
+            <span class="text-muted"><span th:text="#{common.total}">전체</span> <strong th:text="${paginationInfo != null ? paginationInfo.totalRecordCount : 0}">0</strong><span th:text="#{common.unit.case}">건</span></span>
+            <a class="krds-btn primary small" th:href="@{/sec/gmt/EgovGroupInsertView.do}"><i class="bi bi-plus-lg"></i> <span th:text="#{sec.group.register}">그룹 등록</span></a>
         </div>
 
         <div class="krds-table-wrap">
         <table class="tbl">
-            <thead><tr><th scope="col">그룹ID</th><th scope="col">그룹명</th><th scope="col">설명</th><th scope="col" style="width:140px;">생성일</th><th scope="col" style="width:120px;"></th></tr></thead>
+            <thead><tr><th scope="col" th:text="#{sec.group.id}">그룹ID</th><th scope="col" th:text="#{sec.group.name}">그룹명</th><th scope="col" th:text="#{sec.group.desc}">설명</th><th scope="col" style="width:140px;" th:text="#{sec.col.creatDe}">생성일</th><th scope="col" style="width:120px;"></th></tr></thead>
             <tbody>
             <tr th:each="item : ${groupList}">
                 <td th:text="${item.groupId}">ID</td>
@@ -48,10 +48,10 @@
                 <td th:text="${item.groupDc}">설명</td>
                 <td class="text-center" th:text="${item.groupCreatDe}">생성일</td>
                 <td class="text-end">
-                    <a class="krds-btn tertiary small" th:href="@{/sec/gmt/EgovGroup.do(groupId=${item.groupId})}"><i class="bi bi-pencil"></i> 수정</a>
+                    <a class="krds-btn tertiary small" th:href="@{/sec/gmt/EgovGroup.do(groupId=${item.groupId})}"><i class="bi bi-pencil"></i> <span th:text="#{button.modify}">수정</span></a>
                 </td>
             </tr>
-            <tr th:if="${#lists.isEmpty(groupList)}"><td colspan="5" class="text-center text-muted py-4">등록된 그룹이 없습니다.</td></tr>
+            <tr th:if="${#lists.isEmpty(groupList)}"><td colspan="5" class="text-center text-muted py-4" th:text="#{sec.group.empty}">등록된 그룹이 없습니다.</td></tr>
             </tbody>
         </table>
         </div>
