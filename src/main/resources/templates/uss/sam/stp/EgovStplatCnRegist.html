@@ -2,71 +2,71 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}" lang="ko">
-<head><title>약관 등록</title></head>
+<head><title th:text="#{terms.stplat.regist.heading}">약관 등록</title></head>
 <body>
 <main layout:fragment="content">
     <div class="container" style="max-width:820px;">
         <nav aria-label="breadcrumb"><ol class="breadcrumb">
-            <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
-            <li class="breadcrumb-item"><a th:href="@{/uss/sam/stp/StplatListInqire.do}">이용약관</a></li>
-            <li class="breadcrumb-item active">약관 등록</li>
+            <li class="breadcrumb-item"><a th:href="@{/}" th:text="#{menu.home}">홈</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/uss/sam/stp/StplatListInqire.do}" th:text="#{terms.stplat.title}">이용약관</a></li>
+            <li class="breadcrumb-item active" th:text="#{terms.stplat.regist.crumb}">약관 등록</li>
         </ol></nav>
-        <h1 class="h4 mb-3"><i class="bi bi-file-earmark-plus"></i> 약관 등록</h1>
+        <h1 class="h4 mb-3"><i class="bi bi-file-earmark-plus"></i> <span th:text="#{terms.stplat.regist.heading}">약관 등록</span></h1>
 
         <!-- 개인정보처리방침 유형 필수값 누락 안내 -->
-        <div class="text-danger small mb-2" th:if="${ipmValidationError}">
+        <div class="text-danger small mb-2" th:if="${ipmValidationError}" th:text="#{terms.stplat.type.required}">
             명칭, 내용, 동의여부를 모두 입력하세요.
         </div>
 
         <form th:action="@{/uss/sam/stp/StplatCnRegist.do}" th:object="${stplatManageVO}" method="post">
             <!-- 유형 선택 (이용약관 / 개인정보처리방침) -->
             <div class="mb-3">
-                <label class="form-label">유형 <span class="text-danger">*</span></label>
+                <label class="form-label"><span th:text="#{terms.type}">유형</span> <span class="text-danger">*</span></label>
                 <div>
                     <label class="me-3">
                         <input type="radio" name="stplatType" value="stp" id="stplatType-stp"
                                th:checked="${stplatType == null or stplatType == 'stp'}"/>
-                        이용약관
+                        <span th:text="#{terms.stplat}">이용약관</span>
                     </label>
                     <label>
                         <input type="radio" name="stplatType" value="ipm" id="stplatType-ipm"
                                th:checked="${stplatType == 'ipm'}"/>
-                        개인정보처리방침
+                        <span th:text="#{terms.ipm}">개인정보처리방침</span>
                     </label>
                 </div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label"><span id="label-nm">이용약관명</span> <span class="text-danger">*</span></label>
+                <label class="form-label"><span id="label-nm" th:text="#{terms.stplat.col.nm}">이용약관명</span> <span class="text-danger">*</span></label>
                 <input class="krds-input" type="text" th:field="*{useStplatNm}" maxlength="100" required autofocus/>
                 <div class="text-danger small" th:if="${#fields.hasErrors('useStplatNm')}" th:errors="*{useStplatNm}"></div>
             </div>
             <div class="mb-3">
-                <label class="form-label"><span id="label-cn">이용약관내용</span> <span class="text-danger">*</span></label>
+                <label class="form-label"><span id="label-cn" th:text="#{terms.stplat.col.cn}">이용약관내용</span> <span class="text-danger">*</span></label>
                 <textarea class="krds-input" rows="10" th:field="*{useStplatCn}" required></textarea>
                 <div class="text-danger small" th:if="${#fields.hasErrors('useStplatCn')}" th:errors="*{useStplatCn}"></div>
             </div>
 
             <!-- 이용약관 전용: 정보제공동의내용 -->
             <div class="mb-3" id="field-stp">
-                <label class="form-label">정보제공동의내용 <span class="text-danger">*</span></label>
+                <label class="form-label"><span th:text="#{terms.infoProvdAgreCn}">정보제공동의내용</span> <span class="text-danger">*</span></label>
                 <textarea class="krds-input" rows="8" th:field="*{infoProvdAgreCn}"></textarea>
                 <div class="text-danger small" th:if="${#fields.hasErrors('infoProvdAgreCn')}" th:errors="*{infoProvdAgreCn}"></div>
             </div>
 
             <!-- 개인정보처리방침 전용: 동의여부 -->
             <div class="mb-3" id="field-ipm" style="display:none;">
-                <label class="form-label">동의여부 <span class="text-danger">*</span></label>
+                <label class="form-label"><span th:text="#{policy.col.indvdlInfoYn}">동의여부</span> <span class="text-danger">*</span></label>
                 <select class="krds-form-select" th:field="*{indvdlInfoYn}">
-                    <option value="">선택</option>
-                    <option value="Y">예</option>
-                    <option value="N">아니오</option>
+                    <option value="" th:text="#{bbs.select.action}">선택</option>
+                    <option value="Y" th:text="#{policy.yes}">예</option>
+                    <option value="N" th:text="#{policy.no}">아니오</option>
                 </select>
             </div>
 
             <div class="d-flex justify-content-between">
-                <a class="krds-btn tertiary" th:href="@{/uss/sam/stp/StplatListInqire.do}">목록</a>
-                <button class="krds-btn primary" type="submit"><i class="bi bi-check-lg"></i> 저장</button>
+                <a class="krds-btn tertiary" th:href="@{/uss/sam/stp/StplatListInqire.do}" th:text="#{button.list}">목록</a>
+                <button class="krds-btn primary" type="submit"><i class="bi bi-check-lg"></i> <span th:text="#{button.save}">저장</span></button>
             </div>
         </form>
     </div>
@@ -80,10 +80,16 @@
             var stpReq = fieldStp.querySelector('textarea');   // 정보제공동의내용
             var ipmReq = fieldIpm.querySelector('select');      // 동의여부
 
+            var I18N = {
+                ipmNm: /*[[#{policy.detail.nm}]]*/ '개인정보처리방침 명',
+                stpNm: /*[[#{terms.stplat.col.nm}]]*/ '이용약관명',
+                ipmCn: /*[[#{policy.detail.cn}]]*/ '개인정보처리방침 내용',
+                stpCn: /*[[#{terms.stplat.col.cn}]]*/ '이용약관내용'
+            };
             function applyType(type) {
                 var isIpm = (type === 'ipm');
-                labelNm.textContent = isIpm ? '개인정보처리방침 명' : '이용약관명';
-                labelCn.textContent = isIpm ? '개인정보처리방침 내용' : '이용약관내용';
+                labelNm.textContent = isIpm ? I18N.ipmNm : I18N.stpNm;
+                labelCn.textContent = isIpm ? I18N.ipmCn : I18N.stpCn;
                 fieldStp.style.display = isIpm ? 'none' : '';
                 fieldIpm.style.display = isIpm ? '' : 'none';
                 // 숨겨진 필드는 required 해제(브라우저 검증 차단 방지)

@@ -3,65 +3,65 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/default}" lang="ko">
-<head><title>개인정보처리방침</title></head>
+<head><title th:text="#{policy.title}">개인정보처리방침</title></head>
 <body>
 <main layout:fragment="content">
     <div class="container">
         <nav aria-label="breadcrumb"><ol class="breadcrumb">
-            <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
-            <li class="breadcrumb-item active">개인정보처리방침</li>
+            <li class="breadcrumb-item"><a th:href="@{/}" th:text="#{menu.home}">홈</a></li>
+            <li class="breadcrumb-item active" th:text="#{policy.title}">개인정보처리방침</li>
         </ol></nav>
-        <h1 class="h4 mb-3"><i class="bi bi-shield-lock"></i> 개인정보처리방침</h1>
+        <h1 class="h4 mb-3"><i class="bi bi-shield-lock"></i> <span th:text="#{policy.title}">개인정보처리방침</span></h1>
 
         <!-- 검색 영역 (게시판 목록 표준) — 검색구분 + 검색어 -->
         <form th:action="@{/uss/sam/ipm/listIndvdlInfoPolicy.do}" method="get" class="search-bar krds-search mb-3">
             <div class="row g-2 align-items-end">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <div class="form-tit"><label for="searchCondition">검색구분</label></div>
+                        <div class="form-tit"><label for="searchCondition" th:text="#{bbs.search.cnd}">검색구분</label></div>
                         <div class="form-conts">
-                            <select id="searchCondition" name="searchCondition" class="krds-form-select" title="검색구분 선택">
-                                <option value="">선택</option>
+                            <select id="searchCondition" name="searchCondition" class="krds-form-select" th:title="#{bbs.search.cnd.select}">
+                                <option value="" th:text="#{bbs.select.action}">선택</option>
                                 <option value="INDVDL_INFO_POLICY_NM"
-                                        th:selected="${searchVO.searchCondition == 'INDVDL_INFO_POLICY_NM'}">개인정보보호정책명</option>
+                                        th:selected="${searchVO.searchCondition == 'INDVDL_INFO_POLICY_NM'}" th:text="#{policy.search.cnd.nm}">개인정보보호정책명</option>
                                 <option value="INDVDL_INFO_POLICY_CN"
-                                        th:selected="${searchVO.searchCondition == 'INDVDL_INFO_POLICY_CN'}">개인정보보호정책설명</option>
+                                        th:selected="${searchVO.searchCondition == 'INDVDL_INFO_POLICY_CN'}" th:text="#{policy.search.cnd.cn}">개인정보보호정책설명</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <div class="form-tit"><label for="searchKeyword">검색어</label></div>
+                        <div class="form-tit"><label for="searchKeyword" th:text="#{search.keyword}">검색어</label></div>
                         <div class="form-conts">
                             <input type="text" id="searchKeyword" name="searchKeyword" class="krds-input"
-                                   th:value="${searchVO.searchKeyword}" placeholder="검색어를 입력하세요" maxlength="35"/>
+                                   th:value="${searchVO.searchKeyword}" th:placeholder="#{search.keyword.placeholder}" maxlength="35"/>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <button type="submit" class="krds-btn primary medium w-100"><i class="bi bi-search"></i> 검색</button>
+                    <button type="submit" class="krds-btn primary medium w-100"><i class="bi bi-search"></i> <span th:text="#{button.search}">검색</span></button>
                 </div>
             </div>
         </form>
 
         <!-- 목록 헤더: 전체 건수 + 등록 버튼(우측) -->
         <div class="d-flex justify-content-between align-items-center mb-2 mt-3">
-            <span class="text-muted">전체 <strong th:text="${paginationInfo != null ? paginationInfo.totalRecordCount : 0}">0</strong>건</span>
+            <span class="text-muted"><span th:text="#{list.total}">전체</span> <strong th:text="${paginationInfo != null ? paginationInfo.totalRecordCount : 0}">0</strong><span th:text="#{list.count.unit}">건</span></span>
             <a class="krds-btn primary small" sec:authorize="hasRole('ADMIN')" th:href="@{/uss/sam/terms/registView.do(termsType='ipm')}">
-                <i class="bi bi-plus-lg"></i> 방침 등록</a>
+                <i class="bi bi-plus-lg"></i> <span th:text="#{policy.regist.btn}">방침 등록</span></a>
         </div>
 
         <div class="krds-table-wrap">
         <table class="tbl">
-            <caption class="visually-hidden">개인정보보호정책 목록</caption>
+            <caption class="visually-hidden" th:text="#{policy.list.caption}">개인정보보호정책 목록</caption>
             <thead>
             <tr>
-                <th scope="col" style="width:70px;" class="text-center">순번</th>
-                <th scope="col" style="width:110px;" class="text-center">동의여부</th>
-                <th scope="col">개인정보보호정책명</th>
-                <th scope="col" style="width:130px;" class="text-center">등록자</th>
-                <th scope="col" style="width:120px;" class="text-center">등록일자</th>
+                <th scope="col" style="width:70px;" class="text-center" th:text="#{list.seq}">순번</th>
+                <th scope="col" style="width:110px;" class="text-center" th:text="#{policy.col.indvdlInfoYn}">동의여부</th>
+                <th scope="col" th:text="#{policy.col.nm}">개인정보보호정책명</th>
+                <th scope="col" style="width:130px;" class="text-center" th:text="#{policy.col.register}">등록자</th>
+                <th scope="col" style="width:120px;" class="text-center" th:text="#{policy.col.regDe}">등록일자</th>
             </tr>
             </thead>
             <tbody>
@@ -71,7 +71,7 @@
                 <td class="text-center">
                     <span class="krds-badge"
                           th:classappend="${item.indvdlinfoyn == 'Y'} ? 'bg-success' : 'bg-gray'"
-                          th:text="${item.indvdlinfoyn == 'Y'} ? '예' : '아니오'">동의여부</span>
+                          th:text="${item.indvdlinfoyn == 'Y'} ? #{policy.yes} : #{policy.no}">동의여부</span>
                 </td>
                 <td>
                     <a class="text-decoration-none"
@@ -83,7 +83,7 @@
                 <td class="text-center" th:text="${item.frstregistpnttm}">등록일자</td>
             </tr>
             <tr th:if="${#lists.isEmpty(resultList)}">
-                <td colspan="5" class="text-center text-muted py-4">등록된 개인정보처리방침이 없습니다.</td>
+                <td colspan="5" class="text-center text-muted py-4" th:text="#{policy.empty}">등록된 개인정보처리방침이 없습니다.</td>
             </tr>
             </tbody>
         </table>
