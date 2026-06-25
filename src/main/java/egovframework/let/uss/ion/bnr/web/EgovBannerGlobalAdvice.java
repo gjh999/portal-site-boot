@@ -82,6 +82,27 @@ public class EgovBannerGlobalAdvice {
 		return uri.startsWith("/uat/uia/") || uri.startsWith("/error");
 	}
 
+	/**
+	 * 현재 요청이 홈(메인) 화면인지 여부를 모델에 주입한다.
+	 * 팝업 배너는 홈에서만 노출되어야 하므로 default 레이아웃은 이 값이 true 일 때만 팝업 fragment 를 렌더링한다.
+	 *
+	 * <pre>
+	 * 홈 경로: "/" (EgovMainController), "/cmm/main/mainPage.do"(메인 호환 매핑)
+	 * </pre>
+	 */
+	@ModelAttribute("isHome")
+	public boolean isHome(HttpServletRequest request) {
+		String uri = request.getRequestURI();
+		if (uri == null) {
+			return false;
+		}
+		String ctx = request.getContextPath();
+		if (ctx != null && !ctx.isEmpty() && uri.startsWith(ctx)) {
+			uri = uri.substring(ctx.length());
+		}
+		return "/".equals(uri) || "/cmm/main/mainPage.do".equals(uri);
+	}
+
 	private List<BannerVO> selectByType(String bannerTy) {
 		try {
 			BannerVO bannerVO = new BannerVO();
