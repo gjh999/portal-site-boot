@@ -4,63 +4,63 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/default}" lang="ko">
 <head>
-    <title>Q&amp;A</title>
+    <title th:text="#{qna.title}">Q&amp;A</title>
 </head>
 <body>
 <main layout:fragment="content">
     <div class="container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
-                <li class="breadcrumb-item active">Q&amp;A</li>
+                <li class="breadcrumb-item"><a th:href="@{/}" th:text="#{menu.home}">홈</a></li>
+                <li class="breadcrumb-item active" th:text="#{qna.title}">Q&amp;A</li>
             </ol>
         </nav>
-        <h1 class="h4 mb-3"><i class="bi bi-chat-dots"></i> 묻고 답하기</h1>
+        <h1 class="h4 mb-3"><i class="bi bi-chat-dots"></i> <span th:text="#{qna.heading}">묻고 답하기</span></h1>
 
         <!-- 검색 영역 (KRDS 폼) — 게시판 목록과 통일 -->
         <form th:action="@{/uss/olh/qna/QnaListInqire.do}" method="get" class="search-bar krds-search mb-3">
             <div class="row g-2 align-items-end">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <div class="form-tit"><label for="searchCondition">검색구분</label></div>
+                        <div class="form-tit"><label for="searchCondition" th:text="#{bbs.search.cnd}">검색구분</label></div>
                         <div class="form-conts">
-                            <select id="searchCondition" name="searchCondition" class="krds-form-select" title="검색구분 선택">
-                                <option value="">선택</option>
-                                <option value="qestnSj" th:selected="${searchVO.searchCondition == 'qestnSj'}">질문제목</option>
-                                <option value="wrterNm" th:selected="${searchVO.searchCondition == 'wrterNm'}">작성자</option>
+                            <select id="searchCondition" name="searchCondition" class="krds-form-select" th:title="#{bbs.search.cnd.select}">
+                                <option value="" th:text="#{bbs.select.action}">선택</option>
+                                <option value="qestnSj" th:selected="${searchVO.searchCondition == 'qestnSj'}" th:text="#{qna.search.cnd.qestnSj}">질문제목</option>
+                                <option value="wrterNm" th:selected="${searchVO.searchCondition == 'wrterNm'}" th:text="#{common.writer}">작성자</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <div class="form-tit"><label for="searchKeyword">검색어</label></div>
+                        <div class="form-tit"><label for="searchKeyword" th:text="#{search.keyword}">검색어</label></div>
                         <div class="form-conts">
                             <input type="text" id="searchKeyword" name="searchKeyword" class="krds-input"
-                                   th:value="${searchVO.searchKeyword}" placeholder="검색어를 입력하세요" maxlength="35"/>
+                                   th:value="${searchVO.searchKeyword}" th:placeholder="#{search.keyword.placeholder}" maxlength="35"/>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <button type="submit" class="krds-btn primary medium w-100"><i class="bi bi-search"></i> 검색</button>
+                    <button type="submit" class="krds-btn primary medium w-100"><i class="bi bi-search"></i> <span th:text="#{button.search}">검색</span></button>
                 </div>
             </div>
         </form>
 
         <!-- 목록 헤더: 전체 건수 (게시판과 동일하게 표 위 좌측) -->
         <div class="d-flex justify-content-between align-items-center mb-2 mt-3">
-            <span class="text-muted">전체 <strong th:text="${paginationInfo != null ? paginationInfo.totalRecordCount : 0}">0</strong>건</span>
+            <span class="text-muted"><span th:text="#{list.total}">전체</span> <strong th:text="${paginationInfo != null ? paginationInfo.totalRecordCount : 0}">0</strong><span th:text="#{list.count.unit}">건</span></span>
         </div>
 
         <div class="krds-table-wrap">
         <table class="tbl">
             <thead>
             <tr>
-                <th scope="col" style="width:90px;">상태</th>
-                <th scope="col">제목</th>
-                <th scope="col" style="width:120px;">작성자</th>
-                <th scope="col" style="width:120px;">작성일</th>
-                <th scope="col" style="width:80px;">조회</th>
+                <th scope="col" style="width:90px;" th:text="#{qna.col.status}">상태</th>
+                <th scope="col" th:text="#{qna.col.qestnSj}">제목</th>
+                <th scope="col" style="width:120px;" th:text="#{common.writer}">작성자</th>
+                <th scope="col" style="width:120px;" th:text="#{qna.col.writngDe}">작성일</th>
+                <th scope="col" style="width:80px;" th:text="#{qna.detail.inqire}">조회</th>
             </tr>
             </thead>
             <tbody>
@@ -68,7 +68,7 @@
                 <td class="text-center">
                     <span class="krds-badge"
                           th:classappend="${item.qnaProcessSttusCodeNm == '처리완료' ? 'bg-success' : (item.qnaProcessSttusCodeNm == '처리중' ? 'bg-warning' : 'bg-primary')}"
-                          th:text="${item.qnaProcessSttusCodeNm ?: '접수'}">상태</span>
+                          th:text="${item.qnaProcessSttusCodeNm ?: #messages.msg('qna.status.receipt')}">상태</span>
                 </td>
                 <td>
                     <a class="text-decoration-none"
@@ -80,7 +80,7 @@
                 <td class="text-center" th:text="${item.inqireco ?: 0}">0</td>
             </tr>
             <tr th:if="${#lists.isEmpty(resultList)}">
-                <td colspan="5" class="text-center text-muted py-4">등록된 질문이 없습니다.</td>
+                <td colspan="5" class="text-center text-muted py-4" th:text="#{qna.empty}">등록된 질문이 없습니다.</td>
             </tr>
             </tbody>
         </table>
@@ -92,7 +92,7 @@
 
         <div class="text-end">
             <a class="krds-btn primary small" th:href="@{/uss/olh/qna/QnaCnRegistView.do}">
-                <i class="bi bi-pencil-square"></i> 질문 등록
+                <i class="bi bi-pencil-square"></i> <span th:text="#{qna.regist}">질문 등록</span>
             </a>
         </div>
     </div>
