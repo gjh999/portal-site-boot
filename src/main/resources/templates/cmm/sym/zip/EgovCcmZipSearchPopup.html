@@ -2,21 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/popup}" lang="ko">
-<head><title>우편번호 검색</title></head>
+<head><title th:text="#{zip.search}">우편번호 검색</title></head>
 <body>
 <main layout:fragment="content">
-    <h1 class="popup-title"><i class="bi bi-geo-alt"></i> 우편번호 검색</h1>
+    <h1 class="popup-title"><i class="bi bi-geo-alt"></i> <span th:text="#{zip.search}">우편번호 검색</span></h1>
 
     <form class="zip-search-form" th:action="@{/cmm/sym/zip/EgovCcmZipSearchPopup.do}" method="get">
-        <select class="krds-form-select" name="searchCondition" title="검색조건">
-            <option value="4" th:selected="${searchVO.searchCondition == '4'}">읍면동명</option>
-            <option value="2" th:selected="${searchVO.searchCondition == '2'}">시도명</option>
-            <option value="3" th:selected="${searchVO.searchCondition == '3'}">시군구명</option>
-            <option value="1" th:selected="${searchVO.searchCondition == '1'}">우편번호</option>
+        <select class="krds-form-select" name="searchCondition" th:title="#{zip.title.searchCond}" title="검색조건">
+            <option value="4" th:selected="${searchVO.searchCondition == '4'}" th:text="#{zip.cond.emd}">읍면동명</option>
+            <option value="2" th:selected="${searchVO.searchCondition == '2'}" th:text="#{zip.cond.ctprvn}">시도명</option>
+            <option value="3" th:selected="${searchVO.searchCondition == '3'}" th:text="#{zip.cond.signgu}">시군구명</option>
+            <option value="1" th:selected="${searchVO.searchCondition == '1'}" th:text="#{zip.cond.zip}">우편번호</option>
         </select>
         <input class="krds-input" name="searchKeyword" th:value="${searchVO.searchKeyword}"
-               maxlength="20" placeholder="검색어" title="검색어" autofocus/>
-        <button class="krds-btn primary" type="submit"><i class="bi bi-search"></i> 검색</button>
+               maxlength="20" th:placeholder="#{zip.placeholder.keyword}" placeholder="검색어" th:title="#{zip.title.keyword}" title="검색어" autofocus/>
+        <button class="krds-btn primary" type="submit"><i class="bi bi-search"></i> <span th:text="#{button.search}">검색</span></button>
     </form>
 
     <div class="krds-table-wrap"><table class="tbl">
@@ -26,7 +26,7 @@
             <col style="width:64px;"/>
         </colgroup>
         <thead>
-        <tr><th scope="col">우편번호</th><th scope="col">주소</th><th scope="col">선택</th></tr>
+        <tr><th scope="col" th:text="#{zip.col.zip}">우편번호</th><th scope="col" th:text="#{zip.col.addr}">주소</th><th scope="col" th:text="#{zip.col.select}">선택</th></tr>
         </thead>
         <tbody>
         <tr th:each="item : ${resultList}"
@@ -38,13 +38,13 @@
             <td>
                 <button type="button" class="krds-btn small secondary"
                         th:attr="data-zip=${item.zip},data-addr=${addr}"
-                        onclick="fnSelectZip(this);">선택</button>
+                        onclick="fnSelectZip(this);" th:text="#{zip.col.select}">선택</button>
             </td>
         </tr>
         <tr th:if="${resultList == null or #lists.isEmpty(resultList)}">
             <td colspan="3" class="text-center text-muted py-4">
-                <span th:if="${searchVO.searchKeyword == null or searchVO.searchKeyword == ''}">검색어를 입력하세요.</span>
-                <span th:unless="${searchVO.searchKeyword == null or searchVO.searchKeyword == ''}">검색 결과가 없습니다.</span>
+                <span th:if="${searchVO.searchKeyword == null or searchVO.searchKeyword == ''}" th:text="#{zip.guide.keyword}">검색어를 입력하세요.</span>
+                <span th:unless="${searchVO.searchKeyword == null or searchVO.searchKeyword == ''}" th:text="#{zip.empty.search}">검색 결과가 없습니다.</span>
             </td>
         </tr>
         </tbody>
@@ -54,7 +54,7 @@
     <div th:replace="~{fragments/pagination :: paginationSearch(paginationInfo=${paginationInfo}, baseUrl='/cmm/sym/zip/EgovCcmZipSearchPopup.do', searchCondition=${searchVO.searchCondition}, searchKeyword=${searchVO.searchKeyword})}"></div>
 
     <div class="mt-2 text-end">
-        <button class="krds-btn small tertiary" type="button" onclick="window.close();">닫기</button>
+        <button class="krds-btn small tertiary" type="button" onclick="window.close();" th:text="#{button.close}">닫기</button>
     </div>
 
     <script>

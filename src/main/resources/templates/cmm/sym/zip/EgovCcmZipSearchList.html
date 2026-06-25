@@ -2,29 +2,29 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}" lang="ko">
-<head><title>우편번호 검색</title></head>
+<head><title th:text="#{zip.search}">우편번호 검색</title></head>
 <body>
 <main layout:fragment="content">
     <div class="container">
         <nav aria-label="breadcrumb"><ol class="breadcrumb">
-            <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
-            <li class="breadcrumb-item active">우편번호 검색</li>
+            <li class="breadcrumb-item"><a th:href="@{/}" th:text="#{common.home}">홈</a></li>
+            <li class="breadcrumb-item active" th:text="#{zip.search}">우편번호 검색</li>
         </ol></nav>
-        <h1 class="h4 mb-3"><i class="bi bi-geo-alt"></i> 우편번호 검색</h1>
+        <h1 class="h4 mb-3"><i class="bi bi-geo-alt"></i> <span th:text="#{zip.search}">우편번호 검색</span></h1>
         <form class="row g-2 mb-3" th:action="@{/sym/cmm/EgovCcmZipSearchList.do}" method="get">
             <div class="col-auto">
                 <select class="krds-form-select" name="searchCondition">
-                    <option value="2" th:selected="${searchVO.searchCondition == '2'}">시도명</option>
-                    <option value="3" th:selected="${searchVO.searchCondition == '3'}">시군구명</option>
-                    <option value="4" th:selected="${searchVO.searchCondition == '4'}">읍면동명</option>
-                    <option value="1" th:selected="${searchVO.searchCondition == '1'}">우편번호</option>
+                    <option value="2" th:selected="${searchVO.searchCondition == '2'}" th:text="#{zip.cond.ctprvn}">시도명</option>
+                    <option value="3" th:selected="${searchVO.searchCondition == '3'}" th:text="#{zip.cond.signgu}">시군구명</option>
+                    <option value="4" th:selected="${searchVO.searchCondition == '4'}" th:text="#{zip.cond.emd}">읍면동명</option>
+                    <option value="1" th:selected="${searchVO.searchCondition == '1'}" th:text="#{zip.cond.zip}">우편번호</option>
                 </select>
             </div>
-            <div class="col-auto"><input class="krds-input" name="searchKeyword" th:value="${searchVO.searchKeyword}" placeholder="검색어"/></div>
-            <div class="col-auto"><button class="krds-btn primary" type="submit"><i class="bi bi-search"></i> 검색</button></div>
+            <div class="col-auto"><input class="krds-input" name="searchKeyword" th:value="${searchVO.searchKeyword}" th:placeholder="#{zip.placeholder.keyword}" placeholder="검색어"/></div>
+            <div class="col-auto"><button class="krds-btn primary" type="submit"><i class="bi bi-search"></i> <span th:text="#{button.search}">검색</span></button></div>
         </form>
         <div class="krds-table-wrap"><table class="tbl">
-            <thead><tr><th scope="col" style="width:90px;">우편번호</th><th scope="col">시도</th><th scope="col">시군구</th><th scope="col">읍면동</th><th scope="col">건물/지번</th><th scope="col" style="width:70px;">선택</th></tr></thead>
+            <thead><tr><th scope="col" style="width:90px;" th:text="#{zip.col.zip}">우편번호</th><th scope="col" th:text="#{zip.col.ctprvn}">시도</th><th scope="col" th:text="#{zip.col.signgu}">시군구</th><th scope="col" th:text="#{zip.col.emd}">읍면동</th><th scope="col" th:text="#{zip.col.buld}">건물/지번</th><th scope="col" style="width:70px;" th:text="#{zip.col.select}">선택</th></tr></thead>
             <tbody>
             <tr th:each="item : ${resultList}"
                 th:with="addr=${item.ctprvnNm + ' ' + item.signguNm + ' ' + item.emdNm
@@ -37,10 +37,10 @@
                 <td>
                     <button type="button" class="krds-btn small secondary"
                             th:attr="data-zip=${item.zip},data-addr=${addr}"
-                            onclick="fn_egov_select_Zip(this);">선택</button>
+                            onclick="fn_egov_select_Zip(this);" th:text="#{zip.col.select}">선택</button>
                 </td>
             </tr>
-            <tr th:if="${resultList == null or #lists.isEmpty(resultList)}"><td colspan="6" class="text-center text-muted py-4">검색 결과가 없습니다.</td></tr>
+            <tr th:if="${resultList == null or #lists.isEmpty(resultList)}"><td colspan="6" class="text-center text-muted py-4" th:text="#{zip.empty.search}">검색 결과가 없습니다.</td></tr>
             </tbody>
         </table></div>
 
@@ -48,7 +48,8 @@
         <div class="mt-3"
              th:replace="~{fragments/pagination :: paginationSearch(paginationInfo=${paginationInfo}, baseUrl='/sym/cmm/EgovCcmZipSearchList.do', searchCondition=${searchVO.searchCondition}, searchKeyword=${searchVO.searchKeyword})}"></div>
     </div>
-    <script>
+    <script th:inline="javascript">
+        var ZIP_MSG_SELECT_POPUP_ONLY = /*[[#{zip.alert.selectPopupOnly}]]*/ '선택 기능은 우편번호 찾기 팝업에서 사용할 수 있습니다.';
         /* window.open 으로 띄운 부모창(회원 등록/수정 등)에 선택값을 반환한다.
          * JSP 원본과 동일한 fn_egov_returnValue({sZip, vZip, sAddr}) 콜백을 우선 사용한다. */
         function fn_egov_select_Zip(btn) {
@@ -70,7 +71,7 @@
                     return;
                 }
             } catch (e) { /* opener 접근 불가 시 무시 */ }
-            alert('선택 기능은 우편번호 찾기 팝업에서 사용할 수 있습니다.');
+            alert(ZIP_MSG_SELECT_POPUP_ONLY);
         }
     </script>
 </main>

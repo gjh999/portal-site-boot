@@ -2,19 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}" lang="ko">
-<head><title>우편번호 수정</title></head>
+<head><title th:text="#{zip.modify}">우편번호 수정</title></head>
 <body>
 <main layout:fragment="content">
     <div class="container">
         <nav aria-label="breadcrumb"><ol class="breadcrumb">
-            <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
-            <li class="breadcrumb-item"><a th:href="@{/sym/ccm/zip/EgovCcmZipList.do}">우편번호 관리</a></li>
-            <li class="breadcrumb-item active">수정</li>
+            <li class="breadcrumb-item"><a th:href="@{/}" th:text="#{common.home}">홈</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/sym/ccm/zip/EgovCcmZipList.do}" th:text="#{zip.manage}">우편번호 관리</a></li>
+            <li class="breadcrumb-item active" th:text="#{zip.crumb.modify}">수정</li>
         </ol></nav>
-        <h1 class="h4 mb-3"><i class="bi bi-geo-alt"></i> 우편번호 수정</h1>
+        <h1 class="h4 mb-3"><i class="bi bi-geo-alt"></i> <span th:text="#{zip.modify}">우편번호 수정</span></h1>
 
-        <div th:if="${zip == null}" class="alert alert-warning">수정할 데이터가 없습니다.
-            <a class="alert-link" th:href="@{/sym/ccm/zip/EgovCcmZipList.do}">목록으로</a></div>
+        <div th:if="${zip == null}" class="alert alert-warning"><span th:text="#{zip.empty.modify}">수정할 데이터가 없습니다.</span>
+            <a class="alert-link" th:href="@{/sym/ccm/zip/EgovCcmZipList.do}" th:text="#{zip.link.tolist}">목록으로</a></div>
 
         <form th:if="${zip != null}" th:action="@{/sym/ccm/zip/EgovCcmZipModify.do}" method="post" th:object="${zip}">
             <input type="hidden" name="cmd" value="Modify"/>
@@ -22,36 +22,36 @@
             <div class="krds-table-wrap"><table class="tbl col">
                 <tbody>
                 <tr>
-                    <th scope="row" style="width:160px;">우편번호</th>
+                    <th scope="row" style="width:160px;" th:text="#{zip.col.zip}">우편번호</th>
                     <td>
                         <input class="krds-input" type="text" th:field="*{zip}" readonly/>
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row">시도명 <span class="text-danger">*</span></th>
+                    <th scope="row"><span th:text="#{zip.label.ctprvn}">시도명</span> <span class="text-danger">*</span></th>
                     <td><input class="krds-input" type="text" th:field="*{ctprvnNm}" maxlength="20" required/></td>
                 </tr>
                 <tr>
-                    <th scope="row">시군구명 <span class="text-danger">*</span></th>
+                    <th scope="row"><span th:text="#{zip.label.signgu}">시군구명</span> <span class="text-danger">*</span></th>
                     <td><input class="krds-input" type="text" th:field="*{signguNm}" maxlength="20" required/></td>
                 </tr>
                 <tr>
-                    <th scope="row">읍면동명 <span class="text-danger">*</span></th>
+                    <th scope="row"><span th:text="#{zip.label.emd}">읍면동명</span> <span class="text-danger">*</span></th>
                     <td><input class="krds-input" type="text" th:field="*{emdNm}" maxlength="30" required/></td>
                 </tr>
                 <tr>
-                    <th scope="row">리/건물명</th>
+                    <th scope="row" th:text="#{zip.label.buld}">리/건물명</th>
                     <td><input class="krds-input" type="text" th:field="*{liBuldNm}" maxlength="60"/></td>
                 </tr>
                 <tr>
-                    <th scope="row">번지/동호</th>
+                    <th scope="row" th:text="#{zip.label.lnbr}">번지/동호</th>
                     <td><input class="krds-input" type="text" th:field="*{lnbrDongHo}" maxlength="20"/></td>
                 </tr>
                 </tbody>
             </table></div>
             <div class="d-flex gap-2">
-                <button class="krds-btn primary" type="submit"><i class="bi bi-check-lg"></i> 수정</button>
-                <a class="krds-btn tertiary" th:href="@{/sym/ccm/zip/EgovCcmZipList.do}">취소</a>
+                <button class="krds-btn primary" type="submit"><i class="bi bi-check-lg"></i> <span th:text="#{button.modify}">수정</span></button>
+                <a class="krds-btn tertiary" th:href="@{/sym/ccm/zip/EgovCcmZipList.do}" th:text="#{button.cancel}">취소</a>
             </div>
         </form>
     </div>
