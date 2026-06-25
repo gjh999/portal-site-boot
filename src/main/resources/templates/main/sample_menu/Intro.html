@@ -4,33 +4,33 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/default}" lang="ko">
 <head>
-    <title>포탈사이트 템플릿 소개</title>
+    <title th:text="#{intro.title}">포탈사이트 템플릿 소개</title>
 </head>
 <body>
 <main layout:fragment="content">
     <div class="container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
-                <li class="breadcrumb-item active">포탈사이트 템플릿 소개</li>
+                <li class="breadcrumb-item"><a th:href="@{/}" th:text="#{common.home}">홈</a></li>
+                <li class="breadcrumb-item active" th:text="#{intro.title}">포탈사이트 템플릿 소개</li>
             </ol>
         </nav>
 
         <div class="intro-hero">
             <img th:src="@{/images/intro/main_visual.png}" alt="" class="intro-hero-bg" aria-hidden="true"/>
             <div class="intro-hero-text">
-                <span class="intro-hero-eyebrow"><i class="bi bi-info-circle"></i> 템플릿 소개</span>
-                <h1>포탈사이트 메뉴 구성</h1>
-                <p>공통컴포넌트 기반으로 현재 포털에 구현된 메뉴 구조입니다. 각 항목을 클릭하면 해당 화면으로 이동합니다.</p>
+                <span class="intro-hero-eyebrow"><i class="bi bi-info-circle"></i> <span th:text="#{intro.eyebrow}">템플릿 소개</span></span>
+                <h1 th:text="#{intro.heading}">포탈사이트 메뉴 구성</h1>
+                <p th:text="#{intro.lead}">공통컴포넌트 기반으로 현재 포털에 구현된 메뉴 구조입니다. 각 항목을 클릭하면 해당 화면으로 이동합니다.</p>
             </div>
         </div>
 
         <div class="krds-panel mb-4">
             <div class="krds-panel-body">
                 <ul class="mb-0" style="padding-left:1.1rem; color:#454C53; line-height:1.9;">
-                    <li>경량환경 템플릿은 개발자가 프레임워크를 쉽게 이해하고 활용할 수 있도록 지원합니다.</li>
-                    <li>아래는 <strong>현재 구현·연결된 메뉴</strong> 기준의 사이트맵입니다(GNB와 동기화).</li>
-                    <li><span class="badge-admin">관리자</span> 표시 메뉴는 관리자(ADMIN) 권한으로 로그인해야 보입니다.</li>
+                    <li th:text="#{intro.note1}">경량환경 템플릿은 개발자가 프레임워크를 쉽게 이해하고 활용할 수 있도록 지원합니다.</li>
+                    <li><span th:text="#{intro.note2.pre}">아래는</span> <strong th:text="#{intro.note2.strong}">현재 구현·연결된 메뉴</strong> <span th:text="#{intro.note2.post}">기준의 사이트맵입니다(GNB와 동기화).</span></li>
+                    <li><span class="badge-admin" th:text="#{intro.badge.admin}">관리자</span> <span th:text="#{intro.note3.pre}">표시 메뉴는 관리자(ADMIN) 권한으로 로그인해야 보입니다.</span></li>
                 </ul>
             </div>
         </div>
@@ -39,15 +39,15 @@
             <!-- 소개 -->
             <div class="col-md-6 col-lg-4">
                 <div class="krds-panel h-100 sitemap-card">
-                    <div class="krds-panel-head fw-bold"><i class="bi bi-building"></i> 소개</div>
+                    <div class="krds-panel-head fw-bold"><i class="bi bi-building"></i> <span th:text="#{intro.group.intro}">소개</span></div>
                     <div class="krds-panel-body">
                         <ul>
-                            <li><a th:href="@{/EgovPageLink.do(linkIndex=3)}">사이트소개</a></li>
-                            <li><a th:href="@{/EgovPageLink.do(linkIndex=4)}">연혁</a></li>
-                            <li><a th:href="@{/EgovPageLink.do(linkIndex=5)}">조직소개</a></li>
-                            <li><a th:href="@{/EgovPageLink.do(linkIndex=6)}">찾아오시는길</a></li>
-                            <li><a th:href="@{/EgovPageLink.do(linkIndex=7)}">템플릿 소개</a></li>
-                            <li><a th:href="@{/cmm/krds/EgovKrdsSample.do}">KRDS 컴포넌트 예시</a></li>
+                            <li><a th:href="@{/EgovPageLink.do(linkIndex=3)}" th:text="#{nav.aboutSite}">사이트소개</a></li>
+                            <li><a th:href="@{/EgovPageLink.do(linkIndex=4)}" th:text="#{nav.history}">연혁</a></li>
+                            <li><a th:href="@{/EgovPageLink.do(linkIndex=5)}" th:text="#{nav.organization}">조직소개</a></li>
+                            <li><a th:href="@{/EgovPageLink.do(linkIndex=6)}" th:text="#{nav.location}">찾아오시는길</a></li>
+                            <li><a th:href="@{/EgovPageLink.do(linkIndex=7)}" th:text="#{nav.template}">템플릿 소개</a></li>
+                            <li><a th:href="@{/cmm/krds/EgovKrdsSample.do}" th:text="#{intro.link.krdsSample}">KRDS 컴포넌트 예시</a></li>
                         </ul>
                     </div>
                 </div>
@@ -55,12 +55,12 @@
             <!-- 민원광장 (샘플) -->
             <div class="col-md-6 col-lg-4">
                 <div class="krds-panel h-100 sitemap-card">
-                    <div class="krds-panel-head fw-bold"><i class="bi bi-file-earmark-text"></i> 민원광장 <span class="text-muted small fw-normal">(샘플)</span></div>
+                    <div class="krds-panel-head fw-bold"><i class="bi bi-file-earmark-text"></i> <span th:text="#{intro.group.civil}">민원광장</span> <span class="text-muted small fw-normal">(<span th:text="#{common.sample}">샘플</span>)</span></div>
                     <div class="krds-panel-body">
                         <ul class="fst-italic">
-                            <li><a th:href="@{/EgovPageLink.do(linkIndex=0)}">민원발급</a></li>
-                            <li><a th:href="@{/EgovPageLink.do(linkIndex=1)}">민원신청</a></li>
-                            <li><a th:href="@{/EgovPageLink.do(linkIndex=2)}">민원결과확인</a></li>
+                            <li><a th:href="@{/EgovPageLink.do(linkIndex=0)}" th:text="#{nav.civilIssue}">민원발급</a></li>
+                            <li><a th:href="@{/EgovPageLink.do(linkIndex=1)}" th:text="#{nav.civilApply}">민원신청</a></li>
+                            <li><a th:href="@{/EgovPageLink.do(linkIndex=2)}" th:text="#{nav.civilResult}">민원결과확인</a></li>
                         </ul>
                     </div>
                 </div>
@@ -68,11 +68,11 @@
             <!-- 알림마당 -->
             <div class="col-md-6 col-lg-4">
                 <div class="krds-panel h-100 sitemap-card">
-                    <div class="krds-panel-head fw-bold"><i class="bi bi-megaphone"></i> 알림마당</div>
+                    <div class="krds-panel-head fw-bold"><i class="bi bi-megaphone"></i> <span th:text="#{intro.group.notice}">알림마당</span></div>
                     <div class="krds-panel-body">
                         <ul>
-                            <li><a th:href="@{/cop/bbs/selectBoardList.do(bbsId='BBSMSTR_AAAAAAAAAAAA')}">공지사항</a></li>
-                            <li><a th:href="@{/cop/bbs/selectBoardList.do(bbsId='BBSMSTR_BBBBBBBBBBBB')}">갤러리</a></li>
+                            <li><a th:href="@{/cop/bbs/selectBoardList.do(bbsId='BBSMSTR_AAAAAAAAAAAA')}" th:text="#{nav.notice}">공지사항</a></li>
+                            <li><a th:href="@{/cop/bbs/selectBoardList.do(bbsId='BBSMSTR_BBBBBBBBBBBB')}" th:text="#{nav.gallery}">갤러리</a></li>
                         </ul>
                     </div>
                 </div>
@@ -80,14 +80,14 @@
             <!-- 정보마당 -->
             <div class="col-md-6 col-lg-4">
                 <div class="krds-panel h-100 sitemap-card">
-                    <div class="krds-panel-head fw-bold"><i class="bi bi-collection"></i> 정보마당</div>
+                    <div class="krds-panel-head fw-bold"><i class="bi bi-collection"></i> <span th:text="#{intro.group.info}">정보마당</span></div>
                     <div class="krds-panel-body">
                         <ul>
-                            <li><a th:href="@{/uss/olh/faq/FaqListInqire.do}">FAQ</a></li>
-                            <li><a th:href="@{/uss/olh/qna/QnaListInqire.do}">Q&amp;A</a></li>
-                            <li><a th:href="@{/uss/olp/qnn/EgovQustnrRespondInfoManageList.do}">설문참여</a></li>
-                            <li><a href="#" data-terms-modal="stplat">이용약관</a></li>
-                            <li><a href="#" data-terms-modal="ipm">개인정보처리방침</a></li>
+                            <li><a th:href="@{/uss/olh/faq/FaqListInqire.do}" th:text="#{nav.faq}">FAQ</a></li>
+                            <li><a th:href="@{/uss/olh/qna/QnaListInqire.do}" th:text="#{nav.qna}">Q&amp;A</a></li>
+                            <li><a th:href="@{/uss/olp/qnn/EgovQustnrRespondInfoManageList.do}" th:text="#{nav.surveyJoin}">설문참여</a></li>
+                            <li><a href="#" data-terms-modal="stplat" th:text="#{terms.stplat}">이용약관</a></li>
+                            <li><a href="#" data-terms-modal="ipm" th:text="#{terms.ipm}">개인정보처리방침</a></li>
                         </ul>
                     </div>
                 </div>
@@ -95,13 +95,13 @@
             <!-- 관리자 · 회원/권한 -->
             <div class="col-md-6 col-lg-4">
                 <div class="krds-panel h-100 sitemap-card">
-                    <div class="krds-panel-head fw-bold"><i class="bi bi-people"></i> 회원·권한 <span class="badge-admin">관리자</span></div>
+                    <div class="krds-panel-head fw-bold"><i class="bi bi-people"></i> <span th:text="#{intro.group.memberAuth}">회원·권한</span> <span class="badge-admin" th:text="#{intro.badge.admin}">관리자</span></div>
                     <div class="krds-panel-body">
                         <ul>
-                            <li><a th:href="@{/uss/umt/mber/EgovMberManage.do}">회원관리</a></li>
-                            <li><a th:href="@{/sec/ram/EgovAuthorListView.do}">권한관리</a></li>
-                            <li><a th:href="@{/sec/rmt/EgovRoleListView.do}">롤관리</a></li>
-                            <li><a th:href="@{/sec/gmt/EgovGroupListView.do}">그룹관리</a></li>
+                            <li><a th:href="@{/uss/umt/mber/EgovMberManage.do}" th:text="#{nav.member}">회원관리</a></li>
+                            <li><a th:href="@{/sec/ram/EgovAuthorListView.do}" th:text="#{nav.authManage}">권한관리</a></li>
+                            <li><a th:href="@{/sec/rmt/EgovRoleListView.do}" th:text="#{nav.roleManage}">롤관리</a></li>
+                            <li><a th:href="@{/sec/gmt/EgovGroupListView.do}" th:text="#{nav.groupManage}">그룹관리</a></li>
                         </ul>
                     </div>
                 </div>
@@ -109,19 +109,19 @@
             <!-- 관리자 · 콘텐츠·시스템 -->
             <div class="col-md-6 col-lg-4">
                 <div class="krds-panel h-100 sitemap-card">
-                    <div class="krds-panel-head fw-bold"><i class="bi bi-sliders"></i> 콘텐츠·시스템 <span class="badge-admin">관리자</span></div>
+                    <div class="krds-panel-head fw-bold"><i class="bi bi-sliders"></i> <span th:text="#{intro.group.contentSystem}">콘텐츠·시스템</span> <span class="badge-admin" th:text="#{intro.badge.admin}">관리자</span></div>
                     <div class="krds-panel-body">
-                        <p class="grp-tit">콘텐츠</p>
+                        <p class="grp-tit" th:text="#{nav.content}">콘텐츠</p>
                         <ul>
-                            <li><a th:href="@{/cop/bbs/SelectBBSMasterInfs.do}">게시판마스터</a></li>
-                            <li><a th:href="@{/uss/olh/qnm/QnaAnswerListInqire.do}">Q&amp;A 답변관리</a></li>
-                            <li><a th:href="@{/uss/ion/bnr/selectBannerList.do}">배너관리</a></li>
+                            <li><a th:href="@{/cop/bbs/SelectBBSMasterInfs.do}" th:text="#{nav.boardMaster}">게시판마스터</a></li>
+                            <li><a th:href="@{/uss/olh/qnm/QnaAnswerListInqire.do}" th:text="#{nav.qnaAnswer}">Q&amp;A 답변관리</a></li>
+                            <li><a th:href="@{/uss/ion/bnr/selectBannerList.do}" th:text="#{nav.bannerManage}">배너관리</a></li>
                         </ul>
-                        <p class="grp-tit">설문·시스템</p>
+                        <p class="grp-tit" th:text="#{nav.surveySystem}">설문·시스템</p>
                         <ul>
-                            <li><a th:href="@{/uss/olp/qmc/EgovQustnrManageList.do}">설문관리</a></li>
-                            <li><a th:href="@{/sym/cal/EgovRestdeList.do}">휴일관리</a></li>
-                            <li><a th:href="@{/sym/ccm/zip/EgovCcmZipList.do}">우편번호관리</a></li>
+                            <li><a th:href="@{/uss/olp/qmc/EgovQustnrManageList.do}" th:text="#{nav.surveyManage}">설문관리</a></li>
+                            <li><a th:href="@{/sym/cal/EgovRestdeList.do}" th:text="#{nav.holidayManage}">휴일관리</a></li>
+                            <li><a th:href="@{/sym/ccm/zip/EgovCcmZipList.do}" th:text="#{nav.zipManage}">우편번호관리</a></li>
                         </ul>
                     </div>
                 </div>

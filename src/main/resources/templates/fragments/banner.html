@@ -31,11 +31,11 @@
                 </th:block>
             </div>
         </div>
-        <button type="button" class="bnr-nav bnr-prev" aria-label="이전 배너">&#10094;</button>
-        <button type="button" class="bnr-nav bnr-next" aria-label="다음 배너">&#10095;</button>
+        <button type="button" class="bnr-nav bnr-prev" th:attr="aria-label=#{bnr.prev}" aria-label="이전 배너">&#10094;</button>
+        <button type="button" class="bnr-nav bnr-next" th:attr="aria-label=#{bnr.next}" aria-label="다음 배너">&#10095;</button>
         <div class="bnr-dots">
             <button type="button" class="bnr-dot" th:each="b,st : ${bannerList}"
-                    th:classappend="${st.index == 0} ? 'active'" th:attr="aria-label='배너 ' + ${st.count}"></button>
+                    th:classappend="${st.index == 0} ? 'active'" th:attr="aria-label=#{bnr.aria.item(${st.count})}"></button>
         </div>
     </div>
 </th:block>
@@ -70,7 +70,7 @@
                  th:attr="data-cookie-key='bnrPopupHide_group',
                           data-left=${g.popupLeft}, data-top=${g.popupTop},
                           data-width=${g.popupWidth}, data-height=${g.popupHeight}">
-                <div class="bnr-popup" role="dialog" aria-modal="true" aria-label="팝업 배너">
+                <div class="bnr-popup" role="dialog" aria-modal="true" th:attr="aria-label=#{bnr.popup.aria}" aria-label="팝업 배너">
                     <div class="bnr-popup-body">
                         <div class="bnr-carousel" th:attr="data-interval=${interval}">
                             <div class="bnr-track">
@@ -78,20 +78,20 @@
                                     <div th:replace="~{fragments/banner :: popupItem(${b})}"></div>
                                 </div>
                             </div>
-                            <button type="button" class="bnr-nav bnr-prev" aria-label="이전 팝업">&#10094;</button>
-                            <button type="button" class="bnr-nav bnr-next" aria-label="다음 팝업">&#10095;</button>
+                            <button type="button" class="bnr-nav bnr-prev" th:attr="aria-label=#{bnr.popup.prev}" aria-label="이전 팝업">&#10094;</button>
+                            <button type="button" class="bnr-nav bnr-next" th:attr="aria-label=#{bnr.popup.next}" aria-label="다음 팝업">&#10095;</button>
                             <div class="bnr-dots">
                                 <button type="button" class="bnr-dot" th:each="b,st : ${grouped}"
                                         th:classappend="${st.index == 0} ? 'active'"
-                                        th:attr="aria-label='팝업 ' + ${st.count}"></button>
+                                        th:attr="aria-label=#{bnr.popup.ariaItem(${st.count})}"></button>
                             </div>
                         </div>
                     </div>
                     <div class="bnr-popup-foot">
                         <label>
-                            <input type="checkbox" class="bnr-popup-today"/> 오늘 하루 보지 않기
+                            <input type="checkbox" class="bnr-popup-today"/> <span th:text="#{bnr.popup.hideToday}">오늘 하루 보지 않기</span>
                         </label>
-                        <button type="button" class="bnr-popup-close">닫기 &times;</button>
+                        <button type="button" class="bnr-popup-close"><span th:text="#{bnr.popup.close}">닫기</span> &times;</button>
                     </div>
                 </div>
             </div>
@@ -103,15 +103,15 @@
                  th:attr="data-cookie-key='bnrPopupHide_' + ${b.bannerId},
                           data-left=${b.popupLeft}, data-top=${b.popupTop},
                           data-width=${b.popupWidth}, data-height=${b.popupHeight}">
-                <div class="bnr-popup" role="dialog" aria-modal="true" aria-label="팝업 배너">
+                <div class="bnr-popup" role="dialog" aria-modal="true" th:attr="aria-label=#{bnr.popup.aria}" aria-label="팝업 배너">
                     <div class="bnr-popup-body">
                         <div th:replace="~{fragments/banner :: popupItem(${b})}"></div>
                     </div>
                     <div class="bnr-popup-foot">
                         <label>
-                            <input type="checkbox" class="bnr-popup-today"/> 오늘 하루 보지 않기
+                            <input type="checkbox" class="bnr-popup-today"/> <span th:text="#{bnr.popup.hideToday}">오늘 하루 보지 않기</span>
                         </label>
-                        <button type="button" class="bnr-popup-close">닫기 &times;</button>
+                        <button type="button" class="bnr-popup-close"><span th:text="#{bnr.popup.close}">닫기</span> &times;</button>
                     </div>
                 </div>
             </div>
