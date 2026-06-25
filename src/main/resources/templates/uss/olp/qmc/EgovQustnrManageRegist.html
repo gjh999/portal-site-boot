@@ -2,42 +2,42 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}" lang="ko">
-<head><title>설문 등록</title></head>
+<head><title th:text="#{survey.qmc.regist.title}">설문 등록</title></head>
 <body>
 <main layout:fragment="content">
     <div class="container" style="max-width:820px;">
         <nav aria-label="breadcrumb"><ol class="breadcrumb">
-            <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
-            <li class="breadcrumb-item"><a th:href="@{/uss/olp/qmc/EgovQustnrManageList.do}">설문관리</a></li>
-            <li class="breadcrumb-item active">등록</li>
+            <li class="breadcrumb-item"><a th:href="@{/}" th:text="#{common.home}">홈</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/uss/olp/qmc/EgovQustnrManageList.do}" th:text="#{survey.qmc.pageTitle}">설문관리</a></li>
+            <li class="breadcrumb-item active" th:text="#{survey.crumb.regist}">등록</li>
         </ol></nav>
-        <h1 class="h4 mb-3"><i class="bi bi-clipboard-plus"></i> 설문지 등록</h1>
+        <h1 class="h4 mb-3"><i class="bi bi-clipboard-plus"></i> <span th:text="#{survey.qmc.regist.heading}">설문지 등록</span></h1>
         <form id="qustnrForm" th:action="@{/uss/olp/qmc/EgovQustnrManageRegist.do}" th:object="${qustnrManageVO}" method="post">
             <input type="hidden" name="cmd" value="save"/>
             <input type="hidden" id="questionsJson" name="questionsJson" value="[]"/>
             <div class="row g-3">
-                <div class="col-12"><label class="form-label">설문제목 <span class="text-danger">*</span></label>
+                <div class="col-12"><label class="form-label"><span th:text="#{survey.field.qestnrSj}">설문제목</span> <span class="text-danger">*</span></label>
                     <input class="krds-input" type="text" th:field="*{qestnrSj}" maxlength="250" required/>
                     <div class="text-danger small" th:if="${#fields.hasErrors('qestnrSj')}" th:errors="*{qestnrSj}"></div></div>
-                <div class="col-12"><label class="form-label">설문목적 <span class="text-danger">*</span></label>
+                <div class="col-12"><label class="form-label"><span th:text="#{survey.field.qestnrPurps}">설문목적</span> <span class="text-danger">*</span></label>
                     <textarea class="krds-input" rows="3" th:field="*{qestnrPurps}" required></textarea>
                     <div class="text-danger small" th:if="${#fields.hasErrors('qestnrPurps')}" th:errors="*{qestnrPurps}"></div></div>
-                <div class="col-12"><label class="form-label">설문작성 안내내용 <span class="text-danger">*</span></label>
+                <div class="col-12"><label class="form-label"><span th:text="#{survey.field.qestnrWritngGuidanceCn}">설문작성 안내내용</span> <span class="text-danger">*</span></label>
                     <textarea class="krds-input" rows="3" th:field="*{qestnrWritngGuidanceCn}" required></textarea>
                     <div class="text-danger small" th:if="${#fields.hasErrors('qestnrWritngGuidanceCn')}" th:errors="*{qestnrWritngGuidanceCn}"></div></div>
-                <div class="col-md-6"><label class="form-label">설문대상 <span class="text-danger">*</span></label>
+                <div class="col-md-6"><label class="form-label"><span th:text="#{survey.field.qestnrTrget}">설문대상</span> <span class="text-danger">*</span></label>
                     <select class="krds-form-select" th:field="*{qestnrTrget}" required>
                         <option th:each="c : ${comCode034}" th:value="${c.code}" th:text="${c.codeNm}"
                                 th:selected="${c.code == '00'}"></option>
                     </select>
                     <div class="text-danger small" th:if="${#fields.hasErrors('qestnrTrget')}" th:errors="*{qestnrTrget}"></div></div>
-                <div class="col-md-3"><label class="form-label">설문 시작일 <span class="text-danger">*</span></label>
+                <div class="col-md-3"><label class="form-label"><span th:text="#{survey.field.qestnrBeginDe}">설문 시작일</span> <span class="text-danger">*</span></label>
                     <input class="krds-input" type="date" th:field="*{qestnrBeginDe}" required/>
                     <div class="text-danger small" th:if="${#fields.hasErrors('qestnrBeginDe')}" th:errors="*{qestnrBeginDe}"></div></div>
-                <div class="col-md-3"><label class="form-label">설문 종료일 <span class="text-danger">*</span></label>
+                <div class="col-md-3"><label class="form-label"><span th:text="#{survey.field.qestnrEndDe}">설문 종료일</span> <span class="text-danger">*</span></label>
                     <input class="krds-input" type="date" th:field="*{qestnrEndDe}" required/>
                     <div class="text-danger small" th:if="${#fields.hasErrors('qestnrEndDe')}" th:errors="*{qestnrEndDe}"></div></div>
-                <div class="col-12"><label class="form-label">템플릿 유형 <span class="text-danger">*</span></label>
+                <div class="col-12"><label class="form-label"><span th:text="#{survey.field.tmplatType}">템플릿 유형</span> <span class="text-danger">*</span></label>
                     <div>
                         <div class="form-check form-check-inline" th:each="t,st : ${listQustnrTmplat}">
                             <input class="form-check-input qtmplat-radio" type="radio" name="qestnrTmplatId"
@@ -45,25 +45,25 @@
                                    th:attr="data-ty=${t.qestnrtmplatty}"/>
                             <label class="form-check-label" th:text="${t.qestnrtmplatty}">유형</label>
                         </div>
-                        <span class="text-muted small" th:if="${#lists.isEmpty(listQustnrTmplat)}">등록된 템플릿이 없습니다.</span>
+                        <span class="text-muted small" th:if="${#lists.isEmpty(listQustnrTmplat)}" th:text="#{survey.empty.tmplat}">등록된 템플릿이 없습니다.</span>
                     </div>
-                    <p class="text-muted small mt-1 mb-0">객관식 템플릿은 질문과 보기를, 서술형 템플릿은 질문만 등록합니다.</p>
+                    <p class="text-muted small mt-1 mb-0" th:text="#{survey.hint.tmplat.regist}">객관식 템플릿은 질문과 보기를, 서술형 템플릿은 질문만 등록합니다.</p>
                 </div>
 
                 <div class="col-12">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <label class="form-label mb-0">설문 문항</label>
+                        <label class="form-label mb-0" th:text="#{survey.field.questions}">설문 문항</label>
                         <button class="krds-btn secondary small" type="button" id="btnAddQuestion">
-                            <i class="bi bi-plus-lg"></i> 문항 추가</button>
+                            <i class="bi bi-plus-lg"></i> <span th:text="#{survey.btn.addQuestion}">문항 추가</span></button>
                     </div>
                     <!-- 등록된 문항 아코디언 -->
                     <div id="questionAccordion" class="krds-accordion"></div>
-                    <p class="text-muted small mb-0" id="noQuestionMsg">아직 등록된 문항이 없습니다. ‘문항 추가’ 버튼으로 문항을 등록하세요.</p>
+                    <p class="text-muted small mb-0" id="noQuestionMsg" th:text="#{survey.empty.question.guide}">아직 등록된 문항이 없습니다. ‘문항 추가’ 버튼으로 문항을 등록하세요.</p>
                 </div>
             </div>
             <div class="d-flex justify-content-between mt-4">
-                <a class="krds-btn tertiary" th:href="@{/uss/olp/qmc/EgovQustnrManageList.do}">목록</a>
-                <button class="krds-btn primary" type="submit"><i class="bi bi-check-lg"></i> 저장</button>
+                <a class="krds-btn tertiary" th:href="@{/uss/olp/qmc/EgovQustnrManageList.do}" th:text="#{survey.btn.list}">목록</a>
+                <button class="krds-btn primary" type="submit"><i class="bi bi-check-lg"></i> <span th:text="#{survey.btn.save}">저장</span></button>
             </div>
         </form>
     </div>
@@ -72,35 +72,35 @@
     <div id="questionModal" class="qmodal-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="questionModalTitle">
         <div class="qmodal-box">
             <div class="qmodal-head">
-                <h2 class="h5 mb-0" id="questionModalTitle"><i class="bi bi-pencil-square"></i> 문항 등록</h2>
-                <button type="button" class="qmodal-close" id="btnCloseModal" aria-label="닫기">&times;</button>
+                <h2 class="h5 mb-0" id="questionModalTitle"><i class="bi bi-pencil-square"></i> <span th:text="#{survey.modal.title}">문항 등록</span></h2>
+                <button type="button" class="qmodal-close" id="btnCloseModal" th:attr="aria-label=#{survey.modal.close}" aria-label="닫기">&times;</button>
             </div>
             <div class="qmodal-body">
                 <div class="mb-3">
-                    <label class="form-label">질문 유형</label>
+                    <label class="form-label" th:text="#{survey.modal.questionType}">질문 유형</label>
                     <div>
-                        <span class="krds-badge" id="modalTypeBadge">객관식</span>
-                        <span class="text-muted small ms-2" id="modalTypeHint">보기를 1개 이상 입력하세요.</span>
+                        <span class="krds-badge" id="modalTypeBadge" th:text="#{survey.modal.badge.choice}">객관식</span>
+                        <span class="text-muted small ms-2" id="modalTypeHint" th:text="#{survey.modal.hint.choice}">보기를 1개 이상 입력하세요.</span>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="modalQuestionCn">질문 내용 <span class="text-danger">*</span></label>
-                    <textarea id="modalQuestionCn" class="krds-input" rows="2" maxlength="2500" placeholder="질문을 입력하세요"></textarea>
+                    <label class="form-label" for="modalQuestionCn"><span th:text="#{survey.modal.questionCn}">질문 내용</span> <span class="text-danger">*</span></label>
+                    <textarea id="modalQuestionCn" class="krds-input" rows="2" maxlength="2500" th:attr="placeholder=#{survey.modal.questionCn.placeholder}" placeholder="질문을 입력하세요"></textarea>
                 </div>
                 <div id="modalObjectiveArea">
                     <div class="form-check mb-2">
                         <input class="form-check-input" type="checkbox" id="modalMulti"/>
-                        <label class="form-check-label" for="modalMulti">복수 선택(체크박스) 허용</label>
+                        <label class="form-check-label" for="modalMulti" th:text="#{survey.modal.allowMulti}">복수 선택(체크박스) 허용</label>
                     </div>
-                    <label class="form-label">보기 목록</label>
+                    <label class="form-label" th:text="#{survey.modal.itemList}">보기 목록</label>
                     <div id="modalItemList"></div>
                     <button type="button" class="krds-btn tertiary small mt-2" id="btnAddItem">
-                        <i class="bi bi-plus-lg"></i> 보기 추가</button>
+                        <i class="bi bi-plus-lg"></i> <span th:text="#{survey.modal.addItem}">보기 추가</span></button>
                 </div>
             </div>
             <div class="qmodal-foot">
-                <button type="button" class="krds-btn tertiary" id="btnCancelModal">취소</button>
-                <button type="button" class="krds-btn primary" id="btnSaveQuestion"><i class="bi bi-check-lg"></i> 문항 등록</button>
+                <button type="button" class="krds-btn tertiary" id="btnCancelModal" th:text="#{button.cancel}">취소</button>
+                <button type="button" class="krds-btn primary" id="btnSaveQuestion"><i class="bi bi-check-lg"></i> <span th:text="#{survey.modal.btnSave}">문항 등록</span></button>
             </div>
         </div>
     </div>
@@ -122,6 +122,24 @@
 
     <script th:inline="javascript">
     (function () {
+        var MSG = {
+            qlabelText: /*[[#{survey.qlabel.text}]]*/ '서술형',
+            qlabelChoiceMulti: /*[[#{survey.qlabel.choice.multi}]]*/ '객관식(복수)',
+            qlabelChoiceSingle: /*[[#{survey.qlabel.choice.single}]]*/ '객관식(단일)',
+            badgeEtc: /*[[#{survey.badge.etc}]]*/ '기타',
+            qbodyText: /*[[#{survey.qbody.text}]]*/ '주관식 서술 응답',
+            btnDel: /*[[#{survey.btn.delete}]]*/ '삭제',
+            itemPlaceholder: /*[[#{survey.modal.item.placeholder}]]*/ '보기 내용',
+            itemEtc: /*[[#{survey.modal.item.etc}]]*/ '기타',
+            itemDel: /*[[#{survey.modal.item.del}]]*/ '삭제',
+            badgeChoice: /*[[#{survey.modal.badge.choice}]]*/ '객관식',
+            hintChoice: /*[[#{survey.modal.hint.choice}]]*/ '보기를 1개 이상 입력하세요.',
+            badgeText: /*[[#{survey.modal.badge.text}]]*/ '서술형(주관식)',
+            hintText: /*[[#{survey.modal.hint.text}]]*/ '응답자가 자유롭게 서술합니다.',
+            selectTmplatFirst: /*[[#{survey.js.selectTmplatFirst}]]*/ '먼저 템플릿 유형을 선택하세요.',
+            enterQuestion: /*[[#{survey.js.enterQuestion}]]*/ '질문 내용을 입력하세요.',
+            needItem: /*[[#{survey.js.needItem}]]*/ '객관식 문항은 보기를 1개 이상 입력하세요.'
+        };
         var questions = [];               // {type:'1'|'2', content, multi, items:[{content, etc}]}
         var accordion = document.getElementById('questionAccordion');
         var noMsg = document.getElementById('noQuestionMsg');
@@ -144,23 +162,23 @@
             accordion.innerHTML = '';
             noMsg.style.display = questions.length ? 'none' : 'block';
             questions.forEach(function (q, idx) {
-                var typeLabel = q.type === '2' ? '서술형' : (q.multi ? '객관식(복수)' : '객관식(단일)');
+                var typeLabel = q.type === '2' ? MSG.qlabelText : (q.multi ? MSG.qlabelChoiceMulti : MSG.qlabelChoiceSingle);
                 var item = document.createElement('div');
                 item.className = 'acc-item';
                 var itemsHtml = '';
                 if (q.type === '1') {
                     itemsHtml = '<ul class="mb-0">' + q.items.map(function (it) {
-                        return '<li>' + esc(it.content) + (it.etc ? ' <span class="krds-badge">기타</span>' : '') + '</li>';
+                        return '<li>' + esc(it.content) + (it.etc ? ' <span class="krds-badge">' + MSG.badgeEtc + '</span>' : '') + '</li>';
                     }).join('') + '</ul>';
                 } else {
-                    itemsHtml = '<p class="text-muted mb-0">주관식 서술 응답</p>';
+                    itemsHtml = '<p class="text-muted mb-0">' + MSG.qbodyText + '</p>';
                 }
                 item.innerHTML =
                     '<div class="acc-head">' +
                         '<span class="acc-title">' + (idx + 1) + '. ' + esc(q.content) + '</span>' +
                         '<span class="d-flex align-items-center gap-2">' +
                             '<span class="krds-badge">' + typeLabel + '</span>' +
-                            '<button type="button" class="krds-btn danger small btn-del-q" data-idx="' + idx + '">삭제</button>' +
+                            '<button type="button" class="krds-btn danger small btn-del-q" data-idx="' + idx + '">' + MSG.btnDel + '</button>' +
                         '</span>' +
                     '</div>' +
                     '<div class="acc-body">' + itemsHtml + '</div>';
@@ -190,10 +208,10 @@
             var row = document.createElement('div');
             row.className = 'qmodal-item-row';
             row.innerHTML =
-                '<input type="text" class="krds-input item-cn" maxlength="1000" placeholder="보기 내용" />' +
+                '<input type="text" class="krds-input item-cn" maxlength="1000" placeholder="' + MSG.itemPlaceholder + '" />' +
                 '<label class="form-check-label" style="white-space:nowrap;">' +
-                    '<input type="checkbox" class="form-check-input item-etc" /> 기타</label>' +
-                '<button type="button" class="krds-btn tertiary small item-del">삭제</button>';
+                    '<input type="checkbox" class="form-check-input item-etc" /> ' + MSG.itemEtc + '</label>' +
+                '<button type="button" class="krds-btn tertiary small item-del">' + MSG.itemDel + '</button>';
             row.querySelector('.item-cn').value = content || '';
             row.querySelector('.item-etc').checked = !!etc;
             row.querySelector('.item-del').addEventListener('click', function () { row.remove(); });
@@ -208,12 +226,12 @@
             var objArea = document.getElementById('modalObjectiveArea');
             if (qType === '2') {
                 objArea.style.display = 'none';
-                document.getElementById('modalTypeBadge').textContent = '서술형(주관식)';
-                document.getElementById('modalTypeHint').textContent = '응답자가 자유롭게 서술합니다.';
+                document.getElementById('modalTypeBadge').textContent = MSG.badgeText;
+                document.getElementById('modalTypeHint').textContent = MSG.hintText;
             } else {
                 objArea.style.display = 'block';
-                document.getElementById('modalTypeBadge').textContent = '객관식';
-                document.getElementById('modalTypeHint').textContent = '보기를 1개 이상 입력하세요.';
+                document.getElementById('modalTypeBadge').textContent = MSG.badgeChoice;
+                document.getElementById('modalTypeHint').textContent = MSG.hintChoice;
                 addItemRow('', false);
                 addItemRow('', false);
             }
@@ -224,7 +242,7 @@
 
         document.getElementById('btnAddQuestion').addEventListener('click', function () {
             if (!document.querySelector('.qtmplat-radio:checked')) {
-                alert('먼저 템플릿 유형을 선택하세요.');
+                alert(MSG.selectTmplatFirst);
                 return;
             }
             openModal();
@@ -237,7 +255,7 @@
         document.getElementById('btnSaveQuestion').addEventListener('click', function () {
             var qType = currentQType();
             var content = document.getElementById('modalQuestionCn').value.trim();
-            if (!content) { alert('질문 내용을 입력하세요.'); return; }
+            if (!content) { alert(MSG.enterQuestion); return; }
             var q = { type: qType, content: content, multi: false, items: [] };
             if (qType === '1') {
                 q.multi = document.getElementById('modalMulti').checked;
@@ -246,7 +264,7 @@
                     var cn = r.querySelector('.item-cn').value.trim();
                     if (cn) { q.items.push({ content: cn, etc: r.querySelector('.item-etc').checked }); }
                 });
-                if (q.items.length === 0) { alert('객관식 문항은 보기를 1개 이상 입력하세요.'); return; }
+                if (q.items.length === 0) { alert(MSG.needItem); return; }
             }
             questions.push(q);
             renderAccordion();
