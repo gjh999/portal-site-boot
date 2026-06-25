@@ -10,7 +10,7 @@
                   hasQuestions=${Comtnqustnrqesitm != null and !#lists.isEmpty(Comtnqustnrqesitm)},
                   totRespondent=${respondentCnt != null ? respondentCnt : 0}">
         <nav aria-label="breadcrumb"><ol class="breadcrumb">
-            <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/}" th:text="#{common.home}">홈</a></li>
             <li class="breadcrumb-item"><a th:href="@{/uss/olp/qmc/EgovQustnrManageList.do}" th:text="#{survey.manage.title}">설문관리</a></li>
             <li class="breadcrumb-item active" th:text="#{survey.stats.title}">결과·집계</li>
         </ol></nav>

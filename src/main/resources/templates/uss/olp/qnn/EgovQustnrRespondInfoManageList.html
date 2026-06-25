@@ -61,18 +61,18 @@
 
         <!-- 목록 헤더: 전체 건수 (게시판과 동일하게 표 위 좌측) -->
         <div class="d-flex justify-content-between align-items-center mb-2 mt-3">
-            <span class="text-muted">전체 <strong th:text="${paginationInfo != null ? paginationInfo.totalRecordCount : 0}">0</strong>건</span>
+            <span class="text-muted"><span th:text="#{list.total}">전체</span> <strong th:text="${paginationInfo != null ? paginationInfo.totalRecordCount : 0}">0</strong><span th:text="#{list.count.unit}">건</span></span>
         </div>
 
         <div class="krds-table-wrap"><table class="tbl">
             <thead><tr>
-                <th scope="col" style="width:60px;">번호</th>
-                <th scope="col">설문제목</th>
-                <th scope="col">설문목적</th>
-                <th scope="col" style="width:100px;">설문대상</th>
-                <th scope="col" style="width:200px;white-space:nowrap;">설문기간</th>
-                <th scope="col" style="width:100px;">참여상태</th>
-                <th scope="col" style="width:110px;">등록자</th>
+                <th scope="col" style="width:60px;" th:text="#{survey.label.no}">번호</th>
+                <th scope="col" th:text="#{survey.col.qestnrSj}">설문제목</th>
+                <th scope="col" th:text="#{survey.col.qestnrPurps}">설문목적</th>
+                <th scope="col" style="width:100px;" th:text="#{survey.col.qestnrTrget}">설문대상</th>
+                <th scope="col" style="width:200px;white-space:nowrap;" th:text="#{survey.field.period}">설문기간</th>
+                <th scope="col" style="width:100px;" th:text="#{survey.col.partcptnState}">참여상태</th>
+                <th scope="col" style="width:110px;" th:text="#{survey.label.register}">등록자</th>
             </tr></thead>
             <tbody>
             <tr th:each="item, st : ${resultList}">

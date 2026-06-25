@@ -57,7 +57,7 @@
                       th:onsubmit="'return confirm(\'' + #{survey.confirm.deleteSurvey} + '\');'">
                     <input type="hidden" name="qestnrId" th:value="${r['qestnrId']}"/>
                     <input type="hidden" name="cmd" value="del"/>
-                    <button class="krds-btn danger" type="submit"><i class="bi bi-trash"></i> 삭제</button>
+                    <button class="krds-btn danger" type="submit"><i class="bi bi-trash"></i> <span th:text="#{survey.btn.delete}">삭제</span></button>
                 </form>
             </div>
         </div>
