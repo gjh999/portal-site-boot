@@ -37,7 +37,8 @@
                     <div class="col-md-6"><label class="form-label">직업</label>
                         <select class="krds-form-select" name="occpTyCode">
                             <option value="">선택</option>
-                            <option th:each="c : ${comCode034}" th:value="${c.code}" th:text="${c.codeNm}"></option>
+                            <!-- 응답 폼에서는 '전체'(00) 제외 — 등록 화면은 전체 유지 -->
+                            <option th:each="c : ${comCode034}" th:if="${c.code != '00'}" th:value="${c.code}" th:text="${c.codeNm}"></option>
                         </select></div>
                     <div class="col-md-6"><label class="form-label">생년월일(YYYYMMDD)</label>
                         <input class="krds-input" type="text" name="brth" maxlength="8" th:value="${emp != null ? emp.brth : ''}"/></div>
