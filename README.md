@@ -307,3 +307,7 @@ portal-site-boot/
 
 - 이메일: **admin@jennysoft.co.kr**
 - 이슈·기능 제안: GitHub Issues / Pull Request
+
+---
+
+> 본 코드베이스는 eGovFrame 표준프레임워크 포털 사이트 템플릿을 기반으로, Thymeleaf MVC 화면 계층과 **KRDS 디자인 전환·다국어(한국어/English)·보안/스키마 정비**를 더해 새 프로젝트의 출발점으로 사용할 수 있도록 구성되었습니다.
