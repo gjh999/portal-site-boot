@@ -90,12 +90,13 @@ cd "/c/eGovFrame/workspace-egov/portal-site-boot"
 - **레이아웃**: `templates/layouts/default.html`(Thymeleaf Layout Dialect) +
   `templates/fragments/{header,nav,footer}.html`. 정적자원: **공식 KRDS(`static/krds/`) + 호환 레이어(`static/css/krds-compat.css`)**, 로컬. (Bootstrap 프레임워크 미사용)
 
-## 다국어(i18n) 룰 — 신규 기능·화면 추가/변경 시 **반드시 확인** (스킬 `egov-component` §8)
-- ⚠️ **현황**: 본 프로젝트 템플릿은 **대부분 하드코딩 한글**(레거시 JSP 포팅분, `#{}` 미사용). **신규/변경·KRDS 전환 시 i18n 키로 전환**한다.
-- 사용자 노출 텍스트(라벨·버튼·placeholder·title·alt·검증 메시지)는 **하드코딩 금지** → Thymeleaf `th:text="#{key}"`.
-- 메시지는 `egovframework/message/message-ui_{ko,en}.properties`에 **ko·en 동일 키**로 추가(프레임워크 공통은 `message/com/message-common_{ko,en}`). 언어전환 `/cmm/lang(lang='ko'|'en')`.
-- **변경/추가 작업마다**: ① 노출 문구 전부 메시지 키 처리 ② ko/en 양쪽 값 존재(키 집합 일치) ③ 누락/한글 fallback 0 — 확인.
-- 검증: `comm -3`로 ko/en 키 diff, 변경 html에서 `#{` 없는 한글 스캔.
+## 다국어(i18n) — 전면 적용 완료 (2026-06-25) · 신규 화면도 **반드시 준수** (스킬 `egov-component` §8)
+- ✅ **현황(전환 완료)**: 전 템플릿(203개)을 ko/en 메시지 키로 전환. **사용자 노출 하드코딩 한글 ≈ 0**(잔여는 `cmm/fms/EgovFileUploader`의 위젯 텍스트와 `cmm/EgovUserTypes`·`cmm/krds/EgovKrdsSample` 개발자 참조/샘플 페이지뿐 — 메뉴 비노출). 템플릿에 보이는 `>한글<` 대부분은 `th:text="#{key}"`/`${data}`의 **정적 미리보기(프로토타입) 텍스트**로 렌더 시 치환됨(하드코딩 아님).
+- **언어 전환 동작**: 헤더 한국어/EN 토글 → `EgovLangController`(`/cmm/lang?lang=ko|en`) → `CookieLocaleResolver("LANG")`(쿠키 저장, `WebMvcConfig.localeResolver()`, 기본 한국어) → **Referer 기준 PRG 복귀**(같은 호스트만, 오픈리다이렉트 방지). 토글 `active`는 `th:classappend="${#locale.language=='ko'|'en'}?'active'"`.
+- **메시지 파일**: `egovframework/message/message-ui_{ko,en}.properties` — **ko/en 키 집합 정합**(현재 각 1422키, `comm -3`=0, 중복 0). 프레임워크 공통은 `message/com/message-common_{ko,en}`.
+- **규약**: ① 사용자 노출 텍스트(라벨·버튼·placeholder·title·alt·검증 메시지)는 **하드코딩 금지** → `th:text="#{key}"`/`th:utext` ② 메시지 추가는 **APPEND만**(기존 키 변경 금지) ③ **ko/en 동일 키 + 양쪽 값 존재** ④ 공통키 + 모듈 네임스페이스 키 재사용 ⑤ 로직/`name`/`id`/`action`/`${}` 표현식 불변 ⑥ **영어 의도적 빈값 허용**: 한국어 조사·단위(`건`/`명`/`님`/`년`/`월`, `main.hero.title2`='의 표준')는 EN 빈값(현재 6개) — 미설명 빈값이 아님.
+- **변경/추가 작업마다**: ① 노출 문구 전부 메시지 키 처리 ② ko/en 양쪽 값 존재(키 집합 일치) ③ 미해결키(`??key??`)·한글 fallback 0 — 확인.
+- 검증: `comm -3`로 ko/en 키 diff, 변경 html에서 `#{`/`${` 없는 정적 한글 스캔, EN 쿠키(`LANG=en`) 실렌더 미해결키 0 확인.
 
 ## DB 명명 규칙
 
@@ -201,6 +202,18 @@ cd "/c/eGovFrame/workspace-egov/portal-site-boot"
   ③ **응답폼 문항 렌더**: 시드/모달/서술형 등록 모두 정상 렌더 확인(end-to-end). 키 케이싱(`qestnTyCode`/`qestnCn`/`mxmmChoiseCo`/`qestnrqesitmid`) 정합.
   ④ **수정폼 문항 표시/재저장**: Modify 컨트롤러가 qri 서비스로 기존 문항/보기를 `existingQuestionsJson`으로 모델에 담고, 수정폼이 등록폼과 동일한 모달+아코디언으로 초기 로드.
      저장 시 `deleteQustnrQestnManageByQestnr`(설문지+템플릿 단위 문항/보기/응답 일괄삭제, qqm hsql+postgresql 매퍼/DAO/서비스 추가) 후 `saveQuestions` 재등록 → 수정/추가/삭제 반영(round-trip 검증).
+
+## 다국어(i18n) 전면 적용 완료 — 한국어/English 전환 (2026-06-25)
+- **전환 범위**: 전 템플릿(203개)을 ko/en 메시지 키로 전환. 배치 B1~B7 순차 진행(B1 공통·랜딩 → B2 게시판/템플릿 → B3 회원·권한/롤/그룹 → B4 우편·달력·배너 → B5 FAQ·Q&A·약관·개인정보 → B6 설문 6종 → B7 에러페이지·레이아웃·KRDS샘플·파일목록). **사용자 노출 하드코딩 한글 잔여 ≈ 0**.
+- **언어전환 메커니즘**: 헤더 토글(`fragments/header.html`, 한국어/EN) → `EgovLangController.changeLanguage`(`/cmm/lang?lang=ko|en`) → `localeResolver.setLocale`(`CookieLocaleResolver("LANG")`, `com.security.WebMvcConfig`, 기본 한국어) → `safeReturnPath`(Referer 같은 호스트만 추출, 오픈리다이렉트 방지) **PRG 리다이렉트**. 결과: 최종 URL에 `?lang` 미잔류 + 1클릭 즉시 전환. 토글 `active`는 `${#locale.language}` 비교.
+- **메시지 파일**: `egovframework/message/message-ui_{ko,en}.properties`. **ko/en 키 집합 완전 정합**(각 1422키, `comm -3`=0, 중복키 0). 의도적 EN 빈값 6개(`list.count.unit`=건, `common.unit.case`=건, `header.user.suffix`=님, `cal.year.suffix`=년, `cal.month.suffix`=월, `main.hero.title2`=의 표준 — 한국어 조사·단위라 EN은 빈값으로 자연스럽게 렌더).
+- **규약(준수 필수)**: APPEND만(기존 키 변경 금지)·ko/en 동일 키·공통키+모듈 네임스페이스 재사용·로직/`name`/`id`/`action`/`${}` 불변·영어 의도적 빈값(건/명/님/년/월) 허용. 신규 화면도 동일.
+- **검증(라이브 18080, admin/1 세션, `Cookie: LANG=en`)**: 전 모듈 대표 화면(메인·소개·사용자구분안내·게시판 목록/등록·FAQ·Q&A·약관(통합 `/uss/sam/terms/list.do?termsType=stplat`)·개인정보(`termsType=ipm`)·설문 목록/등록/참여·회원관리·권한/롤/그룹·배너·우편번호·달력·로그인) **HTTP 200·미해결키(`??key??`) 0·실제 영어 문구 렌더** 확인. `LANG=ko` 복귀 정상, 토글 `active`·레이아웃(헤더/GNB/푸터) 정상.
+
+## 설문 응답·배너 수정 (2026-06-25)
+- **응답 OCCP_TY_CODE 확장**: `TB_QUSTNR_RESPOND_INFO.OCCP_TY_CODE` `varchar(1)`→`varchar(10)`(직업코드 COM034 2자리 INSERT 길이초과 `dataAccessFailure` 해소). **7종 DBMS 동기화**(hsql·postgresql·mysql·oracle·tibero·cubrid·altibase). `.localdb`는 shtdb.sql 체크섬 변경으로 자동 재시드. 라이브 검증: occpTyCode='02'/'03' 저장 성공.
+- **응답폼 직업 '전체'(00) 제외**: 응답 화면 직업 선택 드롭다운에서 '전체'(코드 '00') 제거(회원 등록/수정폼의 '전체'는 등록 유지 — 설문대상 지정용).
+- **팝업 배너 홈 한정**: 팝업 배너를 **홈(메인)에서만 노출**하도록 제한(기존 전 페이지 노출 → 메인 한정).
 
 ## KRDS 전면 적용 — UI 표준화 (2026-06)
 - **공식 KRDS(디지털정부 표준 디자인시스템) 전환**: Bootstrap 프레임워크 제거, 190+ 템플릿을 KRDS 네이티브 마크업으로 전환(Wave1·2 + 잔존 정리, 레거시 부트스트랩 0건). 네이티브 컴포넌트 + 호환 레이어(`krds-compat.css`: 그리드/유틸/GNB)·`krds.css`(토큰 정규화) 구성. 정적 자산 로컬(CDN 금지), 폰트 **Pretendard GOV**. 전환·검증 절차는 스킬 `krds-conversion` 참조.
