@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title layout:title-pattern="$CONTENT_TITLE">팝업</title>
+    <title layout:title-pattern="$CONTENT_TITLE" th:text="#{layout.popup.title}">팝업</title>
 
     <!-- KRDS 자원만 로드(헤더·GNB·푸터·배너 없는 팝업 전용 레이아웃) -->
     <link rel="preload" th:href="@{/krds/resources/fonts/PretendardGOV-Regular.subset.woff2}" as="font" type="font/woff2" crossorigin/>

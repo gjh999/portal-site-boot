@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title layout:title-pattern="$CONTENT_TITLE - 전자정부표준프레임워크">로그인</title>
+    <title layout:title-pattern="$CONTENT_TITLE - 전자정부표준프레임워크" th:text="#{login.title}">로그인</title>
     <link rel="preload" th:href="@{/krds/resources/fonts/PretendardGOV-Regular.subset.woff2}" as="font" type="font/woff2" crossorigin/>
     <link rel="preload" th:href="@{/krds/resources/fonts/PretendardGOV-Medium.subset.woff2}" as="font" type="font/woff2" crossorigin/>
     <link rel="preload" th:href="@{/krds/resources/fonts/PretendardGOV-Bold.subset.woff2}" as="font" type="font/woff2" crossorigin/>
@@ -19,8 +19,8 @@
 </head>
 <body class="egov-login-body">
 <!-- 언어 선택 -->
-<div class="login-lang egov-lang" role="group" aria-label="언어 선택">
-    <a th:href="@{/cmm/lang(lang='ko')}" class="lang-btn" th:classappend="${#locale.language == 'ko'} ? 'active'">한국어</a>
+<div class="login-lang egov-lang" role="group" th:attr="aria-label=#{layout.langSelect}" aria-label="언어 선택">
+    <a th:href="@{/cmm/lang(lang='ko')}" class="lang-btn" th:classappend="${#locale.language == 'ko'} ? 'active'" th:text="#{layout.lang.ko}">한국어</a>
     <a th:href="@{/cmm/lang(lang='en')}" class="lang-btn" th:classappend="${#locale.language == 'en'} ? 'active'">EN</a>
 </div>
 <div class="container">

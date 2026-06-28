@@ -7,7 +7,7 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title layout:title-pattern="$CONTENT_TITLE - 전자정부표준프레임워크">전자정부표준프레임워크</title>
+    <title layout:title-pattern="$CONTENT_TITLE - 전자정부표준프레임워크" th:text="#{layout.brand}">전자정부표준프레임워크</title>
 
     <!-- KRDS (디지털정부 표준 디자인시스템, 행정안전부 https://www.krds.go.kr) — 로컬 자원만, Bootstrap 프레임워크 미사용 -->
     <!-- Pretendard GOV 폰트 프리로드 (FOUT/글꼴 교체 깜빡임 최소화) -->
@@ -29,7 +29,7 @@
 <body class="egov-body">
 
 <!-- 접근성: 본문 바로가기 -->
-<a href="#content" class="skip-nav">본문 바로가기</a>
+<a href="#content" class="skip-nav" th:text="#{layout.skipNav}">본문 바로가기</a>
 
 <!-- 헤더 -->
 <header class="egov-header" th:replace="~{fragments/header :: header}"></header>
@@ -69,7 +69,7 @@
 <th:block layout:fragment="body-js"></th:block>
 
 <!-- 맨 위로 버튼 -->
-<button type="button" id="scrollTopBtn" class="scroll-top-btn" aria-label="맨 위로" title="맨 위로">
+<button type="button" id="scrollTopBtn" class="scroll-top-btn" th:attr="aria-label=#{layout.scrollTop},title=#{layout.scrollTop}" aria-label="맨 위로" title="맨 위로">
     <i class="bi bi-arrow-up"></i>
 </button>
 <script th:inline="none">
